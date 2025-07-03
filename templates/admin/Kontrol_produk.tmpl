@@ -44,7 +44,7 @@
     <div class="swiper-wrapper" style="display: flex; gap: 15px;">
 
       <!-- Semua -->
-      <div id="Semua" class="short_cut swiper-slide" style="width: 120px; background: linear-gradient(to right, #6366f1, #3b82f6); border-radius: 15px; padding: 12px; text-align: center; cursor: pointer;">
+      <div id="Semua" class="short_cut swiper-slide" style=" background: linear-gradient(to right, #6366f1, #3b82f6); border-radius: 15px; padding: 12px; text-align: center; cursor: pointer;">
         <i class="fas fa-tshirt" style="font-size: 1.8rem; color: white;"></i>
         <div style="color: white; font-weight: bold; margin-top: 6px;">Semua</div>
         <small style="color: white; opacity: 0.9;">Lihat semua kategori</small>
@@ -226,7 +226,7 @@
             
 
             <!-- Sepatu -->
-      <div id="sepatu" class="short_cut swiper-slide" style="
+      <div id="Sepatu" class="short_cut swiper-slide" style="
       width: 160px; 
       background: linear-gradient(to right, #8b5cf6, #6366f1); 
       border-radius: 15px; 
@@ -518,56 +518,80 @@
          const tableProduk = document.getElementById("table_produk");
          tableProduk.innerHTML = ""; // Bersihkan konten sebelumnya
 
+         
+
          document.getElementById("resultCount").innerHTML = data[data.length - 1].Jumlah_Barang;
 
-         data.forEach((datanya, index) => {
-            if (index < data.length - 1) {
-               const cardHTML = `
-               <div class="bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out mx-auto">
-                  <div class="grid grid-cols-[2.5rem_1fr_12.5rem_9.375rem_7.5rem] gap-4 items-center">
+         for (const [index, datanya] of data.entries()) {
+    try {
+        const response = await fetch("/app/endpoint.go", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                tujuan: "ambil_foto",
+                data: {
+                    nama: datanya.nama,
+                    jenis_pakaian: datanya.jenis_pakaian,
+                },
+            }),
+        });
 
-                     <!-- Kolom 1: Nomor -->
-                     <p class="font-semibold text-gray-700 text-lg">${index + 1}.</p>
+        // Ambil blob dari response
+        const blob = await response.blob();
+        const imgSrc = URL.createObjectURL(blob); // Buat object URL dari blob
 
-                     <!-- Kolom 2: Nama • Jenis -->
-                     <div>
-                        <p class="font-semibold text-gray-800 text-lg">${datanya.nama} • ${datanya.jenis_pakaian}</p>
-                        <p class="text-sm text-gray-500">${datanya.harga} • ${datanya.stok}</p>
-                     </div>
+        const cardHTML = `
+        <div class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out mx-auto">
+    
+            <!-- Badge kategori -->
+            <div class=" w-min-xl absolute top-2 left-2 bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded">
+               ${datanya.kategori}
+            </div>
 
-                     <!-- Kolom 3: Kategori dan Warna -->
-                     <div class="text-sm text-gray-600 space-y-1">
-                        <p>Kategori: <span class="font-semibold text-gray-800">${datanya.kategori}</span></p>
-                        <p>Warna: <span class="font-semibold text-gray-800">${datanya.warna}</span></p>
-                     </div>
+            <div class="grid grid-cols-[2.5rem_1fr_12.5rem_6rem_10rem] gap-4 items-center">
 
-                     <!-- Kolom 4: Gender dan Ukuran -->
-                     <div class="text-sm text-gray-600 space-y-1">
-                        <p>Gender: <span class="font-semibold text-gray-800">${datanya.gender}</span></p>
-                        <p>Ukuran: <span class="font-semibold text-gray-800">${datanya.ukuran}</span></p>
-                     </div>
+               <p class="font-semibold text-gray-700 text-lg">${index + 1}.</p>
 
-                     <!-- Kolom 5: Tombol Aksi -->
-                     <div class="flex space-x-2 justify-end">
-                        <button onclick="Edit_barang()" class="w-9 h-9 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center shadow transition" aria-label="Edit">
+               <div>
+                     <p class="font-semibold text-gray-800 text-lg">${datanya.nama} • ${datanya.jenis_pakaian}</p>
+                     <p class="text-sm text-gray-500">${datanya.harga} • ${datanya.stok}</p>
+               </div>
+
+               <div class="text-sm text-gray-600 space-y-1">
+                     <p>Kategori: <span class="font-semibold text-gray-800">${datanya.kategori}</span></p>
+                     <p>Warna: <span class="font-semibold text-gray-800">${datanya.warna}</span></p>
+               </div>
+
+               <div class="text-sm text-gray-600 space-y-1">
+                     <p>Gender: <span class="font-semibold text-gray-800">${datanya.gender}</span></p>
+                     <p>Ukuran: <span class="font-semibold text-gray-800">${datanya.ukuran}</span></p>
+               </div>
+
+               <div class="flex space-x-2 justify-end gap-2">
+                     <button style="margin-top:25px;" onclick="Edit_barang('${imgSrc}', '${datanya.nama}', '${datanya.gender}', '${datanya.deskripsi}', '${datanya.ukuran}')" class="w-9 h-9 bg-blue-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center shadow transition" aria-label="Edit">
                         <i class="fas fa-pen"></i>
-                        </button>
-                        <button onclick="Hapus_Barang_Entry('${datanya.id_barang}', '${datanya.nama}', '${datanya.jenis_pakaian}', '${datanya.gender}', '${datanya.harga}')" class="w-9 h-9 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center shadow transition" aria-label="Delete">
+                     </button>
+                     <button style="margin-top:25px;" onclick="Hapus_Barang_Entry('${datanya.id_barang}', '${datanya.nama}', '${datanya.jenis_pakaian}', '${datanya.gender}', '${datanya.harga}')" class="w-9 h-9 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center shadow transition" aria-label="Delete">
                         <i class="fas fa-trash-alt"></i>
-                        </button>
-                        <button class="w-9 h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center shadow transition" aria-label="View Image">
-                        <i class="fas fa-image"></i>
-                        </button>
+                     </button>
+                     <div style="height:100px; width:87px; " class="bg-gray-100 hover:bg-gray-200 rounded-lg overflow-hidden shadow flex items-center justify-center" aria-label="View Image">
+                        <img src="${imgSrc}" alt="Foto Barang" class="object-cover w-full h-full" />
                      </div>
+               </div>
 
-                  </div>
-                  </div>
+            </div>
+         </div>
 
-               `;
+        `;
 
-               tableProduk.innerHTML += cardHTML; // Tambahkan card ke dalam elemen
-            }
-         });
+        tableProduk.innerHTML += cardHTML;
+    } catch (err) {
+        console.error("Gagal ambil foto (blob) untuk:", datanya.nama, err);
+    }
+}
+
 
       } catch (error) {
          console.error("Terjadi kesalahan:", error);

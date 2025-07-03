@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
+)
 
 type BarangCustom struct {
 	ID            uint   `gorm:"primaryKey;column:id"`
@@ -121,15 +122,10 @@ func AmbilDataUiShort(w http.ResponseWriter, db *gorm.DB) map[string]int {
 }
 
 func HapusBarang(w http.ResponseWriter, db *gorm.DB, id_barang, nama, jenis_pakaian, gender, harga string) map[string]interface{} {
-	type Barang struct {
-		ID           string
-		Nama         string
-		JenisPakaian string
-		Gender       string
-		Harga        int
-	}
+	// Logging awal
+	fmt.Println("Menghapus Barang Dijalankan")
 
-	// Konversi harga ke int
+	// Konversi harga ke integer
 	hargaInt, err := strconv.Atoi(harga)
 	if err != nil {
 		return map[string]interface{}{
@@ -138,9 +134,11 @@ func HapusBarang(w http.ResponseWriter, db *gorm.DB, id_barang, nama, jenis_paka
 		}
 	}
 
-	// Hapus semua yang cocok
-	result := db.Where("id = ? AND nama = ? AND jenis_pakaian = ? AND gender = ? AND harga = ?", id_barang, nama, jenis_pakaian, gender, hargaInt).
-		Delete(&Barang{})
+	// Hapus data dari tabel 'barang_custom' jika semua kolom cocok
+	result := db.Table("barang_custom").
+		Where(`"id" = ? AND "nama" = ? AND "jenis_pakaian" = ? AND "Gender" = ? AND "harga" = ?`,
+			id_barang, nama, jenis_pakaian, gender, hargaInt).
+		Delete(nil)
 
 	if result.Error != nil {
 		return map[string]interface{}{

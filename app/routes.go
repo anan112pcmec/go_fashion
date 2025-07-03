@@ -271,10 +271,9 @@ func (server *Lingkup) InitializeRoutes() {
 	server.ruter.HandleFunc("/app/endpoint.go", func(w http.ResponseWriter, r *http.Request) {
 		server.AjaxEndpoint(w, r)
 	}).Methods("POST")
-	// Route untuk Home (/)
+	
 	server.ruter.HandleFunc("/", controllers.Home).Methods("GET")
 
-	// Route untuk halaman dinamis (/{page})
 	server.ruter.HandleFunc("/{page}", RouterHandler).Methods("GET")
 
 	server.ruter.HandleFunc("/role", RouterHandler).Methods("POST")
