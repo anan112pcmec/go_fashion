@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service</title>
+    
+    <!-- Favicon (Logo Go) -->
+    <link rel="icon" type="image/svg+xml" href="https://golang.org/lib/godoc/images/go-logo-blue.svg">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="assets/swiper/swiper-bundle.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/assets/index.css">
+
+    <!-- Swiper.js, Chart.js, Anime.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+    
+
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+
+    {{ template "navbar" }} <!-- Include Navbar -->
+
+    {{ template "body-home"}}
+
+    <script> 
+    document.getElementById("kirim_request").addEventListener('click', function(){
+    fetch("/app/endpoint.go", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tujuan: "simpan_user", data: {} })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error("Error:", error));
+
+    document.addEventListener("DOMContentLoaded", function () {
+    anime({
+        targets: "#header-login",
+        opacity: [0, 1],
+        translateY: [-70, 0],
+        duration: 1200,
+        easing: "easeOutExpo"
+    });
+    });
+
+
+    });
+    
+    </script>
+    
+</body>
+</html>

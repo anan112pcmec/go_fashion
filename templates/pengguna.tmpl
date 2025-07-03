@@ -1,0 +1,1345 @@
+{{ define "sidebar" }}
+<div id="sidebar" class="fixed left-0 top-0 h-full w-72 bg-gray-50 shadow-2xl transform -translate-x-full transition-transform duration-500 ease-in-out md:translate-x-0 rounded-r-2xl" style="z-index: 500;">
+    <div class="p-6 text-xl font-bold text-teal-600 border-b border-gray-200 flex items-center gap-2">
+    </div>
+    <ul class="space-y-4 px-6 pt-4" style="margin-top: 2rem; width: 95%;">
+        <!-- Kategori Utama -->
+        <li>
+            <div class="flex teks justify-between items-center text-lg font-semibold text-gray-800 border-b border-gray-300 pb-2">
+                Home <i class="fas fa-home ml-3"></i>
+            </div>
+            <ul class="space-y-2 mt-2" style="height: auto;">
+                <li>
+                    <a id="rumah" class="pindah_Laman flex items-center gap-3 py-3 px-4 text-gray-700 hover:bg-teal-400 hover:text-white rounded-lg transition-all duration-300">
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#section-info" class="flex items-center gap-3 py-3 px-4 text-gray-700 hover:bg-teal-400 hover:text-white rounded-lg transition-all duration-300">
+                        Newest
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center gap-3 py-3 px-4 text-gray-700 hover:bg-teal-400 hover:text-white rounded-lg transition-all duration-300">
+                        Product
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Kategori Fashion -->
+        <li>
+        <div class="flex teks justify-between items-center text-lg font-semibold text-gray-800 border-b border-gray-300 pb-2 mt-4">
+            Produk <i class="fas fa-box-open ml-3"></i>
+        </div>
+        <ul class="space-y-2 mt-2" style="height: auto;">
+            <li>
+                <a id="pria" class="pindah_Laman flex items-center gap-3 py-3 px-4 text-gray-700 hover:bg-blue-400 hover:text-white rounded-lg transition-all duration-300">
+                    Daftar Produk
+                </a>
+            </li>
+        </ul>
+        </li>
+
+        <li>
+        <div class="flex teks justify-between items-center text-lg font-semibold text-gray-800 border-b border-gray-300 pb-2 mt-4">
+            Pengiriman <i class="fas fa-truck ml-3"></i>
+        </div>
+        <ul class="space-y-2 mt-2" style="height: auto;">
+            <li>
+                <a  id="BarangDikirim" class="pindah_Laman flex items-center gap-3 py-3 px-4 text-gray-700 hover:bg-blue-400 hover:text-white rounded-lg transition-all duration-300">
+                    Barang Dikirim
+                </a>
+            </li>
+        </ul>
+        </li>
+
+    </ul>
+</div>
+
+
+<!-- JavaScript untuk Sidebar -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let isAnimating = false;
+        let sidebar = document.getElementById("sidebar");
+        let sidebarLinks = sidebar.querySelectorAll("ul > li > ul > li > a");
+        let categoryTitles = sidebar.querySelectorAll("ul > li > div");
+        let isSidebarOpen = true;
+
+        let isi_category = [];
+
+        // Cek localStorage buat nge-load status sidebar terakhir
+        if (localStorage.getItem("sidebarState") === "closed") {
+            shrinkSidebar(false);
+        }
+
+        // Fungsi Toggle Sidebar
+        function toggleSidebar() {
+            if (isSidebarOpen) {
+                shrinkSidebar();
+            } else {
+                expandSidebar();
+            }
+        }
+
+    function shrinkSidebar() {
+        if (isAnimating) return; // Cegah eksekusi jika animasi sedang berlangsung
+        isAnimating = true;
+
+        sidebarLinks.forEach((title) => {
+            title.style.transition = "opacity 0.9s ease-in-out";
+            title.style.opacity = "0";
+        });
+
+        setTimeout(() => {
+            sidebar.style.transition = "width 2.1s ease-in-out";
+            sidebar.style.width = "100px";
+            sidebar.classList.add("-translate-x-full");
+
+            categoryTitles.forEach((category) => {
+                category.style.transition = "transform 0.9s ease-in-out";
+                category.style.transform = "translateX(10px)";
+            });
+
+            isi_category.length = 0;
+            
+            categoryTitles.forEach((category) => {
+                const text = category.textContent.trim();
+                if (text) {
+                    isi_category.push(text);
+                }
+                
+                category.childNodes.forEach((node) => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        node.nodeValue = "";
+                    }
+                });
+            });
+
+            console.log("Kategori tersimpan:", isi_category);
+            localStorage.setItem("sidebarState", "closed");
+            isSidebarOpen = false;
+            isAnimating = false; // Animasi selesai, bisa menjalankan fungsi lain
+        }, 600);
+    }
+
+        const pindah_laman = document.querySelectorAll(".pindah_Laman");
+
+        pindah_laman.forEach(button => {
+            button.addEventListener("click", function() {
+                const id = this.id; // Mengambil ID dari elemen yang diklik
+
+                const token = localStorage.getItem("token");
+
+                if (id === "pria") {
+                console.log("berpindah ke laman pria")
+                    // Pastikan result.TipeEntity dan token sudah didefinisikan sebelumnya
+                    window.location.href = `/user/Pria?role=User&token=` + encodeURIComponent(token);
+                } else if (id === "BarangDikirim") {
+                console.log("berpindah ke laman wanita")
+                    // Pastikan result.TipeEntity dan token sudah didefinisikan sebelumnya
+                    window.location.href = `/user/BarangDikirim?role=User&token=` + encodeURIComponent(token);
+                } else if (id === "anak") {
+                console.log("berpindah ke laman anak")
+                    // Pastikan result.TipeEntity dan token sudah didefinisikan sebelumnya
+                    window.location.href = `/user/Anak?role=User&token=` + encodeURIComponent(token);
+                } else if (id === "rumah"){
+                console.log("Halaman Home");
+
+                    window.location.href = `/user/makan?role=User&token=` + encodeURIComponent(token);
+                }
+            });
+        });
+
+
+    function expandSidebar() {
+        if (!sidebar || !sidebarLinks || isAnimating) return; // Cegah eksekusi jika animasi sedang berlangsung
+        isAnimating = true;
+
+        sidebar.style.transition = "width 0.9s ease-in-out";
+        sidebar.style.width = "300px";
+        sidebar.classList.remove("-translate-x-full");
+
+        setTimeout(() => {
+            sidebarLinks.forEach((title, index) => {
+                title.style.transition = "opacity 0.2s ease-in-out, visibility 0.8s";
+                title.style.opacity = "1";
+                title.style.visibility = "visible";
+            });
+            
+            categoryTitles.forEach((tittles, index) => {
+
+                if (isi_category[index]) {
+                    let existingTextNode = null;
+                    tittles.childNodes.forEach((node) => {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            existingTextNode = node;
+                        }
+                    });
+
+                    if (existingTextNode) {
+                        existingTextNode.nodeValue = " " + isi_category[index];
+                    } else {
+                        tittles.appendChild(document.createTextNode(" " + isi_category[index]));
+                    }
+                }
+            });
+
+            localStorage.setItem("sidebarState", "open");
+            isSidebarOpen = true;
+            isAnimating = false; // Animasi selesai, bisa menjalankan fungsi lain
+        }, 300);
+    }
+
+
+        // Klik di luar sidebar untuk mengecilkannya
+        document.addEventListener("click", function (event) {
+            if (!sidebar.contains(event.target) && isSidebarOpen) {
+                shrinkSidebar();
+            }
+        });
+
+        // Tekan "S" di keyboard buat toggle sidebar
+        document.addEventListener("keydown", function (event) {
+            if (event.key.toLowerCase() === "s") {
+                toggleSidebar();
+            }
+        });
+
+        // **Fitur Hover Sidebar**
+        sidebar.addEventListener("mouseenter", function () {
+            if (!isSidebarOpen) {
+                expandSidebar();
+            }
+            expandSidebar();
+        });
+
+        sidebar.addEventListener("mouseleave", function () {
+            if (!isSidebarOpen) {
+                shrinkSidebar();
+            }
+        });
+
+        // **Fitur Drag Sidebar**
+        let isDragging = false;
+        let startX, currentX;
+
+        sidebar.addEventListener("mousedown", function (event) {
+            isDragging = true;
+            startX = event.clientX;
+            document.body.style.userSelect = "none";
+        });
+
+        
+
+        document.addEventListener("mouseup", function () {
+            isDragging = false;
+            document.body.style.userSelect = "auto";
+        });
+
+        // **Fitur Animasi Halus**
+        let observer = new MutationObserver(() => {
+            sidebar.style.transition = "all 0.3s ease-in-out";
+        });
+
+        observer.observe(sidebar, { attributes: true });
+
+        toggleSidebar();
+
+        // Load Dark Mode dari localStora
+    });
+
+</script>
+{{ end }}
+
+
+
+{{ define "header" }}
+<header id="navbar" class="fixed top-0 left-0 w-full bg-gray-50  z-50 flex items-center justify-between px-6 py-4 border-b border-gray-200" style="z-index: 502;">
+    <h1 class="text-xl font-bold text-teal-600 font-sans" id="sedang_dimana"></h1>
+    <nav>
+        <ul class="flex space-x-6">
+            <li id="laman_pengguna" ><a href="#" class="text-gray-700 hover:text-teal-500"><i class="fa-solid fa-user-gear"></i></a></li>
+            <li id="laman_keranjang" ><a  class="text-gray-700 hover:text-teal-500"><i class="fa-brands fa-opencart"></i></a></li>
+            <li><a href="/cart.tmpl" class="text-gray-700 hover:text-teal-500">Contact</a></li>
+            <li><a href="/" class="text-rose-500 hover:text-red-600 ml-3">Out</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+{{ end }}
+
+{{ define "pagination" }}
+    <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div class="flex flex-1 justify-between sm:hidden">
+        <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+        <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+    </div>
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+        <p class="text-sm text-gray-700">
+            Showing
+            <span class="font-medium">1</span>
+            to
+            <span class="font-medium">10</span>
+            of
+            <span class="font-medium">97</span>
+            results
+        </p>
+        </div>
+        <div>
+        <nav class="isolate inline-flex -space-x-px rounded-md shadow-xs" aria-label="Pagination">
+            <a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+            <span class="sr-only">Previous</span>
+            <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+            </svg>
+            </a>
+            <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+            <a href="#" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">1</a>
+            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">2</a>
+            <a href="#" class="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex">3</a>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300 ring-inset focus:outline-offset-0">...</span>
+            <a href="#" class="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex">8</a>
+            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">9</a>
+            <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">10</a>
+            <a href="#" class="relative inline-flexs items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+            <span class="sr-only">Next</span>
+            <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+            </a>
+        </nav>
+        </div>
+    </div>
+    </div>
+{{ end }}
+
+{{/* fungsi global */}}
+
+{{define "fungsi_barang"}}
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script>
+async function Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna) {
+  console.log("berasal dari pop up barang", nama, harga, deskripsi, id, jenis, stok, ukuran, warna);
+  document.getElementById("deskripsi_barang_popup").innerHTML = deskripsi;
+  document.getElementById("nama_barang_popup").innerHTML = nama;
+  document.getElementById("harga_barang_popup").innerHTML = harga;
+  document.getElementById("jenis_barang_popup").innerHTML = jenis;
+  document.getElementById("stok_barang_popup").innerHTML = stok;
+  let opsiwarna = document.createElement("option");
+  opsiwarna.text = warna;
+  opsiwarna.value = warna;
+  document.getElementById("warna_barang_popup").appendChild(opsiwarna)
+
+    let ukuran_jadi = ukuran.replace(/,/g, ' '); 
+    let array_ukuran = ukuran_jadi.split(' ');   
+
+    let select = document.getElementById("ukuran_barang_popup");
+
+    select.innerHTML = "";
+
+    array_ukuran.forEach(function(item) {
+    let option = document.createElement("option");
+    option.text = item;    
+    option.value = item;
+    select.appendChild(option);
+    });
+
+
+  try {
+    const fotoResponse = await fetch("/app/endpoint.go", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tujuan: "ambil_foto",
+        data: {
+          nama: nama,
+          jenis_pakaian: jenis
+        }
+      }),
+    });
+
+    if (!fotoResponse.ok) {
+      throw new Error("Gagal mengambil foto dari server");
+    }
+
+    const blob = await fotoResponse.blob();
+    const imageUrl = URL.createObjectURL(blob);
+    document.getElementById("foto_barang_popup").src = imageUrl;
+  } catch (error) {
+    console.error("Error mengambil foto:", error);
+    document.getElementById("foto_barang_popup").src = "https://via.placeholder.com/250x180";
+  }
+}
+
+async function MasukanBarang(deskripsi, nama, harga, jenis, stok, select, jumlah, id_user, namanya) {
+    
+    try {
+        const response = await fetch("/app/endpoint.go", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                tujuan: "masukan_barang_ke_keranjang",
+                nama: nama,
+                harga: harga,
+                jenis: jenis,
+                stok: stok,
+                jumlah: jumlah,
+                ukuran: select,
+                iduser : id_user,
+                namauser : namanya,
+                deskripsi : deskripsi
+            })
+        });
+
+        const data = await response.json();
+        const status = data.status?.toLowerCase();
+
+        if (status === "berhasil") {
+            // Tidak ada toast di sini
+            console.log(data.item || "Barang berhasil ditambahkan!");
+        } else {
+            // Tidak ada toast di sini
+            console.warn(data.item || "Gagal menambahkan barang!");
+        }
+    } catch (error) {
+        Toastify({
+            text: "Terjadi kesalahan koneksi. Silakan coba lagi!",
+            duration: 2000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, rgb(230, 103, 57), rgb(201, 61, 84))",
+                color: "#fff",
+                fontSize: "18px",
+                borderRadius: "10px",
+                padding: "15px 20px",
+            }
+        }).showToast();
+        console.error("Error:", error);
+    }
+}
+
+
+
+document.getElementById("tambah_keranjang_popup").addEventListener("click", function () {
+    let deskripsi = document.getElementById("deskripsi_barang_popup").innerHTML;
+    let nama = document.getElementById("nama_barang_popup").textContent;
+    let harga = document.getElementById("harga_barang_popup").innerHTML;
+    let jenis = document.getElementById("jenis_barang_popup").innerHTML;
+    let stok = document.getElementById("stok_barang_popup").innerHTML;
+    let select = document.getElementById("ukuran_barang_popup").value;
+    let jumlah = document.getElementById("jumlah_pesan").value;
+    let id_user = String(localStorage.getItem('id') ?? '');
+    let namanya = String(localStorage.getItem('nama') ?? '');
+
+
+    console.log(id_user);
+
+    console.log("namanye:", nama);
+    
+
+    fetch("/app/endpoint.go", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tujuan: "barang_keranjang",
+            nama: nama,
+            jenis: jenis,
+            jumlah: jumlah,
+            ukuran: select
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        Toastify({
+            text: "⏳ Sedang memproses... Mohon tunggu sebentar",
+            duration: 400,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                color: "#fff",
+                fontSize: "18px",
+                borderRadius: "10px",
+                padding: "15px 20px",
+            },
+            callback: function() {
+                const status = data.status.toLowerCase();
+                if (status === "berhasil") {
+                    Toastify({
+                        text: data.item,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to right, #22c55e, #16a34a)", // hijau
+                            color: "#fff",
+                            fontSize: "18px",
+                            borderRadius: "10px",
+                            padding: "15px 20px",
+                        }
+                    }).showToast();
+                    MasukanBarang(deskripsi, nama, harga, jenis, stok, select, jumlah, id_user, namanya);
+                } else if (status === "gagal") {
+                    Toastify({
+                        text: data.item,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to right,rgb(230, 103, 57),rgb(201, 61, 84))", // merah
+                            color: "#fff",
+                            fontSize: "18px",
+                            borderRadius: "10px",
+                            padding: "15px 20px",
+                        }
+                    }).showToast();
+                } else {
+                    Toastify({
+                        text: `Status tidak dikenal: ${data.status}`,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to right, #f59e0b, #d97706)", // kuning/orange
+                            color: "#fff",
+                            fontSize: "18px",
+                            borderRadius: "10px",
+                            padding: "15px 20px",
+                        }
+                    }).showToast();
+                }
+            }
+        }).showToast();
+    })
+    .catch(error => {
+        Toastify({
+            text: "⏳ Sedang memproses... Mohon tunggu sebentar",
+            duration: 800,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                color: "#fff",
+                fontSize: "18px",
+                borderRadius: "10px",
+                padding: "15px 20px",
+            },
+            callback: function() {
+                Toastify({
+                    text: "Terjadi kesalahan: " + error,
+                    duration: 2000,
+                    gravity: "top",
+                    position: "center",
+                    style: {
+                        background: "linear-gradient(to right,rgb(230, 103, 57),rgb(201, 61, 84))",
+                        color: "#fff",
+                        fontSize: "18px",
+                        borderRadius: "10px",
+                        padding: "15px 20px",
+                    }
+                }).showToast();
+            }
+        }).showToast();
+        console.error("Terjadi kesalahan:", error);
+    });
+
+
+
+});
+
+</script>
+{{ end }}
+{{define "keranjang"}}
+
+<style>
+#display_barang_keranjang {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+/* Chrome, Safari, Edge */
+#display_barang_keranjang::-webkit-scrollbar {
+  display: none;
+}
+
+
+#display_barang_keranjang::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#display_barang_keranjang::-webkit-scrollbar-thumb {
+  background-color: #4fd1c5;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+</style>
+
+<div id="keranjang_elemen"
+     class="fixed top-0 right-0 h-[94%] w-[50%] my-5 rounded-l-2xl shadow-lg grid grid-cols-[30%_70%] transition-transform duration-500 translate-x-0"
+     style="
+        z-index: 10000;
+        visibility: hidden;
+        background: linear-gradient(135deg, rgb(142, 241, 222), rgba(0, 75, 75, 0.8));
+        border-left: 4px solid rgb(249, 250, 250);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+    ">
+    
+    <!-- Kolom 1 -->
+    <div class="flex flex-col items-center justify-start relative">
+        <div class="flex flex-col items-center justify-start pt-6 relative space-y-3">
+            
+            <div class="w-full grid grid-cols-[10%_90%] h-screen">
+                
+                <!-- Kolom 1 (10%) -->
+                <div class="mx-2 ">
+                    <button id="btn_keranjang" aria-label="Tutup Keranjang"
+                            class="text-2xl font-bold text-teal-700 hover:text-red-500 transition-colors duration-300">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Kolom 2 (90%) -->
+                <div class="p-2 flex flex-col items-center w-full max-w-xs mx-auto">
+                    <!-- Ikon Keranjang -->
+                    <div class="w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-teal-300 to-teal-600 rounded-xl mb-4 flex items-center justify-center text-4xl md:text-5xl text-white shadow-lg">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+
+                    <!-- Baris Ikon Tools -->
+                    <div class="flex space-x-6 text-xl md:text-2xl text-teal-700 mb-4">
+                        <i class="fas fa-filter cursor-pointer hover:text-teal-900 transition-colors duration-300"></i>
+                        <i class="fas fa-sliders-h cursor-pointer hover:text-teal-900 transition-colors duration-300"></i>
+                        <i class="fas fa-cog cursor-pointer hover:text-teal-900 transition-colors duration-300"></i>
+                    </div>
+
+                    <hr class="bg-teal-700">
+
+                    <!-- Rekomendasi Jenis -->
+                    <div style="display:none;" id="box_rekomendasi_jenis" class=" gap-2 p-4 mt-[20px]">
+    
+                    </div>
+                </div>
+
+            </div> <!-- End of grid-cols-[10%_90%] -->
+
+        </div> <!-- End of Inner Flex -->
+    </div> <!-- End of Kolom 1 -->
+
+    <!-- Kolom 2 -->
+    <div class="  p-2 flex flex-col items-center bg-white max-h-[756px]">
+
+  <!-- Search Bar -->
+  <div class="w-full  mx-auto mt-4 mb-4">
+  <div class="flex items-center gap-3 px-4 py-2 rounded-full shadow-lg backdrop-blur-md bg-white/50 border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out">
+
+    <!-- Ikon Search -->
+    <i class="fas fa-search text-gray-500 text-lg"></i>
+
+    <!-- Input -->
+    <input
+      type="text"
+      placeholder="Cari produk, kategori, atau merk..."
+      class="flex-grow bg-transparent outline-none text-sm text-gray-800 placeholder-gray-500"
+    />
+
+    <!-- Tombol Voice atau Scan (Opsional) -->
+    <button class="text-gray-400 hover:text-teal-600 transition">
+      <i class="fas fa-microphone-alt"></i>
+    </button>
+
+  </div>
+</div>
+
+
+  <!-- Display Barang -->
+  <div
+    id="display_barang_keranjang"
+    class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-2 space-y-4"
+  >
+    <!-- Contoh Barang -->
+    
+    <!-- Tambahkan elemen lainnya secara dinamis -->
+  </div>
+
+</div>
+
+
+</div>
+
+
+{{end}}
+{{define "logic_keranjang"}}
+
+
+<script>
+    const elemenKeranjang = document.getElementById('keranjang_elemen');
+    const btnCloseKeranjang = document.getElementById('btn_keranjang');
+    const elemenBukaKeranjang = document.getElementById("laman_keranjang");
+    let id_user = String(localStorage.getItem('id') ?? '');
+    let namanya = String(localStorage.getItem('nama') ?? '');
+    let jenis_ui = [];
+
+    async function ambilBarangUser() {
+        const response = await fetch('/app/endpoint.go', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                    tujuan: "mengambil_barang_dari_keranjang",
+                    namauser: namanya,
+                    iduser: id_user
+                })
+        });
+        if (!response.ok) throw new Error('Gagal mengambil data');
+        const data = await response.json();
+        console.log(data);
+        return data; // misal ini objek data barang
+    }
+    anime({
+            targets: elemenKeranjang,
+            translateX: ['100%', '100%'],
+            easing: 'easeInOutQuad',
+            duration: 600,
+            complete: function () {
+                elemenKeranjang.style.visibility = 'hidden';
+            }
+        });
+
+    // Tutup keranjang (geser ke kanan 100% dan hilang)
+    btnCloseKeranjang?.addEventListener("click", function () {
+        anime({
+            targets: elemenKeranjang,
+            translateX: ['100%', '100%'],
+            easing: 'easeInOutQuad',
+            duration: 600,
+            complete: function () {
+                elemenKeranjang.style.visibility = 'hidden';
+            }
+        }); 
+    });
+
+    async function UpdatePesananKeranjang(jumlah, target, ukuran) {
+    console.log(`${target} akan diupdate stok pesanannya menjadi ${jumlah}, dan ukurann ${ukuran}`);
+    console.log('Memulai proses update keranjang...');
+
+    try {
+        const response = await fetch("/app/endpoint.go", {
+           method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tujuan: "update_stok_keranjang_pemesanan",
+            nama: `${target}`,
+            jumlah: `${jumlah}`,
+            iduser: `${id_user}`,
+            ukuran: `${ukuran}`
+        })
+        });
+
+        // Pastikan response OK (status HTTP 200)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.Status !== "Berhasil") {
+            console.warn("Gagal:", result.Pesan || "Terjadi kesalahan.");
+            alert(`⚠️ Gagal memperbarui keranjang: ${result.Pesan || "Terjadi kesalahan tak dikenal"}`);
+            return;
+        }
+
+        console.log("✅ Berhasil:", result);
+
+    } catch (error) {
+        console.error("❌ Fetch error:", error);
+        alert("❌ Tidak dapat terhubung ke server. Silakan cek koneksi atau coba lagi nanti.");
+    }
+}
+
+
+    function KurangiJum(namaBarang, ukuran) {
+        let jumlahInt = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`).textContent;
+        if (jumlahInt > 1) {
+            jumlahInt--;
+
+            UpdatePesananKeranjang(jumlahInt, namaBarang, ukuran);
+
+            // Update tampilan jumlah di elemen HTML
+            const jumlahElem = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`);
+            if (jumlahElem) {
+                jumlahElem.textContent = jumlahInt;
+            }
+        } else {
+            alert("Jumlah minimal adalah 1");
+        }
+    }
+
+    function TambahJum(namaBarang, ukuran) {
+        let jumlahInt = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`).textContent;
+        if (jumlahInt) {
+            jumlahInt++;
+
+            UpdatePesananKeranjang(jumlahInt, namaBarang, ukuran);
+            // Update tampilan jumlah di elemen HTML
+            const jumlahElem = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`);
+            if (jumlahElem) {
+                jumlahElem.textContent = jumlahInt;
+            }
+        } else {
+            alert("Jumlah minimal adalah 1");
+        }
+    }
+
+    
+   elemenBukaKeranjang?.addEventListener("click", async function () {
+    elemenKeranjang.style.visibility = 'visible';     
+    elemenKeranjang.style.opacity = 0;                
+    elemenKeranjang.style.transform = 'translateX(100%)'; 
+    
+
+    document.getElementById("display_barang_keranjang").innerHTML = `
+        <div class="relative w-full h-64 bg-gray-100 rounded-xl overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70">
+                <div class="animate-spin rounded-full h-12 w-12 border-[3px] border-t-slate-700 border-b-transparent border-l-transparent border-r-transparent"></div>
+            </div>
+        </div>
+    `;
+
+    anime({
+        targets: elemenKeranjang,
+        translateX: ['100%', '0%'],
+        opacity: [0, 1],
+        easing: 'easeOutQuad',
+        duration: 100,
+    });
+
+   try {
+        const dataBarang = await ambilBarangUser();
+
+        if (!Array.isArray(dataBarang) || dataBarang.length === 0) {
+            throw new Error("Data barang kosong atau tidak valid");
+        }
+
+        const htmlPromises = dataBarang.map(async (barang) => {
+            const response = await fetch("/app/endpoint.go", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tujuan: "ambil_foto",
+                    data: {
+                        nama: barang.nama,
+                        jenis_pakaian: barang.jenis,
+                    },
+                }),
+            });
+
+            jenis_ui.push(barang.jenis); 
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const blob = await response.blob();
+            const imgUrl = URL.createObjectURL(blob);
+
+            return `
+                <div class="barang-item opacity-0 translate-y-5 my-2 bg-white rounded-xl shadow p-4 flex space-x-4 items-start border-b-4 border-b-gradient-teal mb-4">
+                    <div class="w-24 h-24 bg-gray-300 rounded-md shadow-inner flex-shrink-0 overflow-hidden">
+                        <img src="${imgUrl}" alt="Foto ${barang.nama}" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="flex flex-col flex-grow space-y-2 w-full">
+                        <div class="grid grid-cols-2 w-full gap-4 items-center">
+                            <div class="text-lg font-semibold text-teal-800 truncate" title="Nama Barang">${barang.nama}</div>
+                            <div class="text-sm text-teal-600 truncate" title="Jenis Barang dan Ukuran">${barang.jenis} • ${barang.ukuran}</div>
+                        </div>
+                        <div class="text-sm text-gray-600 line-clamp-2">${barang.deskripsi}</div>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <div class="flex items-center border border-teal-400 rounded-md overflow-hidden select-none w-max">
+                                <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="KurangiJum('${barang.nama}', '${barang.ukuran}')" aria-label="Kurangi jumlah">−</button>
+                                <div id="jumlah_barang_${barang.nama}_${barang.ukuran}" class="px-4 py-1 text-teal-900 font-semibold min-w-[2rem] text-center">${barang.jumlah}</div>
+                                <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="TambahJum('${barang.nama}', '${barang.ukuran}')" aria-label="Tambah jumlah">+</button>
+                            </div>
+                            <button class="text-red-600 hover:text-red-800" aria-label="Hapus produk">
+                                <i class="fas fa-trash-alt text-lg"></i>
+                            </button>
+                            <button class="text-teal-600 hover:text-teal-800" aria-label="Tambahkan ke favorit">
+                                <i class="fas fa-heart text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        });
+        
+
+        const htmlBarang = await Promise.all(htmlPromises);
+        const container = document.getElementById("display_barang_keranjang");
+        container.innerHTML = htmlBarang.join("");
+
+        anime({
+            targets: '.barang-item',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            easing: 'easeOutQuad',
+            duration: 500,
+            delay: anime.stagger(100) // animasi berurutan
+        });
+
+    } catch (error) {
+        document.getElementById("display_barang_keranjang").innerHTML = `<p class="text-red-600">Gagal memuat data keranjang.</p>`;
+        console.error("Error:", error);
+    }
+
+    console.log(jenis_ui);
+
+    let unik = [...new Set(jenis_ui)];
+    console.log("uniknya nih cuk", unik);
+
+    const box = document.getElementById('box_rekomendasi_jenis');
+
+    box.innerHTML = "";
+
+    const hasilGabungan = unik
+    .map(item => item.split(',')) // pisahkan setiap string berdasarkan koma
+    .flat();                      // gabungkan semua array hasil split menjadi satu array
+    const tanpaDuplikat = [...new Set(hasilGabungan)];
+    tanpaDuplikat.forEach((jenis) => {
+    const span = document.createElement('span');
+    span.className = 'span_isi text-sm font-medium text-gray-800 bg-gray-100 px-4 py-1.5 rounded-full shadow-sm hover:bg-gray-200 transition-colors opacity-0 translate-y-4';
+    span.textContent = jenis;
+    box.appendChild(span);
+});
+
+// Setelah semua elemen dimasukkan ke DOM, baru jalankan animasi
+anime({
+    targets: ".span_isi",
+    opacity: [0, 1],
+    translateY: [16, 0],
+    delay: anime.stagger(100), // animasi bertahap setiap 100ms
+    duration: 1000,
+    easing: 'easeOutExpo'
+});
+
+
+
+
+    
+
+});
+
+</script>
+{{end}}
+
+{{define "Pengguna_side"}}
+
+<style>
+#bagian_kanan_pengguna {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+#bagian_kanan_pengguna::-webkit-scrollbar-track {
+  background: transparent;
+}
+</style>
+<div id="Pengguna_elemen"
+  class="fixed top-0 right-0 h-[94%] w-[50%] my-5 rounded-l-2xl shadow-xl grid grid-cols-[30%_70%] transition-transform duration-500 translate-x-0"
+  style="
+    visibility:hidden;
+    z-index: 10000;
+    background: linear-gradient(135deg, #f0fdfa, #e0f7f5);
+    border-left: 4px solid #ffffff;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+  "
+>
+  <!-- Kiri: Navigasi Pengaturan Akun -->
+  <div class="flex flex-col items-start justify-start p-6 bg-teal-50 bg-opacity-40 border-r border-white space-y-4 font-sans text-[15px] rounded-l-2xl">
+  
+    <i id="tutup_laman" class="fas fa-arrow-left mb-2"></i> <br>
+    
+    <h2 class="text-xl font-semibold text-slate-700 mb-6 tracking-wide text-left mt-4">
+    Pengaturan
+    </h2>
+
+  <button id="info_profil" class="button_kiri grid grid-cols-[24px_auto] gap-x-3 w-full text-slate-700 hover:text-teal-600 group items-start px-2 py-2 rounded-md hover:bg-teal-100 transition">
+    <i class="fas fa-user-circle text-teal-500 row-span-2 mt-1"></i>
+    <div class="font-medium text-left">Info Profil</div>
+    <div class="text-xs text-slate-500 group-hover:text-teal-400 leading-snug text-left">
+      Atur identitas dan foto profil kamu
+    </div>
+  </button>
+
+  <button id="alamat" class="button_kiri grid grid-cols-[24px_auto] gap-x-3 w-full text-slate-700 hover:text-teal-600 group items-start px-2 py-2 rounded-md hover:bg-teal-100 transition">
+    <i class="fas fa-id-card text-teal-500 row-span-2 mt-1"></i>
+    <div class="font-medium text-left">Daftar Alamat</div>
+    <div class="text-xs text-slate-500 group-hover:text-teal-400 leading-snug text-left">
+      Data Alamat Pengiriman dll
+    </div>
+  </button>
+
+  <button id="notifikasi" class="button_kiri grid grid-cols-[24px_auto] gap-x-3 w-full text-slate-700 hover:text-teal-600 group items-start px-2 py-2 rounded-md hover:bg-teal-100 transition">
+    <i class="fas fa-lock text-teal-500 row-span-2 mt-1"></i>
+    <div class="font-medium text-left">Notifikasi</div>
+    <div class="text-xs text-slate-500 group-hover:text-teal-400 leading-snug text-left">
+      Atur Segala Jenis Pesan Notifikasi
+    </div>
+  </button>
+
+  <button id="keamanan" class="button_kiri grid grid-cols-[24px_auto] gap-x-3 w-full text-slate-700 hover:text-teal-600 group items-start px-2 py-2 rounded-md hover:bg-teal-100 transition">
+    <i class="fas fa-shield-alt text-teal-500 row-span-2 mt-1"></i>
+    <div class="font-medium text-left">Keamanan</div>
+    <div class="text-xs text-slate-500 group-hover:text-teal-400 leading-snug text-left">
+      Kata sandi, PIN & verifikasi data diri
+    </div>
+  </button>
+
+  <button id="privasi" class="button_kiri grid grid-cols-[24px_auto] gap-x-3 w-full text-slate-700 hover:text-teal-600 group items-start px-2 py-2 rounded-md hover:bg-teal-100 transition">
+    <i class="fas fa-user-secret text-teal-500 row-span-2 mt-1"></i>
+    <div class="font-medium text-left">Privasi</div>
+    <div class="text-xs text-slate-500 group-hover:text-teal-400 leading-snug text-left">
+      Kontrol siapa yang bisa melihat informasi kamu
+    </div>
+  </button>
+
+</div>
+  <!-- Kanan: Form interaktif -->
+  <div id="bagian_kanan_pengguna" class="bg-white bg-opacity-90 rounded-r-2xl overflow-y-auto p-6 text-sm text-slate-800 space-y-8">
+    
+    <!-- Info Profil -->
+    
+  </div>
+</div>
+
+
+<script>
+  const elemenPengguna = document.getElementById("Pengguna_elemen");
+  const elemenKanan = document.getElementById("bagian_kanan_pengguna");
+  let terpilih = "info_profil";
+
+  elemenKanan.innerHTML = `
+        <div id="info-profil-containe">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
+            
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Nama</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="Anan">
+            </div>
+            
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">$}Username</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik">
+            </div>
+
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Bio</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu">
+            </div>
+        </div>
+
+        <!-- Info Pribadi -->
+        <div id="info-pribadi-container">
+        <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
+        
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">User ID</label>
+            <input type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="115221259">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">E-mail</label>
+            <input type="email" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="adyaryarade@gmail.com">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Nomor HP</label>
+            <input type="tel" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="6281389709265">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+            <select class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+            <option selected disabled>Pilih Jenis Kelamin</option>
+            <option>Laki-laki</option>
+            <option>Perempuan</option>
+            <option>Lainnya</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
+            <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+        </div>
+        </div>
+    `;
+
+  function showContainersWithAnimation(containerIds) {
+        requestAnimationFrame(() => {
+            containerIds.forEach(id => {
+                const el = document.querySelector(`#${id}`);
+                if (el) {
+                    el.style.visibility = "visible";
+                }
+            });
+
+            anime({
+                targets: containerIds.map(id => `#${id}`),
+                opacity: [0, 1],
+                translateY: [40, 0],
+                easing: "easeOutExpo",
+                duration: 800
+            });
+        });
+    }
+    
+    anime({
+        targets: elemenPengguna,
+        translateX: ['100%', '100%'],
+        easing: 'easeInOutQuad',
+        duration: 600,
+        complete: function () {
+            elemenPengguna.style.visibility = 'hidden';
+        }
+    });
+
+  document.getElementById("laman_pengguna").addEventListener("click", function () {
+   
+    elemenPengguna.style.visibility = "visible";
+
+    anime({
+      targets: elemenPengguna,
+      translateX: ['100%', '0%'],
+      opacity: [0, 1],
+      easing: 'easeOutQuad',
+      duration: 300,
+    });
+  });
+
+  document.getElementById("tutup_laman").addEventListener("click", function () {
+    anime({
+      targets: elemenPengguna,
+      translateX: ['100%', '100%'],
+      opacity: [1, 0],
+      easing: 'easeInOutQuad',
+      duration: 300,
+      complete: function () {
+        elemenPengguna.style.visibility = 'hidden';
+      }
+    });
+  });
+
+  const semuaButtonKiri = document.querySelectorAll(".button_kiri");
+
+  semuaButtonKiri.forEach(function(button) {
+    button.addEventListener("click", function() {
+      const idButton = this.id;
+      console.log(this.id);
+
+      if(this.id == "info_profil"){
+      elemenKanan.innerHTML = `
+        <div id="info-profil-container" style="visibility: hidden;">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
+            
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Nama</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="Anan">
+            </div>
+            
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Username</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik">
+            </div>
+
+            <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Bio</label>
+            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu">
+            </div>
+        </div>
+
+        <!-- Info Pribadi -->
+        <div id="info-pribadi-container">
+        <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
+        
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">User ID</label>
+            <input type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="115221259">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">E-mail</label>
+            <input type="email" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="adyaryarade@gmail.com">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Nomor HP</label>
+            <input type="tel" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="6281389709265">
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+            <select class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+            <option selected disabled>Pilih Jenis Kelamin</option>
+            <option>Laki-laki</option>
+            <option>Perempuan</option>
+            <option>Lainnya</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
+            <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+        </div>
+        </div>
+    `;
+
+    showContainersWithAnimation(["info-profil-container", "info-pribadi-container"]);
+
+    } else if(this.id == "alamat"){
+        elemenKanan.innerHTML = `
+            <div id="info-alamat-container" style="">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Alamat</h2>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
+                <textarea class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" rows="3" placeholder="Masukkan alamat lengkap tempat tinggalmu"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Provinsi</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan nama provinsi">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kabupaten/Kota</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kabupaten atau kota">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kecamatan</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kecamatan">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kelurahan/Desa</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kelurahan atau desa">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kode Pos</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kode pos">
+            </div>
+            </div>
+        `;
+
+        showContainersWithAnimation(["info-alamat-container"]);
+
+    } else if(this.id == "notifikasi"){
+        elemenKanan.innerHTML = `
+      <div id="notifikasi_container" style="font-family: 'Segoe UI', sans-serif;  margin: 0 auto; padding: 24px; color: #333;">
+        <p style="font-size: 14px; line-height: 1.5; color: #666; margin-bottom: 24px;">
+            Atur bagaimana kamu menerima notifikasi berbelanja dan beraktivitas di Aplikasi.
+        </p>
+
+        <!-- Push Notification -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-bell" style="font-size: 18px; color: #555;"></i>
+            <span style="font-size: 16px; font-weight: 600;">Push Notification</span>
+            </div>
+            <i class="fas fa-chevron-right" style="color: #bbb;"></i>
+        </div>
+
+        <!-- E-mail -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-envelope" style="font-size: 18px; color: #555;"></i>
+            <span style="font-size: 16px; font-weight: 600;">E-mail</span>
+            </div>
+            <i class="fas fa-chevron-right" style="color: #bbb;"></i>
+        </div>
+
+        <!-- SMS -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-comment-dots" style="font-size: 18px; color: #555;"></i>
+            <span style="font-size: 16px; font-weight: 600;">SMS</span>
+            </div>
+            <i class="fas fa-chevron-right" style="color: #bbb;"></i>
+        </div>
+    </div>
+            `;
+
+      showContainersWithAnimation(["notifikasi_container"]);
+    }
+
+    else if(this.id == "keamanan"){
+        elemenKanan.innerHTML = `
+        <div id="keamanan_container" style="font-family: 'Segoe UI', sans-serif;  margin: 0 auto; padding: 24px; color: #111;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Keamanan</h2>
+
+        <div style="padding: 16px 0; border-bottom: 1px solid #e5e5e5; font-size: 16px; font-weight: 600;">
+            Ubah Kata Sandi
+        </div>
+
+        <div style="padding: 16px 0; border-bottom: 1px solid #e5e5e5; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            PIN Aplikasi
+            <span style="background-color: #ff5f73; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+            NEW
+            </span>
+        </div>
+
+        <div style="padding: 16px 0; border-bottom: 1px solid #e5e5e5; font-size: 16px; font-weight: 600;">
+            Sidik Jari
+        </div>
+
+        <div style="padding: 16px 0; border-bottom: 1px solid #e5e5e5; font-size: 16px; font-weight: 600;">
+            Verifikasi Data Diri
+        </div>
+
+        <div style="padding: 16px 0; font-size: 16px; font-weight: 600;">
+            Masuk Lewat Notifikasi
+        </div>
+        </div>
+
+        `;
+
+        showContainersWithAnimation(["keamanan_container"]);
+    } else if(this.id == "privasi"){
+      
+      }
+    });
+  });
+
+   
+
+
+</script>
+
+{{end}}
+

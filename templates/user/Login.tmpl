@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>
+    <script defer src="assets/animejs/lib/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+</head>
+<body>
+{{template "navbar"}}
+    <div class="flex items-center justify-center w-full h-screen relative"> 
+        <div id="inputan"class="p-8 rounded-lg shadow-lg max-w-sm w-full bg-gray-50 border border-gray-200 relative z-10">
+            <h2 class="text-2xl font-bold text-teal-600 text-center">Login</h2>
+            <p class="text-gray-600 text-center mt-2">Masuk ke akun Anda</p>
+            
+            <form class="mt-6">
+                <div>
+                    <label class="block text-gray-700">Username</label>
+                    <input id="input_username" type="text" class="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-teal-400 focus:outline-none" placeholder="Masukkan email Anda">
+                </div>
+                
+                <div class="mt-4">
+                    <label class="block text-gray-700">Password</label>
+                    <input id="input_password" type="password" class="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-teal-400 focus:outline-none" placeholder="Masukkan password Anda">
+                </div>
+                
+                <button type="submit" class="mt-6 w-full bg-teal-500 text-white py-2 rounded-lg font-semibold hover:bg-teal-600 transition">Login</button>
+            </form>
+
+            <p class="text-gray-600 text-center mt-4">Belum punya akun? <a href="#" class="text-teal-500 hover:underline">Daftar</a></p>
+        </div>
+    </div>
+
+    <style>
+    /* Menghilangkan background dan border popup */
+.no-background {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border: none !important;
+}
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+      let header = document.getElementById("header-login");
+    let tulisanElements = document.querySelectorAll(".tulisan");
+    const elementInput = document.getElementById('inputan');
+
+            anime({
+                targets: "#inputan",
+                opacity: [0, 1],  // Dari transparan ke tampak
+                translateY: [50, 0],  // Geser dari bawah ke atas
+                scale: [0.8, 1],  // Efek membesar
+                duration: 500,  // Durasi animasi (ms)
+                easing: "easeOutExpo",
+                delay: 100, // Tunggu 100ms sebelum mulai animasi
+                complete: function() {
+                    anime({
+                        targets: "#inputan",
+                        opacity: [1, 0.8],  // Turunkan opacity ke 0.8 secara perlahan
+                        duration: 2100,  // 2.1 detik untuk transisi yang halus
+                        easing: "easeOutQuad"
+                    });
+                }
+            });
+
+    header.classList.remove("bg-gradient-to-r", "from-teal-300", "to-teal-500", "text-white", "shadow-md");
+
+    if (header) {
+        header.style.opacity = "0"; // Opacity awal untuk animasi
+        
+        anime({
+            targets: "#header-login",
+            opacity: [0, 0],
+            translateY: [-70, 0],
+            duration: 700,
+            easing: "easeOutExpo",
+            complete: function() {
+                header.style.transition = "background-color 0.5s ease, opacity 0.5s ease, color 0.5s ease";
+                header.classList.add("text-black");
+                header.style.opacity = "50%";
+
+                // Pastikan elemen dengan class "tulisan" memiliki opacity 100%
+                tulisanElements.forEach(el => {
+                    el.style.opacity = "100%";
+                });
+            }
+        });
+
+        
+
+        console.log(header);
+    } else {
+        console.error("Elemen dengan ID 'header-login' tidak ditemukan.");
+    }
+          
+    VANTA.HALO({
+        el: "body",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        baseColor: 0x81e6d9, // Teal-300
+        backgroundColor: 0x319795, // Teal-500
+        amplitudeFactor: 1.2,
+        size: 0.8,
+        speed: 0.7
+    });
+
+
+
+            setTimeout(() => {
+                if (!window.VANTA) {
+                    console.error("Vanta.js gagal dimuat!");
+                } else {
+                    console.log("berhasil");
+                }
+            }, 3000);
+        });
+
+        document.querySelector("form").addEventListener("submit", async function(event) {
+    event.preventDefault(); // Mencegah reload halaman
+
+    
+
+    const formData = new FormData(this);
+    const data = {
+        username: document.getElementById('input_username').value,
+        password: document.getElementById('input_password').value,
+    };
+
+    console.log("Ini adalah user",data["username"]);
+    console.log("ini adalah password nya", data["password"]);
+
+    fetch("/app/endpoint.go", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tujuan: "Login", data: data }) // Tetap menggunakan data yang sudah ada
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text); });
+        }
+        return response.json();
+    })
+    .then(result => {
+
+    console.log(result);
+
+        
+        if (result.berhasil) {
+            Toastify({
+            text: "⏳ Sedang memproses... Mohon tunggu sebentar",
+            duration: 800, // Toast muncul selama 3 detik
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                color: "#fff",
+                fontSize: "18px",
+                borderRadius: "10px",
+                padding: "15px 20px",
+            },
+            callback: function() {
+
+            console.log(result.token)
+                    
+            Swal.fire({
+            html: '<div class="loading-icon"></div>',  // Hanya ikon loading
+            showConfirmButton: false,  // Menyembunyikan tombol konfirmasi
+            showCloseButton: false,  // Menyembunyikan tombol close
+            didOpen: () => {
+                Swal.showLoading(); // Menampilkan animasi loading
+            },
+            customClass: {
+                popup: 'no-background',  // Kelas custom untuk popup
+            }
+            });
+
+            Toastify({
+                text: `Login Berhasil! Selamat datang kembali, ${result.nama}`,
+                duration: 1000,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #00b09b,rgb(61, 133, 201))",
+                    color: "#fff",
+                    fontSize: "18px",
+                    borderRadius: "10px",
+                    padding: "15px 20px",
+                }
+            }).showToast();
+            }
+        }).showToast();
+                // Tunggu sampai Toastify hilang, baru redirect
+                setTimeout(() => {
+                    switch (result.TipeEntity) {
+                        case "User":
+                        // Simpan token di Local Storage
+                        localStorage.setItem("token", result.token);
+                        localStorage.setItem("id", result.id);
+                        localStorage.setItem("nama", result.nama);
+                        console.log("✅ Token disimpan:", result.token);
+                        console.log(localStorage.getItem("token"));
+
+                        // Pastikan token ada sebelum melakukan redirect
+                        if (result.token) {
+                            window.location.href = `/user/Pengguna.tmpl?role=${encodeURIComponent(result.TipeEntity)}&token=${encodeURIComponent(result.token)}`;
+                        }
+                        break;
+                        case "Admin":
+                            // Simpan token di Local Storage
+                        localStorage.setItem("token", result.token);
+                        console.log("✅ Token disimpan:", result.token);
+
+                        // Pastikan token ada sebelum melakukan redirect
+                        if (result.token) {
+                            window.location.href = `/admin/dashboard.tmpl?role=${encodeURIComponent(result.TipeEntity)}&token=${encodeURIComponent(result.token)}`;
+                        }
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                }, 3000); // Waktu harus sama dengan duration Toastify
+                } else {
+                    Toastify({
+            text: "⏳ Sedang memproses... Mohon tunggu sebentar",
+            duration: 400, // Toast muncul selama 3 detik
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                color: "#fff",
+                fontSize: "18px",
+                borderRadius: "10px",
+                padding: "15px 20px",
+            },
+            callback: function() {
+                Toastify({
+                    text: "Login Gagal! Cek Kembali Password atau username yang di input!",
+                    duration: 600,
+                    gravity: "top",
+                    position: "center",
+                    style: {
+                        background: "linear-gradient(to right,rgb(230, 103, 57),rgb(201, 61, 84))",
+                        color: "#fff",
+                        fontSize: "18px",
+                        borderRadius: "10px",
+                        padding: "15px 20px",
+                    }
+                }).showToast();
+            }
+        }).showToast();
+                }
+            })
+            .catch(error => {
+                    Toastify({
+                text: "⏳ Sedang memproses... Mohon tunggu sebentar",
+                duration: 800, // Toast muncul selama 3 detik
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    color: "#fff",
+                    fontSize: "18px",
+                    borderRadius: "10px",
+                    padding: "15px 20px",
+                },
+                callback: function() {
+                    Toastify({
+                        text: "Login Gagal! Cek Kembali Password atau username yang di input!",
+                        duration: 2000,
+                        gravity: "top",
+                        position: "center",
+                        style: {
+                            background: "linear-gradient(to right,rgb(230, 103, 57),rgb(201, 61, 84))",
+                            color: "#fff",
+                            fontSize: "18px",
+                            borderRadius: "10px",
+                            padding: "15px 20px",
+                        }
+                    }).showToast();
+                }
+            }).showToast(); 
+
+    });
+
+});
+
+    </script>
+</body>
+</html>

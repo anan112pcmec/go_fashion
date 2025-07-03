@@ -1,0 +1,297 @@
+
+{{ define "navbar"}}
+<header class="bg-gradient-to-r from-teal-300 to-teal-500 text-white py-5 shadow-md" id="header-login" >
+        <div class="container mx-auto flex justify-between items-center px-6">
+            
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="Login.tmpl" class="hover:text-teal-200 tulisan"> Masuk</a></li>
+                    <li><a href="/about.tmpl" class="hover:text-teal-200 tulisan">About</a></li>
+                    <li><a href="/layout.tmpl" class="hover:text-teal-200 tulisan">Services</a></li>
+                    <li><a href="/contact.tmpl" class="hover:text-teal-200 tulisan">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+{{ end }}
+
+{{ define "body-home"}}
+   <section class="text-center py-20 px-6 bg-gradient-to-r from-teal-300 to-teal-500 text-white" id="section-top">
+
+    <div class="grid grid-cols-12 gap-2">
+        <!-- Col-4 -->
+        <div class="col-span-5  text-white p-4">
+             <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="/assets/foto/kemeja.png" alt="Baju 1"></div>
+                    <div class="swiper-slide"><img src="https://pngimg.com/uploads/tshirt/tshirt_PNG5457.png" alt="Baju 2"></div>
+                    <div class="swiper-slide"><img src="https://pngimg.com/uploads/tshirt/tshirt_PNG5458.png" alt="Baju 3"></div>
+                    <div class="swiper-slide"><img src="https://pngimg.com/uploads/tshirt/tshirt_PNG5459.png" alt="Baju 4"></div>
+                </div>
+               
+            </div>
+        </div>
+        <div class="col-span-7 text-white p-4"><div class="mt-12 grid md:grid-cols-2 gap-10 max-w-4xl mx-auto text-left">
+        <!-- Paragraf Kiri -->
+        <div class="p-6 bg-white/20 rounded-xl shadow-lg backdrop-blur-md">
+            <p class="text-lg">
+                Faiz Shop adalah destinasi fashion yang menawarkan koleksi pakaian trendy, berkualitas, dan nyaman 
+                untuk berbagai gaya dan kesempatan. Temukan pilihan terbaik mulai dari casual wear, formal attire, hingga street style fashion.
+            </p>
+        </div>
+
+        <!-- Paragraf Kanan -->
+        <div class="p-6 bg-white/20 rounded-xl shadow-lg backdrop-blur-md">
+            <p class="text-lg">
+                Dengan bahan premium, desain modern, dan harga terjangkau, Faiz Shop berkomitmen menghadirkan pengalaman belanja fashion terbaik. 
+                Eksplor koleksi terbaru kami dan tampil percaya diri dengan gaya Anda!
+            </p>
+        </div>
+    </div></div>
+    </div>
+    </section>
+
+    
+    <section id="about" class="py-16 px-6 section-about" >
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-teal-700 section-about">About Us</h2>
+            <p class="mt-4 text-gray-700 section-about">We specialize in crafting digital solutions that help businesses grow.</p>
+        </div>
+    </section>
+    
+    <section id="services" class="py-16 px-6 bg-gray-200 our-services">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-teal-700">Our Services</h2>
+            <div class="grid md:grid-cols-3 gap-8 mt-8">
+                <div class="p-6 bg-white rounded-lg shadow-lg services-kiri">
+                    <h3 class="text-xl font-semibold">Web Development</h3>
+                    <p class="mt-2 text-gray-600">We build modern and responsive websites.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg service-tengah">
+                    <h3 class="text-xl font-semibold">SEO Optimization</h3>
+                    <p class="mt-2 text-gray-600">Helping your website rank higher on search engines.</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-lg services-kanan">
+                    <h3 class="text-xl font-semibold">Digital Marketing</h3>
+                    <p class="mt-2 text-gray-600">Expanding your online presence effectively.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="py-16 px-6" id="section-contact">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-teal-700">Contact Us</h2>
+            <p class="mt-4 text-gray-700">Reach out to us for any inquiries or collaborations.</p>
+            <button id="kirim_request" class="mt-6 px-6 py-3 bg-teal-600 rounded-lg text-white font-semibold hover:bg-teal-700 transition">Send Message</button>
+        </div>
+    </section>
+    
+    <footer class="bg-teal-700 text-white text-center py-4" id="footer">
+        <p>&copy; 2025 BrandName. All rights reserved.</p>
+    </footer>
+
+    <script> 
+
+    document.addEventListener("DOMContentLoaded", function () {
+    anime({
+        targets: "#header-login",
+        opacity: [0, 1],
+        translateY: [-70, 0],
+        duration: 1200,
+        easing: "easeOutExpo"
+    });
+    anime({
+        targets: "#section-top",
+        opacity: [0, 1],
+        translateY: [-70, 0],
+        duration: 1200,
+        easing: "easeOutExpo"
+    });
+
+    anime({
+        targets: ".our-services",
+        opacity: [0.3, 1],
+        translateY: [200, 0],
+        duration: 1200,
+        easing: "easeOutExpo"
+    });
+
+
+     anime({
+        targets: ".section-about",
+        opacity: [0.3, 1],
+        translateY: [-50, 0],
+        duration: 600,
+        easing: "easeOutExpo"
+    });
+
+    anime({
+        targets: ".services-kiri",
+        translateX: [-100, 0],
+        opacity: [0, 1],
+        duration: 1000,
+        easing: "easeOutQuad"
+    });
+
+    anime({
+        targets: ".services-kanan",
+        translateX: [100, 0],
+        opacity: [0, 1],
+        duration: 1000,
+        easing: "easeOutQuad"
+    });
+
+    var swiper = new Swiper(".mySwiper", {
+        loop: true, 
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        centeredSlides: true,
+        spaceBetween: 10,
+
+    
+    });
+
+    });
+    </script>
+{{ end }}
+
+{{ define "about"}}
+    <header class="text-center py-20 bg-gradient-to-r from-teal-300 to-teal-500 text-white" id="header">
+        <h2 class="text-4xl font-bold">Ribuan Baju Fashion Kekinian</h2>
+        <p class="mt-4 text-lg">Menampilkan tren terbaru dalam dunia fashion.</p>
+    </header>
+
+    <section class="py-16 px-6 text-center" id="pengenalan">
+        <h2 class="text-3xl font-bold text-teal-700">Kenali Produk Kami</h2>
+        <pre class="mt-4 text-gray-700 text-lg">Dapatkan produk fashion terbaru dengan kualitas terbaik.</pre>
+        <button class="mt-6 px-6 py-3 bg-teal-700 rounded-lg text-white font-semibold hover:bg-teal-800 transition">Lihat Selengkapnya</button>
+    </section>
+
+    <section class="py-16 px-6"  id="elemen_kiri">
+        <div class="container mx-auto grid grid-cols-12 gap-8">
+            <div class="col-span-5 relative">
+                <div class="swiper mySwiper bg-transparent">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="/images/fashion1.jpg" alt="Fashion 1" class="w-full rounded-lg shadow"></div>
+                        <div class="swiper-slide"><img src="/images/fashion2.jpg" alt="Fashion 2" class="w-full rounded-lg shadow"></div>
+                        <div class="swiper-slide"><img src="/images/fashion3.jpg" alt="Fashion 3" class="w-full rounded-lg shadow"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-7 flex flex-col justify-center">
+                <h3 class="text-3xl font-bold text-teal-700">Jenis-Jenis Pakaian</h3>
+                <p class="mt-4 text-gray-700 text-lg leading-relaxed">
+                    Dari pakaian kasual hingga formal, kami menyediakan berbagai jenis pakaian yang sesuai untuk setiap kesempatan.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-6"  id="elemen_kanan">
+        <div class="container mx-auto grid grid-cols-12 gap-8">
+            <div class="col-span-7 flex flex-col justify-center">
+                <h3 class="text-3xl font-bold text-teal-700">Analisis Tren Fashion</h3>
+                <p class="mt-4 text-gray-700 text-lg leading-relaxed">
+                    Polar chart di bawah ini menggambarkan popularitas berbagai jenis pakaian berdasarkan permintaan pasar.
+                </p>
+            </div>
+            <div class="col-span-5" style="padding: 5rem;">
+                <canvas id="polarChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-teal-700 text-white text-center py-4"  id="footer">
+        <p>&copy; 2025 BrandName. All rights reserved.</p>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Animasi Header
+        anime({
+            targets: "#header",
+            opacity: [0, 1],
+            translateY: [-50, 0],
+            easing: "easeOutExpo",
+            duration: 1000,
+            delay: 300
+        });
+
+        // Animasi Pengenalan
+        anime({
+            targets: "#pengenalan",
+            opacity: [0, 1],
+            translateY: [50, 0],
+            easing: "easeOutExpo",
+            duration: 1000,
+            delay: 600
+        });
+
+        // Fungsi Animasi Scroll
+        function animateOnScroll(target, translateX, delay) {
+            let observer = new IntersectionObserver(
+                function (entries, observer) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            anime({
+                                targets: target,
+                                opacity: [0, 1],
+                                translateX: [translateX, 0],
+                                easing: "easeOutExpo",
+                                duration: 1000,
+                                delay: delay
+                            });
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.2 }
+            );
+            observer.observe(document.querySelector(target));
+        }
+
+        // Animasi elemen masuk dari kiri
+        animateOnScroll("#elemen_kiri", -100, 300);
+
+        // Animasi elemen masuk dari kanan
+        animateOnScroll("#elemen_kanan", 100, 300);
+
+        // Inisialisasi Swiper JS
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            effect: "fade",
+        });
+
+        // Inisialisasi Chart.js Polar Area Chart
+        const ctx = document.getElementById("polarChart").getContext("2d");
+        new Chart(ctx, {
+            type: "polarArea",
+            data: {
+                labels: ["Shirts", "Pants", "Jackets", "Shoes", "Accessories"],
+                datasets: [{
+                    data: [15, 20, 10, 25, 18],
+                    backgroundColor: ["#14b8a6", "#0d9488", "#0f766e", "#115e59", "#134e4a"],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "top",
+                        labels: { color: "#333" }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+{{ end }}

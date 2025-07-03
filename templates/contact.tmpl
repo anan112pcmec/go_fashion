@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi & Kontak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+
+    {{ template "navbar" }}
+    <section class="container mx-auto py-16 px-6 text-center" id="Tentang">
+        <h2 class="text-3xl font-bold text-teal-700">Tentang Kami</h2>
+        <p class="mt-4 text-lg text-gray-700">Kami adalah perusahaan yang berfokus pada fashion terkini, menyediakan berbagai pakaian trendi dengan kualitas terbaik.</p>
+    </section>
+    
+    <section class="bg-gray-200 py-16 px-6" id="section-info">
+        <div class="container mx-auto grid md:grid-cols-2 gap-8">
+            <div class="p-6 text-center md:text-left">
+                <h3 class="text-2xl font-bold text-teal-700">Hubungi Kami</h3>
+                <p class="mt-4 text-gray-700">Jika Anda memiliki pertanyaan atau ingin berkolaborasi dengan kami, jangan ragu untuk menghubungi kami.</p>
+                <ul class="mt-4 text-gray-700">
+                    <li><strong>Email:</strong> contact@fashionbrand.com</li>
+                    <li><strong>Telepon:</strong> +62 812-3456-7890</li>
+                    <li><strong>Alamat:</strong> Jl. Fashion No. 21, Jakarta, Indonesia</li>
+                </ul>
+            </div>
+            <div class="p-6">
+                <form class="bg-white p-6 rounded-lg shadow-lg" id="form-section">
+                    <h3 class="text-xl font-semibold text-teal-700">Kirim Pesan</h3>
+                    <div class="mt-4">
+                        <label class="block text-gray-700">Nama</label>
+                        <input type="text" class="w-full px-4 py-2 border rounded-lg" placeholder="Nama Anda">
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-700">Email</label>
+                        <input type="email" class="w-full px-4 py-2 border rounded-lg" placeholder="Email Anda">
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-700">Pesan</label>
+                        <textarea class="w-full px-4 py-2 border rounded-lg" placeholder="Tulis pesan Anda"></textarea>
+                    </div>
+                    <button class="mt-6 px-6 py-3 bg-teal-600 rounded-lg text-white font-semibold hover:bg-teal-700 transition w-full">Kirim</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="bg-teal-700 text-white text-center py-4 mt-6" id="footer">
+        <p>&copy; 2025 FashionBrand. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const elements = document.querySelectorAll("#Tentang, #section-info, #footer");
+
+         anime({
+            targets: "#header-login",
+            opacity: [0, 1],
+            translateY: [-70, 0],
+            duration: 1000,
+            easing: "easeOutExpo"
+        });
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.id === "Tentang") {
+                        anime({
+                            targets: "#Tentang h2, #Tentang p",
+                            opacity: [0, 1],
+                            translateY: [50, 0],
+                            duration: 1000,
+                            easing: "easeOutExpo",
+                            delay: anime.stagger(200)
+                        });
+                    } else if (entry.target.id === "section-info") {
+                        anime({
+                            targets: "#section-info div",
+                            opacity: [0, 1],
+                            translateX: [-50, 0],
+                            duration: 1200,
+                            easing: "easeOutExpo",
+                            delay: anime.stagger(300)
+                        });
+                    } else if (entry.target.id === "footer") {
+                        anime({
+                            targets: "#footer",
+                            opacity: [0, 1],
+                            translateY: [30, 0],
+                            duration: 1500,
+                            easing: "easeOutExpo"
+                        });
+                    }
+                    observer.unobserve(entry.target); // Hentikan observer setelah animasi pertama kali terjadi
+                }
+            });
+        }, { threshold: 0.3 }); // Aktifkan saat 30% elemen terlihat
+
+        elements.forEach(el => observer.observe(el));
+
+
+    });
+</script>
+
+</body>
+</html>

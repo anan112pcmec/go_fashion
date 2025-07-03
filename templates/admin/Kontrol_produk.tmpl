@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+   <!-- Toastify JS -->
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    {{ template "sidebar" }}
+    {{ template "Edit_barang"}}
+    {{ template "Hapus_Barang_Entry_Total"}}
+   <div id="admin_kontrol" class="p-4 sm:ml-64 space-y-6 bg-gray-50 min-h-screen">
+
+   <div style="display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px;">
+   <div style="font-size: 1.5rem; font-weight: 500; font-family: 'Sauce', sans-serif;">
+      Kontrol Barang
+   </div>
+   <hr style="border: none; border-top: 2px solid #94a3b8; margin: 0;">
+   </div>
+
+
+      <div style="flex: 12; background: white;  border-radius: 10px; overflow-x: auto; white-space: nowrap;">
+  <div class="swiper-container mySwiper" style="width: 100%; overflow: hidden; padding: 5px;">
+    <div class="swiper-wrapper" style="display: flex; gap: 15px;">
+
+      <!-- Semua -->
+      <div id="Semua" class="short_cut swiper-slide" style="width: 120px; background: linear-gradient(to right, #6366f1, #3b82f6); border-radius: 15px; padding: 12px; text-align: center; cursor: pointer;">
+        <i class="fas fa-tshirt" style="font-size: 1.8rem; color: white;"></i>
+        <div style="color: white; font-weight: bold; margin-top: 6px;">Semua</div>
+        <small style="color: white; opacity: 0.9;">Lihat semua kategori</small>
+      </div>
+
+      <!-- Baju -->
+      <div id="Baju" class="short_cut swiper-slide" style="
+      background: linear-gradient(to right, #34d399, #10b981); 
+      border-radius: 15px; 
+      padding: 14px; 
+      cursor: pointer; 
+      color: white; 
+      font-size: 0.75rem; 
+      height: 100px;
+
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      grid-template-rows: auto auto; 
+      gap: 6px 12px;
+      align-items: center;
+      text-align: left;
+      ">
+
+      <!-- Ikon + Nama (grid area: row 1 / col 1) -->
+      <div style="display: flex; align-items: center; gap: 8px; grid-column: 1 / 2; grid-row: 1 / 2;">
+         <i class="ri-shirt-fill" style="font-size: 1.6rem; color: white;"></i>
+         <div style="font-weight: bold; font-size: 0.9rem;">Baju</div>
+      </div>
+
+      <!-- Jumlah total (grid area: row 1 / col 2) -->
+      <div style="grid-column: 2 / 3; grid-row: 1 / 2; font-weight: bold; font-size: 0.85rem;">
+         Jumlah varian: <span id="Jumlah_baju">38</span>
+      </div>
+
+      <!-- CTA Admin (grid area: row 2 / col 1) -->
+      <div style="font-size: 0.7rem; opacity: 0.9; grid-column: 1 / 2; grid-row: 2 / 3;">
+         Ketuk untuk mengontrol baju
+      </div>
+
+      <!-- Sudah terjual (grid area: row 2 / col 2) -->
+      <div style="grid-column: 2 / 3; grid-row: 2 / 3; font-weight: bold; font-size: 0.85rem;">
+         Sudah terjual: <span id="Jumlah_baju_terjual">38</span>
+      </div>
+
+      </div>
+
+
+
+      <!-- Celana -->
+      <div id="Celana" class="short_cut swiper-slide" style="
+      width: 160px; 
+      background: linear-gradient(to right, #f59e0b, #fbbf24); 
+      border-radius: 15px; 
+      padding: 14px; 
+      cursor: pointer; 
+      color: white; 
+      font-size: 0.75rem; 
+      height: 100px;
+
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      grid-template-rows: auto auto; 
+      gap: 6px 12px;
+      align-items: center;
+      text-align: left;
+      ">
+
+      <!-- Ikon + Nama -->
+      <div style="display: flex; align-items: center; gap: 8px; grid-column: 1 / 2; grid-row: 1 / 2;">
+         <i class="fas fa-user-tie" style="font-size: 1.6rem; color: white;"></i>
+         <div style="font-weight: bold; font-size: 0.9rem;">Celana</div>
+      </div>
+
+      <!-- Jumlah total -->
+      <div style="grid-column: 2 / 3; grid-row: 1 / 2; font-weight: bold; font-size: 0.85rem;">
+         Jumlah varian: <span id="Jumlah_celana">38</span>
+      </div>
+
+      <!-- CTA Admin -->
+      <div style="font-size: 0.7rem; opacity: 0.9; grid-column: 1 / 2; grid-row: 2 / 3;">
+         Kelola stok celana
+      </div>
+
+      <!-- Sudah terjual -->
+      <div style="grid-column: 2 / 3; grid-row: 2 / 3; font-weight: bold; font-size: 0.85rem;">
+         Sudah terjual: <span id="Jumlah_celana_terjual">38</span>
+      </div>
+
+      </div>
+
+
+      <!-- Kacamata -->
+      <div id="Kacamata" class="short_cut swiper-slide" style="
+      width: 160px; 
+      background: linear-gradient(to right, #06b6d4, #3b82f6); 
+      border-radius: 15px; 
+      padding: 14px; 
+      cursor: pointer; 
+      color: white; 
+      font-size: 0.75rem; 
+      height: 100px;
+
+
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      grid-template-rows: auto auto; 
+      gap: 6px 12px;
+      align-items: center;
+      text-align: left;
+      ">
+
+      <!-- Ikon + Nama -->
+      <div style="display: flex; align-items: center; gap: 8px; grid-column: 1 / 2; grid-row: 1 / 2;">
+         <i class="fas fa-glasses" style="font-size: 1.6rem; color: white;"></i>
+         <div style="font-weight: bold; font-size: 0.9rem;">Kacamata</div>
+      </div>
+
+      <!-- Jumlah total -->
+      <div style="grid-column: 2 / 3; grid-row: 1 / 2; font-weight: bold; font-size: 0.85rem;">
+         Jumlah varian: <span id="Jumlah_kacamata">38</span>
+      </div>
+
+      <!-- CTA Admin -->
+      <div style="font-size: 0.7rem; opacity: 0.9; grid-column: 1 / 2; grid-row: 2 / 3;">
+         Pantau koleksi
+      </div>
+
+      <!-- Sudah terjual -->
+      <div style="grid-column: 2 / 3; grid-row: 2 / 3; font-weight: bold; font-size: 0.85rem;">
+         Sudah terjual: <span id="Jumlah_kacamata_terjual">38</span>
+      </div>
+
+      </div>
+
+
+            <!-- Tas -->
+
+      <div id="Tas" class="short_cut swiper-slide" style="
+      width: 160px; 
+      background: linear-gradient(to right, #ec4899, #ef4444); 
+      border-radius: 15px; 
+      padding: 14px; 
+      cursor: pointer; 
+      color: white; 
+      font-size: 0.75rem; 
+      height: 100px;
+
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      grid-template-rows: auto auto; 
+      gap: 6px 12px;
+      align-items: center;
+      text-align: left;
+      ">
+
+      <!-- Ikon + Nama -->
+      <div style="display: flex; align-items: center; gap: 8px; grid-column: 1 / 2; grid-row: 1 / 2;">
+         <i class="fas fa-shopping-bag" style="font-size: 1.6rem; color: white;"></i>
+         <div style="font-weight: bold; font-size: 0.9rem;">Tas</div>
+      </div>
+
+      <!-- Jumlah total -->
+      <div style="grid-column: 2 / 3; grid-row: 1 / 2; font-weight: bold; font-size: 0.85rem;">
+         Jumlah varian: <span id="Jumlah_tas">38</span>
+      </div>
+
+      <!-- CTA Admin -->
+      <div style="font-size: 0.7rem; opacity: 0.9; grid-column: 1 / 2; grid-row: 2 / 3;">
+         Manajemen item
+      </div>
+
+      <!-- Sudah terjual -->
+      <div style="grid-column: 2 / 3; grid-row: 2 / 3; font-weight: bold; font-size: 0.85rem;">
+         Sudah terjual: <span id="Jumlah_tas_terjual">38</span>
+      </div>
+
+      </div>
+
+            
+
+            <!-- Sepatu -->
+      <div id="sepatu" class="short_cut swiper-slide" style="
+      width: 160px; 
+      background: linear-gradient(to right, #8b5cf6, #6366f1); 
+      border-radius: 15px; 
+      padding: 14px; 
+      cursor: pointer; 
+      color: white; 
+      font-size: 0.75rem; 
+      height: 100px;
+
+      display: grid; 
+      grid-template-columns: 1fr auto; 
+      grid-template-rows: auto auto; 
+      gap: 6px 12px;
+      align-items: center;
+      text-align: left;
+      ">
+
+      <!-- Ikon + Nama -->
+      <div style="display: flex; align-items: center; gap: 8px; grid-column: 1 / 2; grid-row: 1 / 2;">
+         <span style="font-size: 1.6rem;">👟</span>
+         <div style="font-weight: bold; font-size: 0.9rem;">Sepatu</div>
+      </div>
+
+      <!-- Jumlah total -->
+      <div style="grid-column: 2 / 3; grid-row: 1 / 2; font-weight: bold; font-size: 0.85rem;">
+         Jumlah varian: <span id="Jumlah_sepatu">38</span>
+      </div>
+
+      <!-- CTA Admin -->
+      <div style="font-size: 0.7rem; opacity: 0.9; grid-column: 1 / 2; grid-row: 2 / 3;">
+         Kontrol sepatu
+      </div>
+
+      <!-- Sudah terjual -->
+      <div style="grid-column: 2 / 3; grid-row: 2 / 3; font-weight: bold; font-size: 0.85rem;">
+         Sudah terjual: <span id="Jumlah_sepatu_terjual">38</span>
+      </div>
+
+      </div>
+
+
+      <!-- Dll -->
+      <div id="dll" class="short_cut swiper-slide" style="width: 120px; background: linear-gradient(to right, #9ca3af, #6b7280); border-radius: 15px; padding: 12px; text-align: center; cursor: pointer;">
+        <i class="fas fa-ellipsis-h" style="font-size: 1.8rem; color: white;"></i>
+        <div style="color: white; font-weight: bold; margin-top: 6px;">Lainnya</div>
+        <small style="color: white; opacity: 0.9;">Kategori lain</small>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  <!-- Filter dan Search -->
+   <div class="flex flex-col space-y-3">
+  <div class="flex items-center justify-between">
+    <button class="border rounded-full px-4 py-1 text-sm text-gray-700 shadow-sm hover:bg-gray-100 transition">
+      Berdasarkan
+    </button>
+
+    <div class="relative w-1/2">
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-300" 
+        placeholder="Cari barang..."
+        aria-label="Search items"
+      >
+      <svg class="absolute right-4 top-3 w-4 h-4 text-gray-500 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M12.9 14.32a8 8 0 111.414-1.414l5.387 5.387-1.414 1.414-5.387-5.387zM8 14a6 6 0 100-12 6 6 0 000 12z"/>
+      </svg>
+      <!-- Loading spinner (hidden by default) -->
+      <div class="absolute right-10 top-3 w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin hidden" id="loadingSpinner"></div>
+    </div>
+
+    <!-- Dropdown sorting -->
+    <select class="border rounded-full px-3 py-1 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300" aria-label="Sort items">
+      <option value="relevance">Relevansi</option>
+      <option value="newest">Terbaru</option>
+      <option value="lowest-price">Harga Terendah</option>
+      <option value="highest-price">Harga Tertinggi</option>
+    </select>
+  </div>
+
+  <!-- Info hasil pencarian -->
+  <div class="text-sm text-gray-600">
+    <span id="resultCount"> </span> barang ditemukan
+  </div>
+</div>
+
+
+   <!-- Daftar Produk -->
+   <div id="table_produk" style="max-height: 400px; overflow-y: auto;" class="space-y-4">
+  <!-- Item Produk 1 -->
+  
+
+
+  <!-- Item Produk 2 -->
+   <div class="bg-gray-200 rounded-2xl p-4 shadow-inner space-y-2 mx-auto">
+
+   <div class="grid grid-cols-[2.5rem_1fr_12.5rem_9.375rem_7.5rem] gap-4 items-center">
+      <!-- Kolom 1: Nomor -->
+      <p class="font-semibold text-lg">1.</p>
+      
+      <!-- Kolom 2: Nama • Jenis -->
+      <div>
+         <p class="font-semibold text-lg">Nama • Jenis</p>
+         <p class="text-sm text-gray-700">Harga • Stok</p>
+      </div>
+      
+      <!-- Kolom 3: Memiliki Diskon dan Berakhir Pada -->
+      <div class="text-sm text-gray-600 space-y-1">
+         <p>Memiliki diskon: <span class="font-semibold text-red-600">48%</span></p>
+         <p>Berakhir pada: <span class="font-semibold">31 Des 2025</span></p>
+      </div>
+
+      <!-- Kolom 4: Tersedia dan Terjual -->
+      <div class="text-sm text-gray-600 space-y-1">
+         <p>Tersedia: <span class="font-semibold">100</span></p>
+         <p>Terjual: <span class="font-semibold">50</span></p>
+      </div>
+
+      <!-- Kolom 5: Ikon -->
+      <div class="flex space-x-3 justify-end">
+         <button class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer" aria-label="Edit">
+         ✏️
+         </button>
+         <button class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-red-400 cursor-pointer" aria-label="Delete">
+         🗑️
+         </button>
+         <button class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer" aria-label="View Image">
+         🖼️
+         </button>
+      </div>
+   </div>
+
+   </div>
+
+  <!-- Item Produk 3 -->
+  <div class="bg-gray-200 rounded-2xl p-4 space-y-2 shadow-inner">
+    <div class="flex justify-between items-center">
+      <div>
+        <p class="font-semibold text-lg">3. Nama • Jenis</p>
+        <p class="text-sm text-gray-700">Harga • Stok</p>
+      </div>
+      <div class="flex space-x-3">
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer">✏️</div>
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-red-400 cursor-pointer">🗑️</div>
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer">🖼️</div>
+      </div>
+    </div>
+    <div class="text-sm text-gray-600">
+      <p>Memiliki diskon:</p>
+      <p>Berakhir Pada:</p>
+    </div>
+  </div>
+
+  <!-- Item Produk 4 -->
+  <div class="bg-gray-200 rounded-2xl p-4 space-y-2 shadow-inner">
+    <div class="flex justify-between items-center">
+      <div>
+        <p class="font-semibold text-lg">4. Nama • Jenis</p>
+        <p class="text-sm text-gray-700">Harga • Stok</p>
+      </div>
+      <div class="flex space-x-3">
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer">✏️</div>
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-red-400 cursor-pointer">🗑️</div>
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-xl hover:bg-gray-400 cursor-pointer">🖼️</div>
+      </div>
+    </div>
+    <div class="text-sm text-gray-600">
+      <p>Memiliki diskon:</p>
+      <p>Berakhir Pada:</p>
+    </div>
+  </div>
+</div>
+
+
+   <!-- Tombol Tambah -->
+   <div class="flex justify-center space-x-4 pt-4">
+      <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-gray-400 cursor-pointer">+</div>
+      <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-gray-400 cursor-pointer">+</div>
+      <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-gray-400 cursor-pointer">+</div>
+      <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-gray-400 cursor-pointer">+</div>
+      <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl font-bold hover:bg-gray-400 cursor-pointer">+</div>
+   </div>
+   </div>
+
+   <script>
+
+   const elemen_short_cut = document.querySelectorAll(".short_cut");
+   let pencarian_short_cut = "";
+
+   const jumlah_baju = document.getElementById("Jumlah_baju");
+   const jumlah_baju_terjual = document.getElementById("Jumlah_baju_terjual");
+   const jumlah_celana = document.getElementById("Jumlah_celana");
+   const jumlah_celana_terjual = document.getElementById("Jumlah_celana_terjual");
+   const jumlah_kacamata = document.getElementById("Jumlah_kacamata");
+   const jumlah_kacamata_terjual = document.getElementById("Jumlah_kacamata_terjual");
+   const jumlah_tas = document.getElementById("Jumlah_tas");
+   const jumlah_tas_terjual = document.getElementById("Jumlah_tas_terjual");
+   const jumlah_sepatu = document.getElementById("Jumlah_sepatu");
+   const jumlah_sepatu_terjual = document.getElementById("Jumlah_sepatu_terjual");
+
+
+   elemen_short_cut.forEach((element) => {
+      element.addEventListener("click", (el) => {
+         console.log(element.id);
+         pencarian_short_cut = element.id;
+         // Panggil AmbilData di sini setelah pencarian_short_cut diupdate
+         AmbilData(element.id)
+      });
+   });
+
+   if (jumlah_baju && jumlah_celana && jumlah_kacamata && jumlah_tas && jumlah_sepatu) {
+         fetchData().then(data => {
+         if (data) {
+            console.log("Data yang diproses:", data);
+         } else {
+            console.log("Pengambilan data gagal.");
+         }
+      });
+   }
+
+   if(pencarian_short_cut == ""){
+    AmbilData("Semua");
+   }
+
+   async function fetchData() {
+         try {
+            const response = await fetch("/app/endpoint.go", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               tujuan: "Ambil_Data_ui_short"
+            }),
+            });
+
+            if (!response.ok) {
+            console.error("Gagal mengambil data:", response.status, response.statusText, await response.text());
+            throw new Error(`Gagal mengambil data: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json(); // Parse respons JSON
+            console.log("Data berhasil diambil:", data);
+
+            jumlah_baju.innerHTML = data.total_baju;
+            jumlah_celana.innerHTML = data.total_celana;
+            jumlah_kacamata.innerHTML = data.total_kacamata;
+            jumlah_sepatu.innerHTML = data.total_sepatu;
+            jumlah_tas.innerHTML = data.total_tas;
+            jumlah_barang_custom.innerHTML = data.total_barang_custom;
+
+
+            // Lakukan sesuatu dengan data di sini, misalnya:
+            // updateUI(data);
+
+            return data; // Mengembalikan data agar bisa digunakan di luar fungsi
+         } catch (error) {
+            console.error("Terjadi kesalahan:", error);
+            // Tampilkan pesan kesalahan kepada pengguna atau lakukan penanganan lain
+            // Misalnya:
+            // displayError("Terjadi kesalahan saat mengambil data.");
+            return null; // Mengembalikan null atau nilai default jika terjadi kesalahan
+         }
+      }
+   
+   async function AmbilData(Jenis) {
+      try {
+         const response = await fetch("/app/endpoint.go", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            tujuan: "Ambil_Data_Admin_Short",
+            jenis: Jenis,
+            }),
+         });
+
+         if (!response.ok) {
+            throw new Error("Gagal mengambil data: " + response.statusText);
+         }
+
+         const data = await response.json();
+         console.log("Data berhasil diambil:", data);
+
+         const tableProduk = document.getElementById("table_produk");
+         tableProduk.innerHTML = ""; // Bersihkan konten sebelumnya
+
+         document.getElementById("resultCount").innerHTML = data[data.length - 1].Jumlah_Barang;
+
+         data.forEach((datanya, index) => {
+            if (index < data.length - 1) {
+               const cardHTML = `
+               <div class="bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out mx-auto">
+                  <div class="grid grid-cols-[2.5rem_1fr_12.5rem_9.375rem_7.5rem] gap-4 items-center">
+
+                     <!-- Kolom 1: Nomor -->
+                     <p class="font-semibold text-gray-700 text-lg">${index + 1}.</p>
+
+                     <!-- Kolom 2: Nama • Jenis -->
+                     <div>
+                        <p class="font-semibold text-gray-800 text-lg">${datanya.nama} • ${datanya.jenis_pakaian}</p>
+                        <p class="text-sm text-gray-500">${datanya.harga} • ${datanya.stok}</p>
+                     </div>
+
+                     <!-- Kolom 3: Kategori dan Warna -->
+                     <div class="text-sm text-gray-600 space-y-1">
+                        <p>Kategori: <span class="font-semibold text-gray-800">${datanya.kategori}</span></p>
+                        <p>Warna: <span class="font-semibold text-gray-800">${datanya.warna}</span></p>
+                     </div>
+
+                     <!-- Kolom 4: Gender dan Ukuran -->
+                     <div class="text-sm text-gray-600 space-y-1">
+                        <p>Gender: <span class="font-semibold text-gray-800">${datanya.gender}</span></p>
+                        <p>Ukuran: <span class="font-semibold text-gray-800">${datanya.ukuran}</span></p>
+                     </div>
+
+                     <!-- Kolom 5: Tombol Aksi -->
+                     <div class="flex space-x-2 justify-end">
+                        <button onclick="Edit_barang()" class="w-9 h-9 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full flex items-center justify-center shadow transition" aria-label="Edit">
+                        <i class="fas fa-pen"></i>
+                        </button>
+                        <button onclick="Hapus_Barang_Entry('${datanya.id_barang}', '${datanya.nama}', '${datanya.jenis_pakaian}', '${datanya.gender}', '${datanya.harga}')" class="w-9 h-9 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center shadow transition" aria-label="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="w-9 h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center shadow transition" aria-label="View Image">
+                        <i class="fas fa-image"></i>
+                        </button>
+                     </div>
+
+                  </div>
+                  </div>
+
+               `;
+
+               tableProduk.innerHTML += cardHTML; // Tambahkan card ke dalam elemen
+            }
+         });
+
+      } catch (error) {
+         console.error("Terjadi kesalahan:", error);
+         return null;
+      }
+   }
+
+
+      var swiper = new Swiper(".mySwiper", {
+         slidesPerView: 3,
+         spaceBetween: 30,
+         freeMode: true,
+      });
+      </script>
+
+   </body>
+
+</html>

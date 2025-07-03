@@ -1,0 +1,703 @@
+{{ define "sidebar"}}
+<button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+   <span class="sr-only">Open sidebar</span>
+   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+   <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+   </svg>
+</button>
+
+<aside id="sidebar-multi-level-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+      <ul class="space-y-2 font-medium">
+         <li>
+            <a id="Dashboard" class="pindah_laman flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+               </svg>
+               <span class="ms-3">Dashboard</span>
+            </a>
+         </li>
+         <li>
+            <button  type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                  <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+                  </svg>
+                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Produk</span>
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                  </svg>
+            </button>
+            <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                  <li>
+                     <a id="Produk" class="pindah_laman flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Input Produk</a>
+                  </li>
+                  <li>
+                     <a id="hskxb" class="pindah_laman flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Kontrol</a>
+                  </li>
+                  <li>
+                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
+                  </li>
+            </ul>
+         </li>
+         <li>
+            <a id="Kontrol_produk" class="pindah_laman flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Kanban</span>
+               <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
+               <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                  <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                  <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Products</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Sign In</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
+                  <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
+                  <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
+            </a>
+         </li>
+      </ul>
+   </div>
+</aside>
+
+   <script>
+   const token = localStorage.getItem("token");
+   document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.querySelector("[data-collapse-toggle='dropdown-example']");
+    const dropdownMenu = document.getElementById("dropdown-example");
+
+    toggleButton.addEventListener("click", function () {
+        dropdownMenu.classList.toggle("hidden");
+    });
+    });
+   const pindah_laman = document.querySelectorAll('.pindah_laman');
+
+   pindah_laman.forEach(button => {
+    button.addEventListener('click', function () {
+        const jenis = this.id.toLowerCase(); // Ubah ke lowercase agar perbandingan lebih fleksibel
+        console.log(jenis);
+
+        if (jenis === "produk") {
+            window.location.href = `/admin/produk?role=Admin&token=` + encodeURIComponent(token);
+        } else if (jenis === "dashboard") { // Ubah ke lowercase
+            window.location.href = `/admin/dashboard.tmpl?role=Admin&token=` + encodeURIComponent(token);
+        } else if(jenis === "kontrol_produk") {
+            window.location.href = `/admin/kontrol?role=Admin&token=` + encodeURIComponent(token);
+        }
+    });
+    });
+
+
+   </script>
+
+{{ end }}
+
+{{define "dashboardtemplate"}}
+<div class="p-4 sm:ml-64">
+   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+      <div class="grid grid-cols-3 gap-4 mb-4 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-md">
+    <!-- Total Pengguna -->
+    <div class="flex items-center justify-between h-24 rounded-lg bg-white dark:bg-gray-800 p-5 shadow hover:shadow-lg transition-all">
+        <div class="flex flex-col">
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total Pengguna</p>
+            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">1,245</p>
+        </div>
+        <canvas id="userChart" width="50" height="50"></canvas>
+    </div>
+
+    <!-- Pendapatan -->
+    <div class="flex items-center justify-between h-24 rounded-lg bg-white dark:bg-gray-800 p-5 shadow hover:shadow-lg transition-all">
+        <div class="flex flex-col">
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">Pendapatan</p>
+            <p class="text-2xl font-bold text-green-600 dark:text-green-400">Rp 75,000,000</p>
+        </div>
+        <canvas id="revenueChart" width="50" height="50"></canvas>
+    </div>
+
+    <!-- Pesanan Baru -->
+    <div class="flex items-center justify-between h-24 rounded-lg bg-white dark:bg-gray-800 p-5 shadow hover:shadow-lg transition-all">
+        <div class="flex flex-col">
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-300">Pesanan Baru</p>
+            <p class="text-2xl font-bold text-red-600 dark:text-red-400">87</p>
+        </div>
+        <canvas id="ordersChart" width="50" height="50"></canvas>
+    </div>
+</div>
+
+<!-- Grafik Penjualan Produk -->
+<div class="flex flex-col gap-4 h-auto mb-4 rounded-lg bg-white dark:bg-gray-800 shadow-md p-4">
+    <!-- Row 1: Judul -->
+    <div class="text-gray-900 dark:text-gray-200 text-lg font-bold ml-4">
+        Penjualan
+    </div>
+
+    <!-- Row 2: Chart & Table -->
+    <div class="flex flex-row w-full gap-4">
+        <!-- Chart -->
+        <div class="flex-1 bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <canvas id="salesChart"></canvas>
+        </div>
+
+        <!-- Data Table -->
+        <div class="flex-1 bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <table id="salesTable" class="w-full text-gray-900 dark:text-gray-200">
+                <thead>
+                    <tr class="border-b">
+                        <th class="p-2 text-left">Kategori</th>
+                        <th class="p-2 text-left">Penjualan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="p-2">Baju</td><td class="p-2">120</td></tr>
+                    <tr><td class="p-2">Celana</td><td class="p-2">90</td></tr>
+                    <tr><td class="p-2">Sepatu</td><td class="p-2">140</td></tr>
+                    <tr><td class="p-2">Kacamata</td><td class="p-2">80</td></tr>
+                    <tr><td class="p-2">Perhiasan</td><td class="p-2">50</td></tr>
+                    <tr><td class="p-2">Tas</td><td class="p-2">110</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+const categories = ["Baju", "Celana", "Sepatu", "Kacamata", "Perhiasan", "Tas"];
+const salesData = [120, 90, 140, 80, 50, 110]; // Data penjualan
+
+// Perbaikan: Menghitung posisi tren di puncak bar
+const trendData = salesData.map((value, index, arr) => 
+    index > 0 ? arr[index] : arr[index] // Memastikan nilai tren berada di puncak
+);
+
+const barColors = ["#211C84", "#4D55CC", "#7A73D1", "#B5A8D5", "#4D55CC", "#211C84"];
+const lineColors = trendData.map((_, index) => index > 0 && salesData[index] >= salesData[index - 1] ? "#2ECC71" : "#E74C3C");
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: categories,
+        datasets: [
+            {
+                type: 'bar',
+                label: 'Penjualan',
+                data: salesData,
+                backgroundColor: barColors,
+                borderWidth: 1,
+                yAxisID: 'y'
+            },
+            {
+                type: 'line',
+                label: 'Tren',
+                data: trendData, // Tren kini berada di puncak bar
+                borderColor: lineColors,
+                borderWidth: 2,
+                pointBackgroundColor: lineColors,
+                fill: false,
+                tension: 0.4,
+                yAxisID: 'y' // Gunakan skala y yang sama
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+            }
+        }
+    }
+});
+
+</script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#salesTable').DataTable({
+            responsive: true,
+            paging: false,
+            searching: false,
+            info: false,
+            ordering: false
+        });
+    });
+</script>
+
+<!-- Kotak Statistik Lainnya -->
+<div class="grid grid-cols-2 gap-6 mb-4">
+    <!-- Kartu Total Penjualan -->
+    <div class="flex flex-col justify-between p-5 rounded-lg bg-white h-40 dark:bg-gray-800 shadow-md hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total Penjualan</p>
+                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">Rp 250.000.000</p>
+            </div>
+            <svg class="w-10 h-10 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+            <strong class="text-gray-900 dark:text-gray-100">Tren naik 15%!</strong> Produk <em>elektronik</em> dan <em>fashion</em> mendominasi pasar bulan ini.
+        </p>
+    </div>
+
+    <!-- Kartu Produk Terjual -->
+    <div class="flex flex-col justify-between p-5 rounded-lg bg-white h-40 dark:bg-gray-800 shadow-md hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Produk Terjual</p>
+                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">1.250</p>
+            </div>
+            <svg class="w-10 h-10 text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m4-4H8"/>
+            </svg>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+            <strong class="text-gray-900 dark:text-gray-100">Hot item:</strong> Pakaian musim panas laris manis! Terjual <strong>400+ unit</strong> dalam seminggu.
+        </p>
+    </div>
+
+    <!-- Kartu Pelanggan Baru -->
+    <div class="flex flex-col justify-between p-5 rounded-lg bg-white h-40 dark:bg-gray-800 shadow-md hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Pelanggan Baru</p>
+                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">320</p>
+            </div>
+            <svg class="w-10 h-10 text-yellow-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m4-10H8"/>
+            </svg>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+            <strong class="text-gray-900 dark:text-gray-100">Instagram & TikTok</strong> membawa pelanggan baru terbanyak. Iklan berbayar efektif!
+        </p>
+    </div>
+
+    <!-- Kartu Rating Kepuasan -->
+    <div class="flex flex-col justify-between p-5 rounded-lg bg-white h-40 dark:bg-gray-800 shadow-md hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Rating Kepuasan</p>
+                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100">4.8 / 5</p>
+            </div>
+            <svg class="w-10 h-10 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17l-5 3 1-5.5L3 10l5.5-.5L12 5l2.5 4.5L20 10l-4.5 4.5 1 5.5z"/>
+            </svg>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+            <strong class="text-gray-900 dark:text-gray-100">Feedback positif!</strong> Pelanggan memuji pengiriman cepat dan kualitas produk yang bagus.
+        </p>
+    </div>
+</div>
+
+
+      </div>
+      <div class="flex flex-col items-center justify-center h-48 mb-4 rounded-sm bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-md p-4">
+   
+
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">© 2024 Nama Perusahaan. All rights reserved.</p>
+
+    <div class="flex space-x-4 mt-2">
+        <a href="#" class="text-sm text-blue-500 hover:underline">Dokumentasi</a>
+        <a href="#" class="text-sm text-blue-500 hover:underline">Bantuan</a>
+        <a href="#" class="text-sm text-blue-500 hover:underline">Kebijakan Privasi</a>
+    </div>
+
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Version 1.2.3 - Last updated: July 2024</p>
+</div>
+
+      <div class="grid grid-cols-2 gap-4">
+         
+      </div>
+   </div>
+</div>
+
+{{ end }}
+
+{{ define "dropdown" }}
+<div class="dropdown" data-control="checkbox-dropdown" style="width: 100%; border-radius: 10px; z-index: 1000;">
+        <label class="dropdown-label">Select</label>
+        
+        <div class="dropdown-list">
+            <a href="#" data-toggle="check-all" class="dropdown-option">
+                Semua  
+            </a>
+            
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Casual" />
+                Casual
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Formal" />
+                Formal
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Sporty" />
+                Sporty
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Vintage" />
+                Vintage
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Bohemian" />
+                Bohemian
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Chic" />
+                Chic
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Streetwear" />
+                Streetwear
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Preppy" />
+                Preppy
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Gothic" />
+                Gothic
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Hipster" />
+                Hipster
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Minimalist" />
+                Minimalist
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Grunge" />
+                Grunge
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Punk" />
+                Punk
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Y2K" />
+                Y2K
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Artsy" />
+                Artsy
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Business Casual" />
+                Business Casual
+            </label>
+
+            <label class="dropdown-option">
+                <input type="checkbox" name="dropdown-group" value="Athleisure" />
+                Athleisure
+            </label>
+
+
+
+        </div>
+    </div>
+
+    {{ end }}
+
+    {{ define "Edit_barang" }}
+    <!-- Popup Wrapper -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Popup -->
+    <div id="popup-detail" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white w-[95%] max-w-6xl rounded-2xl shadow-xl p-6 relative animate-fadeIn font-sans text-slate-800">
+
+        <!-- Tombol Exit -->
+        <button onclick="TutupPopupEdit()" class="absolute top-4 right-4 text-slate-500 hover:text-red-500 transition" aria-label="Close">
+        <i class="fas fa-times text-2xl"></i>
+        </button>
+
+        <!-- Isi Konten Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Kolom Kiri -->
+        <div class="flex flex-col space-y-5">
+            <!-- Canvas Foto -->
+            <div class="w-full h-64 bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center overflow-hidden">
+            <canvas id="fotoCanvas" class="w-full h-full object-contain rounded-xl"></canvas>
+            </div>
+
+            <!-- Nama Barang -->
+            <h3 class="text-xl font-semibold pl-1 flex items-center gap-2">
+            <i class="fas fa-tag text-slate-500"></i>
+            Jaket Kulit Pria Premium
+            </h3>
+
+            <!-- Deskripsi -->
+            <textarea
+            class="w-full h-32 p-4 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+            placeholder="Deskripsi barang...">Jaket kulit asli berkualitas tinggi dengan desain modern, cocok untuk tampilan kasual maupun formal.</textarea>
+
+            <!-- Info Tambahan -->
+            <div class="flex flex-wrap text-sm text-slate-600 gap-4 pl-1">
+            <span><i class="fas fa-palette mr-1"></i> Warna: Coklat Tua</span>
+            <span><i class="fas fa-ruler-combined mr-1"></i> Ukuran: L</span>
+            <span><i class="fas fa-venus-mars mr-1"></i> Gender: Pria</span>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan -->
+        <div class="flex flex-col space-y-4">
+            <!-- Box 1 -->
+            <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <i class="fas fa-box text-slate-500 text-xl mt-1"></i>
+            <div class="flex-1">
+                <h4 class="text-base font-semibold mb-1">Stok Barang</h4>
+                <p class="text-sm text-slate-600 leading-snug">Tersedia <strong>24</strong> unit. Siap kirim dalam 1x24 jam.</p>
+            </div>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <i class="fas fa-clock-rotate-left text-slate-500 text-xl mt-1"></i>
+            <div class="flex-1">
+                <h4 class="text-base font-semibold mb-1">Riwayat Barang</h4>
+                <p class="text-sm text-slate-600 leading-snug">Terakhir restock <strong>15 Juni 2025</strong>. Tidak ada retur.</p>
+            </div>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <i class="fas fa-chart-line text-slate-500 text-xl mt-1"></i>
+            <div class="flex-1">
+                <h4 class="text-base font-semibold mb-1">Penjualan Produk</h4>
+                <p class="text-sm text-slate-600 leading-snug">Terjual <strong>350+</strong> unit bulan lalu. Penjualan stabil.</p>
+            </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <i class="fas fa-chart-line text-slate-500 text-xl mt-1"></i>
+            <div class="flex-1">
+                <h4 class="text-base font-semibold mb-1">Discount</h4>
+                <p class="text-sm text-slate-600 leading-snug">Barang ini <strong>50%</strong> Dari Harga Asli.</p>
+            </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+            <i class="fas fa-chart-line text-slate-500 text-xl mt-1"></i>
+            <div class="flex-1">
+                <h4 class="text-base font-semibold mb-1">Customer Service</h4>
+                <p class="text-sm text-slate-600 leading-snug">Tangani Pengalaman<strong> Customer</strong></p>
+            </div>
+            </div>
+
+        </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+    </div>
+    </div>
+
+
+    <script>
+    function Edit_barang(){
+        document.getElementById("popup-detail").style.display = "flex";
+    }
+
+    function TutupPopupEdit() {
+        document.getElementById("popup-detail").style.display = "none";
+    }
+    </script>
+    {{ end }}
+
+    {{define "Hapus_Barang_Entry_Total"}}
+
+    <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+</style>
+
+<script>
+
+let popupAktif = false;
+let popupToast = null;
+
+function Hapus_Barang_Entry(id_barang, nama, jenis_pakaian, gender, harga) {
+
+  if (popupAktif) {
+    Toastify({
+      text: "⚠️ Fokus ke aksi ini terlebih dahulu.",
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: "#fef9c3",       
+        color: "#92400e",
+        border: "1px solid #fde68a",
+        borderRadius: "8px",
+        padding: "10px 16px",
+        fontSize: "14px",
+      }
+    }).showToast();
+    return;
+  }
+
+  const formContainer = document.createElement("div");
+  formContainer.style.fontFamily = "'Inter', system-ui, sans-serif";
+
+  formContainer.innerHTML = `
+    <div class="text-slate-800">
+      <h3 class="text-base font-semibold text-red-600 mb-2">
+        ⚠️ Anda akan menghapus seluruh data barang <strong>${nama}</strong>!
+      </h3>
+      <p class="text-sm mb-3 text-slate-700 leading-snug">
+        Tindakan ini <strong>tidak dapat dibatalkan</strong>. Jika Anda melanjutkan, seluruh data terkait barang ini akan terhapus dari sistem secara permanen.
+      </p>
+
+      <label class="flex items-start space-x-2 bg-slate-50 p-2 rounded-md border border-slate-200 mb-4">
+        <input type="checkbox" id="konfirmasiHapus" class="mt-1 accent-red-600">
+        <span class="text-sm text-slate-700 leading-tight">Saya memahami dan menyetujui penghapusan seluruh data barang ini secara permanen.</span>
+      </label>
+
+      <div class="flex justify-end gap-2">
+        <button onclick="batalHapus()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-1.5 rounded text-sm font-medium transition">
+          Batal
+        </button>
+        <button onclick="konfirmasiHapusBarang('${id_barang}', '${nama}', '${jenis_pakaian}', '${gender}', '${harga}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded text-sm font-medium transition">
+          Hapus Data
+        </button>
+      </div>
+    </div>
+  `;
+
+  popupToast = Toastify({
+    node: formContainer,
+    duration: -1,
+    gravity: "top",
+    position: "center",
+    close: false,
+    stopOnFocus: true,
+    style: {
+      background: "#fef2f2",
+      border: "1px solid #fecaca",
+      borderRadius: "0.75rem",
+      padding: "1rem",
+      boxShadow: "0 6px 18px rgba(0,0,0,0.1)",
+      width: "360px",
+    }
+  });
+
+  popupToast.showToast();
+  popupAktif = true;
+}
+
+function batalHapus() {
+  if (popupToast) {
+    popupToast.hideToast();
+    popupAktif = false;
+    popupToast = null;
+  }
+}
+
+async function konfirmasiHapusBarang(id_barang, nama, jenis_pakaian, gender, harga) {
+  const checkbox = document.getElementById("konfirmasiHapus");
+  if (!checkbox.checked) {
+    alert("Mohon centang kotak persetujuan terlebih dahulu.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/app/endpoint.go", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tujuan: "Hapus_Barang_Admin_ACC",
+        id_barang: `${id_barang}`,
+        nama: `${nama}`,
+        jenis_pakaian: `${id_barang}`, // <- sesuai aslinya walau kemungkinan typo
+        gender: `${gender}`,
+        harga: `${harga}`,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data: " + response.statusText);
+    }
+
+    const data = await response.json();
+    console.log("Data berhasil diambil:", data);
+
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+    return null;
+  }
+
+  alert("✅ Seluruh barang berhasil dihapus dari sistem.");
+  if (popupToast) popupToast.hideToast();
+}
+
+</script>
+
+    {{ end }}

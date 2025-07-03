@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+     <!-- Leaflet CSS -->
+        <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-o9N1j8xT7bO3PhmCGL+0Rs3GHI1smh7aCkPzYaxjUPg=" 
+        crossorigin=""/>
+        <!-- Leaflet JS -->
+<script 
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+  integrity="sha256-o9N1j8xT7bO3PhmCGL+0Rs3GHI1smh7aCkPzYaxjUPg=" 
+  crossorigin="">
+</script>
+
+
+    
+
+
+    <!-- Swiper.js CSS -->
+    
+    <style>
+        /* Custom Tailwind Config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+    </style>
+    <style>
+    select option {
+        text-align: center;
+    }
+    </style>
+
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    {{ template "header"}}
+   {{ template "sidebar"}}
+
+   {{ template "fungsi_barang" }}
+   <div id="sisa-ruang" style="width: 112rem; margin-left: 7rem; margin-right: 1.875rem; height: 100rem; margin-top: 4.25rem; background: white; border: 1px solid #d1d1d1; border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
+   {{ template "keranjang" }}
+   {{template "Pengguna_side"}}
+
+    <!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- Popup -->
+<div class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 backdrop-blur-sm">
+  <div class="relative bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] flex flex-col md:flex-row w-full max-w-5xl p-8 md:p-10 animate-fade-in transition-all duration-300 ease-in-out">
+
+    <!-- Tombol Close -->
+    <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-extrabold transition-transform duration-200 hover:scale-125" onclick="closePopup()">
+      &times;
+    </button>
+
+    <!-- Kolom Kiri -->
+    <div class="md:w-1/2 md:pr-8 flex flex-col justify-between">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800 mb-5 tracking-tight" id="nama_barang_popup">Nama Barang</h2>
+
+        <div class="bg-gray-100 rounded-2xl h-32 flex items-center justify-center text-base text-center text-gray-600 mb-6 px-6 shadow-inner" id="deskripsi_barang_popup">
+          Deskripsi barang sebesar box ini.
+        </div>
+
+        <p class="text-sm font-medium text-gray-500 mb-8 italic break-words max-w-xs" id="jenis_barang_popup">
+        
+        </p>
+
+        <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+        <div class="bg-white  py-2 px-3 text-center shadow-sm">
+            <p class="text-[10px] text-gray-500 mb-1">Ukuran</p>
+            <select id="ukuran_barang_popup" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full">
+            <!-- opsi ukuran di sini -->
+            </select>
+        </div>
+
+        <div class="bg-white   py-2 px-3 text-center shadow-sm">
+            <p class="text-[10px] text-gray-500 mb-1">Warna</p>
+            <select id="warna_barang_popup" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full">
+            <!-- opsi warna di sini -->
+            </select>
+        </div>
+
+        <div class="bg-white  px-3 text-center shadow-sm">
+            <p class="text-[10px] text-gray-500 mb-1">Jumlah Pesan</p>
+            <input type="number" id="jumlah_pesan" min="1" value="1" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full border border-gray-300 rounded px-2 py-1" />
+        </div>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <!-- Harga -->
+        <div class="bg-gray-900 text-white py-3 rounded-full text-center text-lg font-semibold tracking-wide shadow-md hover:bg-black transition-all duration-200" id="harga_barang_popup">
+          Rp 199.000
+        </div>
+
+        <!-- Tombol Tambah ke Keranjang -->
+        <button class="bg-teal-500 text-white py-3 rounded-full w-full flex items-center justify-center gap-3 font-semibold text-lg shadow-lg hover:bg-orange-600 transition-all duration-200" id="tambah_keranjang_popup">
+          <i class="fa-solid fa-cart-shopping text-base"></i>
+          Tambah ke Keranjang
+        </button>
+      </div>
+    </div>
+
+    <!-- Garis Pemisah -->
+    <div class="hidden md:block border-l mx-8 border-gray-200"></div>
+
+    <div class="md:w-1/2 flex flex-col items-center justify-center mt-8 md:mt-0 relative space-y-4">
+    <!-- Teks di atas gambar -->
+    <p class="text-sm font-semibold text-gray-700 tracking-wide">Foto Produk</p>
+
+    <!-- Container gambar -->
+    <div class="w-60 h-80 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-inner">
+        <img src="https://via.placeholder.com/250x180" alt="Foto Barang" class="object-contain max-h-full max-w-full transition-transform duration-300 hover:scale-105" id="foto_barang_popup" />
+
+        <!-- Watermark -->
+        <div class="absolute bottom-2 right-3 text-[10px] text-gray-400 select-none pointer-events-none tracking-wide">
+        © Faizh Shop
+        </div>
+        
+    </div>
+
+    <!-- Kotak info stok/warna/ukuran/keranjang -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 w-full max-w-[20rem]" style="display:none">
+  <!-- Stok -->
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">Stok</p>
+    <p class="text-sm font-semibold text-gray-700" id="stok_barang_popup">50</p>
+  </div>
+
+  <!-- Warna (dropdown tapi dalam box yang sama) -->
+
+
+  <!-- Ukuran (dropdown) -->
+  
+
+
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 w-full max-w-[20rem]">
+  <!-- Stok -->
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">S :</p>
+    <p class="text-sm font-semibold text-gray-700" >50</p>
+  </div>
+
+  <!-- Ukuran (dropdown) -->
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">M :</p>
+    <p class="text-sm font-semibold text-gray-700" >50</p>
+  </div>
+
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">L :</p>
+    <p class="text-sm font-semibold text-gray-700" >50</p>
+  </div>
+
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">X :</p>
+    <p class="text-sm font-semibold text-gray-700" >50</p>
+  </div>
+
+  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+    <p class="text-[10px] text-gray-500">XL :</p>
+    <p class="text-sm font-semibold text-gray-700" >50</p>
+  </div>
+
+
+</div>
+
+    </div>
+
+
+
+  </div>
+</div>
+
+
+<script>
+    const popupcuy = document.querySelector('.fixed.inset-0');
+    popupcuy.style.display = 'none'; // Tampilkan popup dengan fleksibel di tengah layar                           
+</script>
+
+
+
+    <!-- Row 1 -->
+    <div style="display: flex; gap: 1rem; height: 200px;">
+        <div class="bg-white p-6 rounded-xl border border-gray-300 shadow-lg flex flex-row gap-6">
+        <!-- Kolom Kiri -->
+        <div class="flex flex-col justify-between flex-1">
+            <div>
+                <p class="text-lg font-semibold text-gray-800">Alamat Pengiriman</p>
+                <p id="alamat_user" class="text-sm text-gray-600">Jalan Merdeka No. 45, Jakarta, Indonesia</p>
+            </div>
+            <div class="flex gap-4 text-xl mt-4">
+                <i class="fas fa-comments text-teal-500"></i>
+                <i class="fas fa-bell text-teal-500"></i>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan (Peta) -->
+        <div class="flex-1">
+            <div id="mapContainer" class="w-full h-full rounded-lg overflow-hidden border border-gray-200"></div>
+        </div>
+    </div>
+
+    <script>
+    // Ambil alamat dari elemen
+const alamat = document.getElementById("alamat_user").textContent.trim();
+
+// Pastikan Leaflet sudah dimuat sebelum menjalankan ini
+// Gunakan API Nominatim OpenStreetMap untuk geocoding
+fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(alamat)}`)
+  .then(response => response.json())
+  .then(data => {
+    if (data && data.length > 0) {
+      const lat = parseFloat(data[0].lat);
+      const lon = parseFloat(data[0].lon);
+
+      // Inisialisasi peta Leaflet
+      const map = L.map('mapContainer').setView([lat, lon], 15);
+
+      // Tambahkan tile layer
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map);
+
+      // Tambahkan marker lokasi
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup(`Lokasi: ${alamat}`)
+        .openPopup();
+    } else {
+      console.error('Lokasi tidak ditemukan untuk alamat:', alamat);
+      document.getElementById('mapContainer').innerHTML = '<p class="text-sm text-red-500 p-2">Lokasi tidak ditemukan</p>';
+    }
+  })
+  .catch(error => {
+    console.error('Terjadi kesalahan saat mengambil lokasi:', error);
+    document.getElementById('mapContainer').innerHTML = '<p class="text-sm text-red-500 p-2">Gagal memuat peta</p>';
+  });
+
+    </script>
+
+        <div style="flex: 9; border-radius: 10px; overflow-x: auto; white-space: nowrap;">
+        
+            <div class="swiper-container mySwiper" style="width: 100%; overflow: hidden; padding: 20px;">
+                <div class="swiper-wrapper" style="display: flex; gap: 15px;">
+                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-400 to-sky-400 mb-2">
+                    <i class="ri-shirt-fill text-white text-xl"></i>
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Pakaian</span>
+                <small class="text-xs text-gray-500">12 varian • 3 coming soon</small>
+            </div>
+
+            <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-400 to-purple-500 mb-2 text-white text-xl">
+                    👟
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Sepatu</span>
+                <small class="text-xs text-gray-500">8 varian • 2 coming soon</small>
+                </div>
+
+                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-200 mb-2 text-white text-xl">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Topi</span>
+                <small class="text-xs text-gray-500">5 varian • 1 coming soon</small>
+                </div>
+
+                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-400 mb-2 text-white text-xl">
+                    <i class="fa-solid fa-glasses"></i>
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Kacamata</span>
+                <small class="text-xs text-gray-500">6 varian • 4 coming soon</small>
+                </div>
+
+                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-red-500 mb-2 text-white text-xl">
+                    <i class="fas fa-ring"></i>
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Cincin</span>
+                <small class="text-xs text-gray-500">3 varian • 5 coming soon</small>
+                </div>
+
+                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-lime-400 mb-2 text-white text-xl">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <span class="text-sm font-semibold text-gray-800">Tas</span>
+                <small class="text-xs text-gray-500">10 varian • 2 coming soon</small>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<div style="display: flex; gap: 1rem; height: 158px;">
+    <div style="flex: 4;" class="bg-gradient-to-r from-gray-50 via-teal-100 to-teal-300 
+    hover:from-gray-50 hover:via-teal-200 hover:to-teal-600 
+    transition-all duration-1000 ease-in-out 
+    transform hover:-translate-x-2 
+    p-6 rounded-xl border-l-2 border-teal-500 shadow-lg 
+    hover:shadow-xl">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Pesanan Aktif</h3>
+        <i class="fas fa-box text-2xl text-gray-50"></i>
+    </div>
+    <p class="text-3xl font-bold text-teal-500">5</p>
+    <p class="text-sm text-gray-600">Sedang dalam proses</p>
+</div>
+
+<!-- Wishlist -->
+<div style="flex: 4;" class="bg-gradient-to-r from-gray-50 via-pink-100 to-pink-300 
+    hover:from-gray-50 hover:via-pink-200 hover:to-pink-600 
+    transition-all duration-1000 ease-in-out 
+    transform hover:-translate-x-2 
+    p-6 rounded-xl border-l-2 border-pink-500 shadow-lg 
+    hover:shadow-xl">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Wishlist</h3>
+        <i class="fas fa-heart text-2xl text-gray-50"></i>
+    </div>
+    <p class="text-3xl font-bold text-pink-500">12</p>
+    <p class="text-sm text-gray-600">Produk disimpan</p>
+</div>
+
+<!-- Kupon Tersedia -->
+<div style="flex: 4;" 
+    class="bg-gradient-to-r from-gray-50 via-fuchsia-100 to-fuchsia-400 
+    hover:from-gray-50 hover:via-fuchsia-200 hover:to-fuchsia-600 
+    transition-all duration-700 ease-in-out 
+    transform hover:-translate-x-2 
+    p-6 rounded-xl border-l-2 border-purple-500 shadow-lg 
+    hover:shadow-xl">
+    
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Kupon Anda</h3>
+        <i class="fa-solid fa-ticket text-2xl text-gray-50 transition-transform duration-1000 hover:-translate-x-1"></i>
+    </div>
+    
+    <p class="text-3xl font-bold text-purple-500">3</p>
+    <p class="text-sm text-gray-600 mb-1">Kupon aktif siap digunakan</p>
+    <p class="text-xs text-purple-700 font-medium">🎁 1 kupon akan berakhir dalam 2 hari</p>
+</div>
+
+
+
+
+</div>
+
+    
+
+    <div style="width: 98%;" class="mt-1" id="saran_untuk_user">
+    <div id="untuk_user">
+    </div> 
+
+    <div id="event1" style="
+            border-radius: 24px;
+            height: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+    ">
+            <div class="swiper mySwiperevent1" style="height: 100%;">
+                <div class="swiper-wrapper wiper1" style="height: 100%;">
+                    <!-- Slider items here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-[50%_50%] h-screen gap-4 p-4">
+  <!-- Kolom 1: grid 4 baris, masing-masing 25% -->
+  <div class="grid grid-rows-[25%_25%_25%_25%] gap-4">
+    <div class="bg-blue-100 rounded-xl flex items-center justify-center">Row 1</div>
+    <div class="bg-blue-200 rounded-xl flex items-center justify-center">Row 2</div>
+    <div class="bg-blue-300 rounded-xl flex items-center justify-center">Row 3</div>
+    <div class="bg-blue-400 rounded-xl flex items-center justify-center">Row 4</div>
+  </div>
+
+  <!-- Kolom 2: satu sel penuh -->
+  <div class="bg-gray-100 rounded-xl flex items-center justify-center">
+    Kolom 2
+  </div>
+</div>
+
+
+    
+
+
+    
+
+    <script>
+        function getRandomDelay(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        let membuka_popup = false;
+
+       async function ambilDataCelana() {
+            try {
+                const hasil = await fetch("/app/endpoint.go", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ tujuan: "ambil_celana" }),
+                });
+
+                if (!hasil.ok) {
+                    throw new Error(`Gagal Mengambil Data Celana: ${hasil.status}`);
+                }
+
+                const celana = await hasil.json();
+
+                const container = document.querySelector(".wiper1");
+
+                if(container.innerHTML){
+                    container.innerHTML = "";
+                }
+
+                const foto = celana.map(async (item) => {
+                    const fotoResponse = await fetch("/app/endpoint.go", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            tujuan: "ambil_foto",
+                            data: {
+                                nama: item.nama,
+                                jenis_pakaian: item.jenis_pakaian
+                            }
+                        }),
+                    });
+
+                    if (!fotoResponse.ok) {
+                        throw new Error(`Gagal mengambil foto untuk ${item.nama}`);
+                    }
+
+                    const blob = await fotoResponse.blob();
+                    const imgUrl = URL.createObjectURL(blob);
+                    item.fotoUrl = imgUrl;
+                });
+
+                await Promise.all(foto)
+
+                celana.forEach(item => {
+                    const slide = document.createElement("div");
+
+                    slide.innerHTML = `
+                       <div class="item_swiper w-40 bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg hover:scale-[1.03] transition-all duration-300 relative">
+    <!-- Badge Diskon (kiri atas) -->
+    <div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-pulse z-10">
+        -15%
+    </div>
+
+    <!-- Badge Jenis Pakaian (kanan atas) -->
+    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md z-10">
+        ${item.kategori || 'Baju'}
+    </div>
+
+    <!-- Gambar Produk -->
+    <div class="bg-gray-100 aspect-square flex items-center justify-center">
+        <img src="${item.fotoUrl}" alt="${item.nama}" class="object-contain w-4/5 h-4/5" />
+    </div>
+
+    <!-- Harga -->
+    <div class="p-3 text-center">
+        <div class="text-sm font-semibold text-gray-900">Rp${item.harga.toLocaleString('id-ID')}</div>
+    </div>
+</div>
+
+                    `;
+
+                    slide.className = "swiper-slide";
+
+                
+                    container.appendChild(slide);
+                });
+
+                // Seleksi semua elemen item swiper
+
+
+                const el1 = document.querySelector('.mySwiperevent2');
+                if (el1) {
+                    new Swiper(el1, {
+                        slidesPerView: 1,
+                        spaceBetween: 2,
+                        autoplay: {
+                            delay: getRandomDelay(2000, 6000),
+                            disableOnInteraction: false,
+                        },
+                        breakpoints: {
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 10,
+                                spaceBetween: 30,
+                            },
+                            1024: {
+                                slidesPerView: 10,
+                                spaceBetween: 40,
+                            },
+                        },
+                    });
+
+                    function rekayasaswiper(swiper){
+                    const center = swiper.length / 2;
+                    console.log(center)
+                    }
+                }
+
+            } catch (error) {
+                console.error("Terjadi kesalahan saat fetch:", error);
+            }
+        }
+
+
+
+
+       async function ambilDataBaju() {
+            try {
+                const response = await fetch("/app/endpoint.go", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ tujuan: "ambil_baju" }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Gagal mengambil data: ${response.status}`);
+                }
+
+                const hasil = await response.json();
+                console.log("Data baju:", hasil);
+
+                const container = document.querySelector(".wiper1");
+                container.innerHTML = ""; 
+                // Mengambil foto secara paralel untuk semua item
+                const fotoPromises = hasil.map(async (item) => {
+                    const fotoResponse = await fetch("/app/endpoint.go", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            tujuan: "ambil_foto",
+                            data: {
+                                nama: item.nama,
+                                jenis_pakaian: item.jenis_pakaian
+                            }
+                        }),
+                    });
+
+                    if (!fotoResponse.ok) {
+                        throw new Error(`Gagal mengambil foto untuk ${item.nama}`);
+                    }
+
+                    const blob = await fotoResponse.blob();
+                    const imgUrl = URL.createObjectURL(blob);
+                    item.fotoUrl = imgUrl;
+                });
+
+                // Tunggu semua foto selesai diambil
+                await Promise.all(fotoPromises);
+
+                hasil.forEach(item => {
+                    const slide = document.createElement("div");
+
+                    
+
+                    slide.innerHTML = `
+                        <div 
+                            class="item_swiper barang_didalam w-40 bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg hover:scale-[1.03] transition-all duration-300 relative"
+                            data-nama="${item.nama}"
+                            data-deskripsi="${item.deskripsi}"
+                            data-harga="${item.harga}"
+                            data-id="${item.id}"
+                            data-jenis="${item.jenis_pakaian}"
+                            data-stok="${item.stok}"
+                            data-warna="${item.warna}"
+                            data-ukuran="${item.ukuran}"
+                        >
+                            <!-- Badge Diskon -->
+                            <div class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow z-10 animate-pulse">
+                                -15%
+                            </div>
+
+                            <!-- Badge Jenis Pakaian -->
+                            <div class="absolute top-2 right-2 bg-green-600 text-white text-[10px] font-medium px-2 py-1 rounded-full shadow z-10">
+                                Baju
+                            </div>
+
+                            <!-- Gambar Produk -->
+                            <div class="bg-gray-100 aspect-square flex items-center justify-center">
+                                <img src="${item.fotoUrl}" alt="${item.nama}" class="object-contain w-4/5 h-4/5" />
+                            </div>
+
+                            <!-- Harga -->
+                            <div class="p-3 text-center">
+                                <div class="text-sm font-semibold text-gray-900">Rp${item.harga.toLocaleString('id-ID')}</div>
+                            </div>
+                        </div>
+                    `;
+
+                    slide.className = "swiper-slide";
+
+                    // Membuat konten card di dalam slide
+                    
+
+                    // Menambahkan slide ke dalam swiper-wrapper
+                    container.appendChild(slide);
+                });
+
+                const items = document.querySelectorAll(".item_swiper");
+
+                items.forEach((item) => {
+                    anime({
+                        targets: item,
+                        opacity: [0, 1],
+                        scale: [0.8, 1],
+                        duration: 600,
+                        delay: anime.random(0, 500), // delay random untuk tiap elemen
+                        easing: 'easeOutBack'
+                    });
+                });
+
+
+                const el1 = document.querySelector('.mySwiperevent1');
+                if (el1) {
+                    new Swiper(el1, {
+                        slidesPerView: 1,
+                        spaceBetween: 2,
+                        autoplay: {
+                            delay: getRandomDelay(2000, 6000),
+                            disableOnInteraction: false,
+                        },
+                        breakpoints: {
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 10,
+                                spaceBetween: 30,
+                            },
+                            1024: {
+                                slidesPerView: 10,
+                                spaceBetween: 40,
+                            },
+                        },
+                    });
+
+                    // Tambahkan event listener ke semua slide dan elemen di dalamnya
+                   const slides = el1.querySelectorAll(".swiper-slide");
+                    slides.forEach(slide => {
+                        slide.addEventListener("click", (event) => {
+                            const target = event.target;
+                            console.log("Slide ditekan:", slide);
+                            console.log("Elemen dalam slide yang ditekan:", target);
+
+                            const barang = slide.querySelector(".barang_didalam");
+                            if (barang) {
+                                const nama = barang.dataset.nama;
+                                const harga = barang.dataset.harga;
+                                const deskripsi = barang.dataset.deskripsi;
+                                const id = barang.dataset.id;
+                                const jenis = barang.dataset.jenis;
+                                const ukuran = barang.dataset.ukuran;
+                                const stok = barang.dataset.stok;
+                                const warna = barang.dataset.warna;
+                                membuka_popup = true
+
+                                     
+
+                                if (membuka_popup) {
+                                // Panggil fungsi dengan data yang diambil
+                                Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna);
+
+                                const popup = document.querySelector('.fixed.inset-0');
+                                if (popup) {
+                                    popup.style.display = 'flex'; // Tampilkan popup dengan fleksibel di tengah layar
+                                        anime({
+                                        targets: popup,
+                                        opacity: [0, 1],
+                                        scale: [1, 1],
+                                        easing: 'easeOutQuad',
+                                        duration: 400
+                                    }); 
+                                }
+                            }
+                            }
+                        });
+                    });
+                }
+
+                console.log(container)
+
+                console.log("Semua data sudah dimasukkan ke swiper.");
+            } catch (error) {
+                console.error("Terjadi kesalahan saat fetch:", error);
+            }
+        }
+
+       function closePopup() {
+            const popup = document.querySelector('.fixed.inset-0');
+            if (popup) {
+                popup.style.display = 'none'; // Sembunyikan popup
+            }
+
+            if (membuka_popup === true) {
+                membuka_popup = false;
+            }
+        }
+
+
+        ambilDataBaju();
+        ambilDataCelana();
+
+        
+
+      document.getElementById("untuk_user").innerHTML = `
+    <div id="box_rekomendasi" style="opacity: 0; transform: translateX(-50px); display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+        <h2 id="Nama_user" style="
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        ">
+            🎯 Rekomendasi untuk <span id="nama_user">Faiz</span>
+        </h2>
+    </div>
+`;
+
+// Efek muncul dari kiri (translateX dari -50 ke 0)
+anime({
+    targets: '#box_rekomendasi',
+    opacity: [0.5, 1],
+    translateX: [-30, 0],
+    duration: 400,
+    easing: 'easeOutCubic'
+});
+
+    </script>
+
+   
+</div>
+   <script>
+
+   
+    const token = localStorage.getItem("token");
+
+   function KapitalComma(text) {
+    return text.replace(/,\s*([a-z])/g, (match, letter) => `, ${letter.toUpperCase()}`);
+    }   
+
+   function decodeJWT(token) {
+        try {
+            // JWT terdiri dari 3 bagian yang dipisahkan oleh titik (.)
+            const parts = token.split(".");
+            if (parts.length !== 3) {
+                throw new Error("Format token tidak valid");
+            }
+
+            const payload = JSON.parse(atob(parts[1]));
+            console.log("Data dalam token:", payload);
+
+            document.getElementById("alamat_user").textContent =  KapitalComma(payload.alamat);
+            return payload;
+        } catch (error) {
+            console.error("Gagal mendekode token:", error.message);
+            return null;
+        }
+    }
+
+
+    if (token) {
+        const data = decodeJWT(token);
+        console.log("ini data di dalam token");
+    } else {
+        console.error("Token tidak ditemukan!");
+    }
+
+    // Ambil ukuran viewport (lebar & tinggi)
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Ambil ukuran sidebar dan navbar
+    const sidebarWidth = document.getElementById("sidebar").offsetWidth; // Gantilah dengan kelas sidebar yang sesuai
+    const navbarHeight = document.getElementById("navbar").offsetHeight; // Gantilah dengan kelas navbar yang sesuai
+
+    // Hitung sisa ruang
+    const remainingWidth = viewportWidth - sidebarWidth;
+    const remainingHeight = viewportHeight - navbarHeight;
+
+    console.log(`Sisa ruang lebar: ${remainingWidth}px`);
+    console.log(`Sisa ruang tinggi: ${remainingHeight}px`);
+
+   document.getElementById('cart_pembelian').addEventListener("mouseenter", function() {
+        this.classList.add("fa-bounce");
+    });
+
+    document.getElementById('cart_pembelian').addEventListener("mouseleave", function() {
+        this.classList.remove("fa-bounce");
+    });
+    </script>
+
+    {{/* atur swiper */}}
+
+    <script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      freeMode: true,
+    });
+    </script>
+
+   {{ template "logic_keranjang" }}
+
+    
+</body>
+</html>

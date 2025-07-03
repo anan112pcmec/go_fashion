@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    {{ template "sidebar" }}
+    {{ template "dashboardtemplate"}}
+
+</body>
+<script>
+   const token = localStorage.getItem("token");
+    function createPieChart(canvasId, dataColor) {
+      new Chart(document.getElementById(canvasId), {
+         type: 'doughnut',
+         data: {
+            labels: ['Progress', 'Remaining'],
+            datasets: [{
+               data: [70, 30], // Gantilah nilai ini sesuai kebutuhan
+               backgroundColor: [dataColor, '#E5E7EB'],
+               borderWidth: 0,
+            }]
+         },
+         options: {
+            responsive: false,
+            cutout: '70%',
+            plugins: { legend: { display: false } },
+         }
+      });
+   }
+
+   function pieChart(canvas_id, user, admin, pengunjung) {
+   new Chart(document.getElementById(canvas_id), {
+      type: 'pie',
+      data: {
+         labels: ['User', 'Admin', 'Pengunjung'],
+         datasets: [{
+            data: [user, admin, pengunjung], // Gunakan parameter yang dikirim
+            backgroundColor: ['#4F959D', '#98D2C0', '#205781'], // Warna tetap atau bisa dijadikan parameter
+            borderWidth: 0,
+         }]
+      },
+      options: {
+         responsive: false,
+         plugins: { legend: { display: false } }, // Menampilkan legenda
+      }
+   });
+};
+
+   pieChart('userChart', 12, 55, 67);
+
+   createPieChart('revenueChart', '#16A34A'); // Hijau
+   createPieChart('ordersChart', '#DC2626'); // Merah
+</script>
+</html>

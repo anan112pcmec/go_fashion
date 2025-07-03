@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Tambahkan CDN Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    {{ templates "sidebar" }}
+    <div class="flex gap-6 p-6 bg-gray-100 rounded-lg shadow-lg">
+        <!-- Kolom Kiri (Upload Gambar & Genre) -->
+        <div class="w-1/3 bg-white p-4 rounded-lg shadow-md">
+            <div class="flex items-center justify-center h-48 border border-gray-300 rounded-md">
+                <span class="text-gray-500"><i class="fas fa-image text-2xl"></i></span>
+            </div>
+            <input type="text" placeholder="Genre" class="w-full mt-4 p-2 border rounded-md focus:ring focus:ring-blue-300">
+            <label class="block mt-4 font-semibold text-center">"Sinopsis"</label>
+            <textarea placeholder="Tuliskan sinopsis singkat tentang buku..." class="w-full mt-2 p-2 border rounded-md focus:ring focus:ring-blue-300"></textarea>
+            <div class="mt-4 text-center">
+                <label class="block text-gray-700 font-semibold">Untuk</label>
+                <button class="w-full mt-2 p-2 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700">Dewasa</button>
+            </div>
+        </div>
+    
+        <!-- Kolom Kanan (Form Input) -->
+        <div class="w-2/3 bg-white p-4 rounded-lg shadow-md">
+            <label class="block font-semibold">Judul Buku</label>
+            <input type="text" placeholder="Masukkan Judul Buku" class="w-full p-2 border rounded-md mb-4 focus:ring focus:ring-blue-300">
+            
+            <label class="block font-semibold">Pengarang</label>
+            <input type="text" placeholder="Masukkan Nama Pengarang" class="w-full p-2 border rounded-md mb-4 focus:ring focus:ring-blue-300">
+            
+            <label class="block font-semibold">Penerbit</label>
+            <input type="text" placeholder="Masukkan Nama Penerbit" class="w-full p-2 border rounded-md mb-4 focus:ring focus:ring-blue-300">
+            
+            <label class="block font-semibold">Tahun Terbit</label>
+            <input type="text" placeholder="Masukkan Tahun Terbit" class="w-full p-2 border rounded-md mb-4 focus:ring focus:ring-blue-300">
+            
+            <label class="block font-semibold">Jumlah Stok Buku</label>
+            <input type="text" placeholder="Masukkan Jumlah Stok" class="w-full p-2 border rounded-md mb-4 focus:ring focus:ring-blue-300">
+            
+            <label class="block font-semibold">Penanggung Jawab</label>
+            <input type="text" value="Pustakawan, Kepala Perpustakaan, dan Staf Pengelola Perpustakaan" class="w-full p-2 border rounded-md mb-4 bg-gray-100 text-gray-700" readonly>
+            
+            <div class="flex items-center gap-2 mt-4">
+                <input type="checkbox" id="approval" class="w-5 h-5">
+                <label for="approval" class="text-gray-700 text-sm">Saya(nama) menyetujui, Untuk memasukkan buku ini ke dalam pustaka</label>
+            </div>
+    
+            <div class="flex justify-end mt-4 gap-2">
+                <button class="p-2 bg-gray-500 text-white font-semibold rounded-md shadow-md hover:bg-gray-600">Reload</button>
+                <button class="p-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700">Masukan</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

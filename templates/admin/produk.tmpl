@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Tambahkan CDN Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+
+    
+</head>
+<style>
+.dropdown {
+        position: relative;
+        font-size: 14px;
+        color: #333;
+
+        .dropdown-list {
+          padding: 12px;
+          background: #fff;
+          position: absolute;
+          top: 30px;
+          left: 2px;
+          right: 2px;
+          box-shadow: 0 1px 2px 1px rgba(0, 0, 0, .15);
+          transform-origin: 50% 0;
+          transform: scale(1, 0);
+          transition: transform .15s ease-in-out .15s;
+          max-height: 66vh;
+          overflow-y: scroll;
+        }
+        
+        .dropdown-option {
+          display: block;
+          padding: 8px 12px;
+          opacity: 0;
+          transition: opacity .15s ease-in-out;
+        }
+        
+        .dropdown-label {
+          display: block;
+          height: 30px;
+          background: #fff;
+          border: 1px solid #ccc;
+          border-radius: 30px;
+          padding: 6px 12px;
+          line-height: 1;
+          cursor: pointer;
+          
+          &:before {
+            content: '▼';
+            float: right;
+          }
+        }
+        
+        &.on {
+        .dropdown-list {
+            transform: scale(1, 1);
+            transition-delay: 0s;
+            
+            .dropdown-option {
+              opacity: 1;
+              transition-delay: .2s;
+            }
+          }
+          
+          .dropdown-label:before {
+            content: '▲';
+          }
+        }
+        
+        [type="checkbox"] {
+          position: relative;
+          top: -1px;
+          margin-right: 4px;
+        }
+      }
+</style>
+<body>
+
+<script>
+     function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const uploadBox = document.getElementById("uploadBox");
+                    uploadBox.innerHTML = `
+                        <div class="relative w-full h-full flex items-center justify-center">
+                            <button onclick="removeImage(event)" class="absolute top-2 left-2 bg-red-500 text-white rounded-full px-2 py-1 text-sm hover:bg-red-700 z-10">X</button>
+                            <img src="${e.target.result}" alt="Uploaded Image" class="max-w-full max-h-full object-contain rounded-lg">
+                        </div>`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage(event) {
+            event.stopPropagation();
+            const uploadBox = document.getElementById("uploadBox");
+            uploadBox.innerHTML = `
+                <span class="text-gray-500 text-center"><i class="fas fa-cloud-upload-alt text-3xl"></i><br>Upload Gambar</span>`;
+        }
+
+        function triggerFileInput() {
+            document.getElementById("fileInput").click();
+        }
+
+</script>
+    {{ template "sidebar" }}
+
+    <div class="p-4 sm:ml-64"> 
+    <div class="flex gap-8 p-8 bg-gray-100 rounded-xl shadow-lg">
+    <!-- Kolom Kiri (Upload Gambar & Kategori) -->
+    <div class="w-1/3 bg-white p-6 rounded-xl shadow-md">
+        <!-- Kotak Upload Gambar -->
+        <div id="uploadBox" class="flex items-center justify-center border-2 border-dashed border-gray-400 rounded-lg cursor-pointer hover:border-blue-500 overflow-hidden" style="height: 400px; width:100%;" onclick="triggerFileInput()">
+            <span class="text-gray-500 text-center"><i class="fas fa-cloud-upload-alt text-3xl"></i><br>Upload Gambar</span>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(event)">
+
+        <!-- Input Nama Produk -->
+        <input type="text" style="display: none;"id="jenis_pakaian" placeholder="Jenis" class="w-full mt-4 p-3 border rounded-lg focus:ring focus:ring-blue-300" readonly>
+
+        <!-- Input Deskripsi Produk -->
+        <label class="block mt-4 font-semibold">Deskripsi Produk</label>
+        <textarea id="deskripsi_barang" placeholder="Tuliskan deskripsi singkat..." class="w-full mt-2 p-3 border rounded-lg focus:ring focus:ring-blue-300"></textarea>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <!-- Pilihan Kategori Produk -->
+        <div class="mt-4">
+            <label class="block text-gray-700 font-semibold">Kategori</label>
+            <select id="pilhan" class="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300">
+                <option>Baju</option>
+                <option>Celana</option>
+                <option>Kacamata</option>
+                <option>Sepatu</option>
+                <option>Aksesoris</option>
+            </select>
+        </div>
+
+        <div class="mt-4">
+            <label class="block text-gray-700 font-semibold">Untuk</label>
+            <select id="Untuk" class="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300">
+                <option>Pria</option>
+                <option>Wanita</option>
+            </select>
+        </div>
+        </div>
+
+      
+    </div>
+
+    <!-- Kolom Kanan (Form Input) -->
+    <div class="w-2/3 bg-white p-6 rounded-xl shadow-md">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="">
+                <label class="block font-semibold">Nama Barang</label>
+                <input id="merek" type="text" placeholder="Masukkan Nama Barang" class="w-full p-3 border rounded-lg mb-4 focus:ring focus:ring-blue-300">
+            </div>
+            <div class="" style="width: 100%; display: grid; place-items: center;">
+                {{ template "dropdown" }}
+            </div>
+
+        </div>
+        
+        <label  class="block font-semibold mb-2">Harga Satuan</label>
+        <input id="harga" type="number" placeholder="Masukkan Harga" class="w-full p-3 border rounded-lg mb-4 focus:ring focus:ring-blue-300">
+        
+        
+        <label  class="block font-semibold mb-2">Warna</label>
+        <input id="warna" type="text" placeholder="Masukkan Warna Produk" class="w-full p-3 border rounded-lg mb-4 focus:ring focus:ring-blue-300">
+        
+        <label  class="block font-semibold mb-2">Jumlah Stok</label>
+        <div class="grid grid-cols-5 gap-6 mb-2">
+          <input type="number" placeholder="Ukuran S" id="uk_s" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition" />
+          <input type="number" placeholder="Ukuran M" id="uk_m" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition" />
+          <input type="number" placeholder="Ukuran L" id="uk_l" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition" />
+          <input type="number" placeholder="Ukuran X" id="uk_x" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition" />
+          <input type="number" placeholder="Ukuran XL" id="uk_xl" class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition" />
+        </div>
+
+        <label  class="block font-semibold mb-2">Penanggung Jawab</label>
+        <input id="pj" type="text" value="Admin Toko & Manajer" class="w-full p-3 border rounded-lg bg-gray-100 text-gray-700" readonly>
+        
+        <div class="flex items-center gap-2 mt-4">
+            <input type="checkbox" id="approval" class="w-5 h-5">
+            <label for="approval" class="text-gray-700 text-sm">Saya menyetujui untuk memasukkan produk ini ke dalam katalog</label>
+        </div>
+
+        <div class="flex justify-end mt-6 gap-3">
+            <button class="p-3 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600">Reset</button>
+            <button onclick="kirimData()" class="p-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700">Tambahkan</button>
+        </div>
+    </div>
+</div>
+
+    </div>
+</body>
+</html>
+<script>
+    const jenis_akhir = document.getElementById("jenis_pakaian").value;
+
+    let status_persetujuan = "";
+
+    document.getElementById("approval").addEventListener("change", function() {
+        if (this.checked) {
+            console.log("dicentang");
+
+            status_persetujuan = "dicentang";
+        } else {
+            console.log("tidak dicentang");
+
+            status_persetujuan = "";
+        }
+    });
+
+    function requestPe(data){
+      fetch("/app/endpoint.go", {
+            method: "POST",
+            body: data  // Tidak perlu `JSON.stringify()`
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Gagal mengirim data");
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log("Response dari server:", data);
+            alert("Data berhasil dikirim!");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan saat mengirim data!");
+        });
+    }
+    function kirimData() {
+    const fileInput = document.getElementById("fileInput").files[0];
+    const jenisPakaian = document.getElementById("jenis_pakaian").value;
+    const deskripsi = document.getElementById("deskripsi_barang").value;
+    const kategori = document.getElementById("pilhan").value;
+    const harga = document.getElementById("harga").value;
+    const warna = document.getElementById("warna").value;
+    const NamaBarang = document.getElementById("merek").value;
+    const untuk = document.getElementById('Untuk').value;
+    const s = document.getElementById("uk_s").value;
+    const m = document.getElementById("uk_m").value;
+    const l = document.getElementById("uk_l").value;
+    const x = document.getElementById("uk_x").value;
+    const xl = document.getElementById("uk_xl").value;
+
+
+    const stok = s + m + l + x + xl;
+
+    console.log(fileInput, jenisPakaian, deskripsi, kategori, harga, warna, stok,  NamaBarang);
+  
+    let formData = new FormData();
+    formData.append("tujuan", "Masukin_barang");
+    formData.append("file", fileInput);
+    formData.append("jenis_pakaian", jenisPakaian);
+    formData.append("deskripsi", deskripsi);
+    formData.append("kategori", kategori);
+    formData.append("harga", harga);
+    formData.append("warna", warna);
+    formData.append("stok", stok);
+    formData.append("untuk", untuk)
+
+    formData.append("nama_produk", NamaBarang);
+    formData.append("s", s)
+    formData.append("m", m)
+    formData.append("l", l)
+    formData.append("x", x)
+    formData.append("xl", xl)
+
+    if (
+          !fileInput || 
+          !jenisPakaian || 
+          !deskripsi || 
+          !kategori || 
+          !harga || 
+          !warna || 
+          !stok || 
+          !NamaBarang
+      ) {
+          setTimeout(() => {
+          Toastify({
+              text: "❌ Kamu Harus Melengkapi form input",
+              duration: 2000,
+              gravity: "top",
+              position: "center",
+              style: {
+                  background: "linear-gradient(to right, rgb(230, 103, 57), rgb(201, 61, 84))",
+                  color: "#fff",
+                  fontSize: "18px",
+                  borderRadius: "10px",
+                  padding: "15px 20px",
+              }
+          }).showToast();
+      }, 300); // Ditampilkan setelah 3 detik
+          return;
+      }
+
+
+    if(status_persetujuan == "dicentang") {
+      requestPe(formData);
+    } else {
+
+        Toastify({
+          text: "⏳ Pastikan Kamu Mencentang Persetujuan pemasukan barang",
+          duration: 1800, // Toast muncul selama 3 detik
+          gravity: "top",
+          position: "center",
+          style: {
+              background: "linear-gradient(to right,rgb(70, 176, 0),rgb(61, 201, 194))",
+              color: "#fff",
+              fontSize: "18px",
+              borderRadius: "10px",
+              padding: "15px 20px",
+          }
+      }).showToast();
+
+      // Setelah toast pertama selesai, tampilkan toast kedua
+      setTimeout(() => {
+          Toastify({
+              text: "❌ Input Barang Gagal! Kamu belum memberi perstujuan pemasukan barang",
+              duration: 2000,
+              gravity: "top",
+              position: "center",
+              style: {
+                  background: "linear-gradient(to right, rgb(230, 103, 57), rgb(201, 61, 84))",
+                  color: "#fff",
+                  fontSize: "18px",
+                  borderRadius: "10px",
+                  padding: "15px 20px",
+              }
+          }).showToast();
+      }, 300); // Ditampilkan setelah 3 detik
+
+    }
+
+    
+}
+
+
+
+    (function($) {
+    var CheckboxDropdown = function(el) {
+      var _this = this;
+      this.isOpen = false;
+      this.areAllChecked = false;
+      this.$el = $(el);
+      this.$label = this.$el.find('.dropdown-label');
+      this.$checkAll = this.$el.find('[data-toggle="check-all"]').first();
+      this.$inputs = this.$el.find('[type="checkbox"]');
+      
+      this.onCheckBox();
+      
+      this.$label.on('click', function(e) {
+        e.preventDefault();
+        _this.toggleOpen();
+      });
+      
+      this.$checkAll.on('click', function(e) {
+        e.preventDefault();
+        _this.onCheckAll();
+      });
+      
+      this.$inputs.on('change', function(e) {
+        _this.onCheckBox();
+      });
+    };
+    
+    CheckboxDropdown.prototype.onCheckBox = function() {
+      this.updateStatus();
+    };
+    
+    CheckboxDropdown.prototype.updateStatus = function() {
+      var checked = this.$el.find(':checked');
+      var pilihan = [];
+      
+      // Loop untuk memasukkan nilai label yang dicentang ke dalam array pilihan
+      checked.each(function() {
+        pilihan.push($(this).parent('label').text().trim());
+      });
+      
+      console.log('Pilihan yang dicentang: ', pilihan); // Log pilihan yang dicentang
+      document.getElementById("jenis_pakaian").value = pilihan;
+      
+      this.areAllChecked = false;
+      this.$checkAll.html('Semua');
+      
+      if(checked.length <= 0) {
+        this.$label.html('Jenis Pakaian');
+      }
+      else if(checked.length === 1) {
+        this.$label.html(checked.parent('label').text());
+      }
+      else if(checked.length === this.$inputs.length) {
+        this.$label.html('All Selected');
+        this.areAllChecked = true;
+        this.$checkAll.html('Batalkan');
+      }
+      else {
+        this.$label.html(checked.length + ' Selected');
+      }
+
+      console.log(pilihan);
+    };
+    
+    CheckboxDropdown.prototype.onCheckAll = function(checkAll) {
+      if(!this.areAllChecked || checkAll) {
+        this.areAllChecked = true;
+        this.$checkAll.html('Uncheck All');
+        this.$inputs.prop('checked', true);
+      }
+      else {
+        this.areAllChecked = false;
+        this.$checkAll.html('Check All');
+        this.$inputs.prop('checked', false);
+      }
+      
+      this.updateStatus();
+    };
+    
+    CheckboxDropdown.prototype.toggleOpen = function(forceOpen) {
+      var _this = this;
+      
+      if(!this.isOpen || forceOpen) {
+        this.isOpen = true;
+        this.$el.addClass('on');
+        $(document).on('click', function(e) {
+          if(!$(e.target).closest('[data-control]').length) {
+            _this.toggleOpen();
+          }
+        });
+      }
+      else {
+        this.isOpen = false;
+        this.$el.removeClass('on');
+        $(document).off('click');
+      }
+    };
+    
+    var checkboxesDropdowns = document.querySelectorAll('[data-control="checkbox-dropdown"]');
+    for(var i = 0, length = checkboxesDropdowns.length; i < length; i++) {
+      new CheckboxDropdown(checkboxesDropdowns[i]);
+    }
+  })(jQuery);
+</script>
