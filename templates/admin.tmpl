@@ -465,104 +465,120 @@ new Chart(ctx, {
     {{ end }}
 
     {{ define "Edit_barang" }}
+
+    <!-- Tailwind CSS -->
+
+
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    #nav_edit {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+
     <!-- Popup Wrapper -->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Popup -->
     <!-- Popup Detail -->
-<div id="popup-detail" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-  <div class="bg-white w-[95%] max-w-6xl rounded-2xl shadow-xl p-6 relative animate-fadeIn font-sans text-slate-800">
+      <div id="popup-detail" class="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-end z-50 hidden">
+        <div class="bg-white w-[95%] max-w-7xl min-h-[90%] rounded-2xl shadow-xl p-6 relative animate-fadeIn font-sans text-slate-800 mr-5">
 
-    <!-- Tombol Exit -->
-    <button onclick="TutupPopupEdit()" class="absolute top-4 right-4 text-slate-500 hover:text-red-500 transition" aria-label="Close">
-      <i class="fas fa-times text-2xl"></i>
-    </button>
+          <!-- Tombol Exit -->
+          <button onclick="TutupPopupEdit()" class="absolute top-10 right-4 text-slate-500 hover:text-red-500 transition" aria-label="Close">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
 
-    <!-- Grid Konten -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Grid Konten -->
+          <div class="grid grid-cols-1 md:grid-cols-[35%_65%] gap-6">
 
-      <!-- Kolom Kiri -->
-      <div class="flex flex-col space-y-5">
+            <!-- Kolom Kiri -->
+            <div class="flex flex-col space-y-5">
 
-        <!-- Canvas Foto -->
-        <div class="w-full h-64 bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center overflow-hidden">
-          <img id="fotoCanvas" class="max-w-full max-h-full object-contain rounded-xl" alt="Foto Barang">
-        </div>
+              <!-- Canvas Foto -->
+              <div class="w-full h-64 bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center overflow-hidden">
+                <img id="fotoCanvas" class="max-w-full max-h-full object-contain rounded-xl" alt="Foto Barang">
+              </div>
 
-        <!-- Nama Barang -->
-        <h3 class="text-xl font-semibold pl-1 flex items-center gap-2">
-          <i class="fas fa-tag text-slate-500"></i>
-          Jaket Kulit Pria Premium
-          <button>Edit</button>
-        </h3>
+              <!-- Nama Barang -->
+              <h3 class="text-xl font-semibold pl-1 flex items-center gap-2">
+                <i class="fas fa-tag text-slate-500"></i>
+                Jaket Kulit Pria Premium
+                <button>Edit</button>
+              </h3>
 
-        
+              
 
-        <!-- Deskripsi -->
-        <textarea
-          class="w-full h-32 p-4 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-          placeholder="Deskripsi barang...">Jaket kulit asli berkualitas tinggi dengan desain modern, cocok untuk tampilan kasual maupun formal.</textarea>
+              <!-- Deskripsi -->
+              <textarea
+                class="w-full h-32 p-4 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+                placeholder="Deskripsi barang...">Jaket kulit asli berkualitas tinggi dengan desain modern, cocok untuk tampilan kasual maupun formal.</textarea>
 
-        <!-- Info Tambahan -->
-        <div class="flex flex-wrap text-sm text-slate-600 gap-4 pl-1">
-          <span id="warna_popup"><i class="fas fa-palette mr-1"></i> Warna: Coklat Tua</span>
-          <span id="ukuran_popup"><i class="fas fa-ruler-combined mr-1"></i> Ukuran: L</span>
-          <span id="gender_popup"><i class="fas fa-venus-mars mr-1"></i> Gender: Pria</span>
+              <!-- Info Tambahan -->
+              <div class="flex flex-wrap text-sm text-slate-600 gap-4 pl-1">
+                <span id="warna_popup"><i class="fas fa-palette mr-1"></i> Warna: Coklat Tua</span>
+                <span id="ukuran_popup"><i class="fas fa-ruler-combined mr-1"></i> Ukuran: L</span>
+                <span id="gender_popup"><i class="fas fa-venus-mars mr-1"></i> Gender: Pria</span>
+              </div>
+            </div>
+
+            <!-- Kolom Kanan -->
+
+            <div class="grid grid-rows-[auto_90%]">
+              <!-- Row 1 (tinggi 20%) -->
+              
+            <div class="flex flex-col space-y-4">
+              <!-- Navbar -->
+              <nav class="bg-slate-100 shadow-sm rounded-xl">
+                <div id="nav_edit"class=" mx-auto px-4 py-3">
+                  <div class="flex space-x-4 text-slate-700 font-medium text-sm">
+                    
+                    <a id="Stok_barang_popup_edit" class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-slate-700 hover:text-white hover:scale-105">
+                      <i class="fas fa-box w-4 h-4"></i>
+                      <span>Stok Barang</span>
+                    </a>
+
+                    <a id="Riwayat_barang_popup_edit" class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-slate-700 hover:text-white hover:scale-105">
+                      <i class="fas fa-clock-rotate-left w-4 h-4"></i>
+                      <span>Riwayat</span>
+                    </a>
+
+                    <a id="Penjualan_barang_popup_edit" class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-slate-700 hover:text-white hover:scale-105">
+                      <i class="fas fa-cart-shopping w-4 h-4"></i>
+                      <span>Penjualan</span>
+                    </a>
+
+                    <a id="Diskon_barang_popup_edit" class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-slate-700 hover:text-white hover:scale-105">
+                      <i class="fas fa-percent w-4 h-4"></i>
+                      <span>Discount</span>
+                    </a>
+
+                    <a id="CS_barang_popup_edit" class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 hover:bg-slate-700 hover:text-white hover:scale-105">
+                      <i class="fas fa-headset w-4 h-4"></i>
+                      <span>Customer Service</span>
+                    </a>
+
+                  </div>
+                </div>
+              </nav>
+            </div>
+            
+              <!-- Row 2 (sisa) -->
+              <div id="Edit_barang_Context" class="bg-white overflow-auto ml-2 mt-2 mr-2">
+                
+              </div>
+            </div>
+
+            
+          </div>
         </div>
       </div>
-
-      <!-- Kolom Kanan -->
-      <div class="flex flex-col space-y-4">
-        <!-- Box 1 -->
-        <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-          <i class="fas fa-box text-slate-500 text-xl mt-1"></i>
-          <div class="flex-1">
-            <h4 class="text-base font-semibold mb-1">Stok Barang</h4>
-            <p class="text-sm text-slate-600 leading-snug">Cek dan Kontrol <strong>Stok </strong>Dari Barang ini</p>
-          </div>
-        </div>
-
-        <!-- Box 2 -->
-        <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-          <i class="fas fa-clock-rotate-left text-slate-500 text-xl mt-1"></i>
-          <div class="flex-1">
-            <h4 class="text-base font-semibold mb-1">Riwayat Barang</h4>
-            <p class="text-sm text-slate-600 leading-snug">Cek <strong>Riwayat </strong>Barang ini</p>
-          </div>
-        </div>
-
-        <!-- Box 3 -->
-        <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-          <i class="fas fa-chart-line text-slate-500 text-xl mt-1"></i>
-          <div class="flex-1">
-            <h4 class="text-base font-semibold mb-1">Penjualan Produk</h4>
-            <p class="text-sm text-slate-600 leading-snug">Lihat <strong>Data Penjualan</strong> unit</p>
-          </div>
-        </div>
-
-        <!-- Discount -->
-        <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-          <i class="fas fa-percent text-slate-500 text-xl mt-1"></i>
-          <div class="flex-1">
-            <h4 class="text-base font-semibold mb-1">Discount</h4>
-            <p class="text-sm text-slate-600 leading-snug">Cek dan Kontrol <strong>Diskon</strong> Barang.</p>
-          </div>
-        </div>
-
-        <!-- Customer Service -->
-        <div class="flex items-start space-x-3 bg-slate-50 border border-slate-200 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-          <i class="fas fa-headset text-slate-500 text-xl mt-1"></i>
-          <div class="flex-1">
-            <h4 class="text-base font-semibold mb-1">Customer Service</h4>
-            <p class="text-sm text-slate-600 leading-snug">Tangani pengalaman<strong> customer</strong>.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
         <!-- Tombol Aksi -->
@@ -574,8 +590,21 @@ new Chart(ctx, {
    function Edit_barang(foto, nama, gender, deskripsi, ukuran) {
         console.log(foto, nama, gender, deskripsi, ukuran);
 
-        // Tampilkan popup
-        document.getElementById("popup-detail").style.display = "flex";
+         const popup = document.getElementById("popup-detail");
+
+        // Reset posisi awal
+        popup.classList.remove("hidden");
+        popup.style.opacity = 0;
+        popup.style.transform = "translateY(50px)";
+        popup.style.display = "flex";
+
+        anime({
+          targets: popup,
+          opacity: 1,
+          translateY: 0,
+          duration: 500,
+          easing: "easeOutQuad"
+        });
 
         // Tampilkan foto
         const fotoCanvas = document.getElementById("fotoCanvas");
@@ -744,4 +773,5 @@ async function konfirmasiHapusBarang(id_barang, nama, jenis_pakaian, gender, har
 
 </script>
 
-    {{ end }}
+{{ end }}
+

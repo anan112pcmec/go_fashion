@@ -11,7 +11,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/anan112pcmec/go_fashion/app/controllers"
-
 )
 
 // Render template sesuai request
@@ -271,7 +270,7 @@ func (server *Lingkup) InitializeRoutes() {
 	server.ruter.HandleFunc("/app/endpoint.go", func(w http.ResponseWriter, r *http.Request) {
 		server.AjaxEndpoint(w, r)
 	}).Methods("POST")
-	
+
 	server.ruter.HandleFunc("/", controllers.Home).Methods("GET")
 
 	server.ruter.HandleFunc("/{page}", RouterHandler).Methods("GET")
@@ -299,6 +298,8 @@ func (server *Lingkup) InitializeRoutes() {
 			EntityHandler(w, alamat, role, token)
 		}
 	}).Methods("GET")
+
+	server.ruter.HandleFunc("/ws", server.handleWebSocket)
 
 	// Serve Static Files (CSS, JS, Images)
 	staticFileDirectory := http.Dir("./assets/")

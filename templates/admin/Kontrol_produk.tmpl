@@ -18,6 +18,13 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>    
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- jQuery -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <!-- DataTables CSS & JS -->
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
 
    <!-- Toastify JS -->
    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -319,11 +326,7 @@
 
    <!-- Daftar Produk -->
    <div id="table_produk" style="max-height: 400px; overflow-y: auto;" class="space-y-4">
-  <!-- Item Produk 1 -->
   
-
-
-  <!-- Item Produk 2 -->
    <div class="bg-gray-200 rounded-2xl p-4 shadow-inner space-y-2 mx-auto">
 
    <div class="grid grid-cols-[2.5rem_1fr_12.5rem_9.375rem_7.5rem] gap-4 items-center">
@@ -414,8 +417,7 @@
    </div>
    </div>
 
-   <script>
-
+<script>
    const elemen_short_cut = document.querySelectorAll(".short_cut");
    let pencarian_short_cut = "";
 
@@ -523,74 +525,74 @@
          document.getElementById("resultCount").innerHTML = data[data.length - 1].Jumlah_Barang;
 
          for (const [index, datanya] of data.entries()) {
-    try {
-        const response = await fetch("/app/endpoint.go", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                tujuan: "ambil_foto",
-                data: {
-                    nama: datanya.nama,
-                    jenis_pakaian: datanya.jenis_pakaian,
-                },
-            }),
-        });
+            try {
+               const response = await fetch("/app/endpoint.go", {
+                     method: "POST",
+                     headers: {
+                        "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify({
+                        tujuan: "ambil_foto",
+                        data: {
+                           nama: datanya.nama,
+                           jenis_pakaian: datanya.jenis_pakaian,
+                        },
+                     }),
+               });
 
-        // Ambil blob dari response
-        const blob = await response.blob();
-        const imgSrc = URL.createObjectURL(blob); // Buat object URL dari blob
+               // Ambil blob dari response
+               const blob = await response.blob();
+               const imgSrc = URL.createObjectURL(blob); // Buat object URL dari blob
 
-        const cardHTML = `
-        <div class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out mx-auto">
-    
-            <!-- Badge kategori -->
-            <div class=" w-min-xl absolute top-2 left-2 bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded">
-               ${datanya.kategori}
-            </div>
-
-            <div class="grid grid-cols-[2.5rem_1fr_12.5rem_6rem_10rem] gap-4 items-center">
-
-               <p class="font-semibold text-gray-700 text-lg">${index + 1}.</p>
-
-               <div>
-                     <p class="font-semibold text-gray-800 text-lg">${datanya.nama} • ${datanya.jenis_pakaian}</p>
-                     <p class="text-sm text-gray-500">${datanya.harga} • ${datanya.stok}</p>
-               </div>
-
-               <div class="text-sm text-gray-600 space-y-1">
-                     <p>Kategori: <span class="font-semibold text-gray-800">${datanya.kategori}</span></p>
-                     <p>Warna: <span class="font-semibold text-gray-800">${datanya.warna}</span></p>
-               </div>
-
-               <div class="text-sm text-gray-600 space-y-1">
-                     <p>Gender: <span class="font-semibold text-gray-800">${datanya.gender}</span></p>
-                     <p>Ukuran: <span class="font-semibold text-gray-800">${datanya.ukuran}</span></p>
-               </div>
-
-               <div class="flex space-x-2 justify-end gap-2">
-                     <button style="margin-top:25px;" onclick="Edit_barang('${imgSrc}', '${datanya.nama}', '${datanya.gender}', '${datanya.deskripsi}', '${datanya.ukuran}')" class="w-9 h-9 bg-blue-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center shadow transition" aria-label="Edit">
-                        <i class="fas fa-pen"></i>
-                     </button>
-                     <button style="margin-top:25px;" onclick="Hapus_Barang_Entry('${datanya.id_barang}', '${datanya.nama}', '${datanya.jenis_pakaian}', '${datanya.gender}', '${datanya.harga}')" class="w-9 h-9 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center shadow transition" aria-label="Delete">
-                        <i class="fas fa-trash-alt"></i>
-                     </button>
-                     <div style="height:100px; width:87px; " class="bg-gray-100 hover:bg-gray-200 rounded-lg overflow-hidden shadow flex items-center justify-center" aria-label="View Image">
-                        <img src="${imgSrc}" alt="Foto Barang" class="object-cover w-full h-full" />
+               const cardHTML = `
+               <div class="relative bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-all duration-300 ease-in-out mx-auto">
+            
+                     <!-- Badge kategori -->
+                     <div class=" w-min-xl absolute top-2 left-2 bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded">
+                        ${datanya.kategori}
                      </div>
-               </div>
 
-            </div>
-         </div>
+                     <div class="grid grid-cols-[2.5rem_1fr_12.5rem_6rem_10rem] gap-4 items-center">
 
-        `;
+                        <p class="font-semibold text-gray-700 text-lg">${index + 1}.</p>
 
-        tableProduk.innerHTML += cardHTML;
-    } catch (err) {
-        console.error("Gagal ambil foto (blob) untuk:", datanya.nama, err);
-    }
-}
+                        <div>
+                              <p class="font-semibold text-gray-800 text-lg">${datanya.nama} • ${datanya.jenis_pakaian}</p>
+                              <p class="text-sm text-gray-500">${datanya.harga} • ${datanya.stok}</p>
+                        </div>
+
+                        <div class="text-sm text-gray-600 space-y-1">
+                              <p>Kategori: <span class="font-semibold text-gray-800">${datanya.kategori}</span></p>
+                              <p>Warna: <span class="font-semibold text-gray-800">${datanya.warna}</span></p>
+                        </div>
+
+                        <div class="text-sm text-gray-600 space-y-1">
+                              <p>Gender: <span class="font-semibold text-gray-800">${datanya.gender}</span></p>
+                              <p>Ukuran: <span class="font-semibold text-gray-800">${datanya.ukuran}</span></p>
+                        </div>
+
+                        <div class="flex space-x-2 justify-end gap-2">
+                              <button style="margin-top:25px;" onclick="Edit_barang('${imgSrc}', '${datanya.nama}', '${datanya.gender}', '${datanya.deskripsi}', '${datanya.ukuran}')" class="w-9 h-9 bg-blue-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center shadow transition" aria-label="Edit">
+                                 <i class="fas fa-pen"></i>
+                              </button>
+                              <button style="margin-top:25px;" onclick="Hapus_Barang_Entry('${datanya.id_barang}', '${datanya.nama}', '${datanya.jenis_pakaian}', '${datanya.gender}', '${datanya.harga}')" class="w-9 h-9 bg-red-100 hover:bg-red-200 text-red-600 rounded-full flex items-center justify-center shadow transition" aria-label="Delete">
+                                 <i class="fas fa-trash-alt"></i>
+                              </button>
+                              <div style="height:100px; width:87px; " class="bg-gray-100 hover:bg-gray-200 rounded-lg overflow-hidden shadow flex items-center justify-center" aria-label="View Image">
+                                 <img src="${imgSrc}" alt="Foto Barang" class="object-cover w-full h-full" />
+                              </div>
+                        </div>
+
+                     </div>
+                  </div>
+
+               `;
+
+               tableProduk.innerHTML += cardHTML;
+            } catch (err) {
+               console.error("Gagal ambil foto (blob) untuk:", datanya.nama, err);
+            }
+         }
 
 
       } catch (error) {
@@ -605,7 +607,634 @@
          spaceBetween: 30,
          freeMode: true,
       });
-      </script>
+</script>
+
+<script>
+  const tombolStok = document.getElementById("Stok_barang_popup_edit");
+  const Konteks_Popup = document.getElementById("Edit_barang_Context");
+  tombolStok.addEventListener("click", () => {
+
+    Konteks_Popup.innerHTML = `
+      <style>
+      /* Container search box */
+      .dataTables_filter {
+      margin-bottom: 1rem;
+      }
+      .dataTables_filter label {
+      font-weight: 600;
+      color: #475569; /* slate-600 */
+      font-family: 'Inter', sans-serif;
+      }
+
+      /* Search input styling */
+      .dataTables_filter input {
+      margin-left: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #cbd5e1; /* slate-300 */
+      border-radius: 0.5rem; /* rounded */
+      background-color: #f8fafc; /* slate-50 */
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      color: #334155; /* slate-700 */
+      transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .dataTables_filter input:focus {
+      outline: none;
+      border-color: #2563eb; /* blue-600 */
+      box-shadow: 0 0 0 3px rgb(37 99 235 / 0.3);
+      background-color: white;
+      }
+
+      /* Info text */
+      .dataTables_info {
+      color: #64748b; /* slate-500 */
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      padding-top: 0.25rem;
+      }
+
+      /* Pagination container */
+      .dataTables_paginate {
+      margin-top: 1rem;
+      font-family: 'Inter', sans-serif;
+      }
+
+      /* Pagination buttons */
+      .dataTables_paginate .paginate_button {
+      border-radius: 0.375rem;
+      border: 1px solid transparent;
+      padding: 0.25rem 0.75rem;
+      margin: 0 0.15rem;
+      cursor: pointer;
+      color: #475569; /* slate-600 */
+      background-color: #f1f5f9; /* slate-100 */
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      user-select: none;
+      font-weight: 600;
+      }
+      .dataTables_paginate .paginate_button:hover {
+      background-color: #2563eb; /* blue-600 */
+      color: white !important;
+      border-color: #2563eb;
+      box-shadow: 0 0 6px rgb(37 99 235 / 0.4);
+      }
+      .dataTables_paginate .paginate_button.current,
+      .dataTables_paginate .paginate_button.current:hover {
+      background-color: #1e40af; /* blue-800 */
+      color: white !important;
+      border-color: #1e40af;
+      cursor: default;
+      box-shadow: none;
+      }
+
+      /* Disabled pagination buttons */
+      .dataTables_paginate .paginate_button.disabled {
+      color: #94a3b8 !important; /* slate-400 */
+      cursor: not-allowed;
+      background-color: transparent;
+      border-color: transparent;
+      box-shadow: none;
+      }
+
+      /* Responsive wrapper for table */
+      .dataTables_wrapper {
+      font-family: 'Inter', sans-serif;
+      color: #475569; /* slate-600 */
+      }
+      </style>
+      <table id="table-stok" class="min-w-full bg-white rounded-lg shadow-md overflow-hidden text-slate-700 text-sm">
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">#</th>
+            <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Nama Baju</th>
+            <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Jenis</th>
+            <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Ukuran</th>
+            <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Stok</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200">1</td>
+            <td class="py-3 px-4 border-t border-slate-200">Kaos Polos</td>
+            <td class="py-3 px-4 border-t border-slate-200">Casual</td>
+            <td class="py-3 px-4 border-t border-slate-200">L</td>
+            <td class="py-3 px-4 border-t border-slate-200">
+              <span class="inline-block px-3 py-1 text-blue-700 bg-blue-100 rounded-full font-semibold shadow-sm select-none">
+                45
+              </span>
+            </td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200">2</td>
+            <td class="py-3 px-4 border-t border-slate-200">Kemeja Flanel</td>
+            <td class="py-3 px-4 border-t border-slate-200">Formal</td>
+            <td class="py-3 px-4 border-t border-slate-200">M</td>
+            <td class="py-3 px-4 border-t border-slate-200">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                12
+              </span>
+            </td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200">3</td>
+            <td class="py-3 px-4 border-t border-slate-200">Hoodie Tebal</td>
+            <td class="py-3 px-4 border-t border-slate-200">Casual</td>
+            <td class="py-3 px-4 border-t border-slate-200">XL</td>
+            <td class="py-3 px-4 border-t border-slate-200">
+              <span class="inline-block px-3 py-1 text-blue-700 bg-blue-100 rounded-full font-semibold shadow-sm select-none">
+                30
+              </span>
+            </td>
+          </tr>
+          <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+                 <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+           <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">4</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Jaket Jeans</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">Outdoor</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">L</td>
+            <td class="py-3 px-4 border-t border-slate-200 rounded-b-lg">
+              <span class="inline-block px-3 py-1 text-red-700 bg-red-100 rounded-full font-semibold shadow-sm select-none">
+                8
+              </span>
+            </td>
+          </tr>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+
+      // Destroy dulu DataTable jika sudah ada
+      if ( $.fn.dataTable.isDataTable('#table-stok') ) {
+         $('#table-stok').DataTable().clear().destroy();
+      }
+
+      // Inisialisasi ulang DataTables
+      $('#table-stok').DataTable();
+  });
+
+  const tombolRiwayat = document.getElementById("Riwayat_barang_popup_edit");
+  tombolRiwayat.addEventListener("click", () => {
+   Konteks_Popup.innerHTML = `
+   <div class="p-6 text-slate-700 space-y-6">
+      <h2 class="text-xl font-bold text-slate-800">Riwayat Barang (Admin)</h2>
+
+      <div class="relative border-l-2 border-slate-200 ml-3 pl-6 space-y-8 max-h-[400px] overflow-y-auto pr-4">
+
+         <!-- 1 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-blue-600 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">30 Juli 2025, 08:12 WIB</p>
+            <h3 class="font-semibold text-base">📦 Barang Masuk: <span class="text-slate-800">Kaos Polos</span></h3>
+            <p class="text-sm text-slate-600">Barang pertama kali dimasukkan ke sistem dengan stok <b>50</b>. Oleh <b>Faiz Admin</b></p>
+         </div>
+
+         <!-- 2 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-green-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">01 Agustus 2025, 10:00 WIB</p>
+            <h3 class="font-semibold text-base">🔁 Restock: <span class="text-slate-800">Kaos Polos</span></h3>
+            <p class="text-sm text-slate-600">Stok ditambah dari <b>30</b> menjadi <b>45</b>. Oleh <b>Rudi Admin</b></p>
+         </div>
+
+         <!-- 3 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-yellow-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">02 Agustus 2025, 09:00 WIB</p>
+            <h3 class="font-semibold text-base">✏️ Data Diedit: <span class="text-slate-800">Hoodie Tebal</span></h3>
+            <p class="text-sm text-slate-600">Ukuran default diubah dari <b>M</b> ke <b>L</b>. Oleh <b>Admin Pusat</b></p>
+         </div>
+
+         <!-- 4 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-red-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">03 Agustus 2025, 14:30 WIB</p>
+            <h3 class="font-semibold text-base">⚠️ Koreksi Stok: <span class="text-slate-800">Jaket Jeans</span></h3>
+            <p class="text-sm text-slate-600">Stok dikoreksi dari <b>10</b> ke <b>8</b>. Oleh <b>Faiz Admin</b></p>
+         </div>
+
+         <!-- 5 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-slate-400 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">04 Agustus 2025, 16:00 WIB</p>
+            <h3 class="font-semibold text-base">🚫 Barang Dinonaktifkan: <span class="text-slate-800">Sweater Tipis</span></h3>
+            <p class="text-sm text-slate-600">Barang ini disembunyikan dari daftar aktif. Oleh <b>Admin Gudang</b></p>
+         </div>
+
+         <!-- 6 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-green-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">05 Agustus 2025, 08:45 WIB</p>
+            <h3 class="font-semibold text-base">🔁 Restock: <span class="text-slate-800">Hoodie Tebal</span></h3>
+            <p class="text-sm text-slate-600">Stok ditambah dari <b>25</b> menjadi <b>35</b>. Oleh <b>Admin Gudang</b></p>
+         </div>
+
+         <!-- 7 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-yellow-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">06 Agustus 2025, 12:00 WIB</p>
+            <h3 class="font-semibold text-base">✏️ Nama Produk Diubah</h3>
+            <p class="text-sm text-slate-600">"Sweater Tebal" diubah menjadi "Sweater Premium". Oleh <b>Faiz Admin</b></p>
+         </div>
+
+         <!-- 8 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-blue-600 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">07 Agustus 2025, 09:00 WIB</p>
+            <h3 class="font-semibold text-base">📦 Barang Masuk: <span class="text-slate-800">Topi Trucker</span></h3>
+            <p class="text-sm text-slate-600">Barang baru ditambahkan ke sistem. Stok awal <b>20</b>. Oleh <b>Admin CS</b></p>
+         </div>
+
+         <!-- 9 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-red-500 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">08 Agustus 2025, 15:15 WIB</p>
+            <h3 class="font-semibold text-base">⚠️ Koreksi Stok: <span class="text-slate-800">Kaos Polos</span></h3>
+            <p class="text-sm text-slate-600">Audit menemukan 2 unit hilang, stok dikurangi menjadi <b>43</b>. Oleh <b>Audit Internal</b></p>
+         </div>
+
+         <!-- 10 -->
+         <div class="group">
+            <div class="absolute w-3 h-3 bg-slate-400 rounded-full -left-1.5 top-1"></div>
+            <p class="text-xs text-slate-500">09 Agustus 2025, 18:00 WIB</p>
+            <h3 class="font-semibold text-base">🚫 Barang Dinonaktifkan: <span class="text-slate-800">Topi Trucker</span></h3>
+            <p class="text-sm text-slate-600">Barang sudah tidak tersedia di gudang pusat. Oleh <b>Admin CS</b></p>
+         </div>
+
+      </div>
+      </div>
+
+  `;
+    
+  });
+
+  const tombolPenjualan = document.getElementById("Penjualan_barang_popup_edit");
+  tombolPenjualan.addEventListener("click", () => {
+   Konteks_Popup.innerHTML = `
+   <!-- Ringkasan Atas -->
+   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mb-6">
+   <div class="bg-slate-50 p-4 rounded-xl shadow text-slate-700">
+      <div class="text-xs uppercase text-slate-500 font-semibold mb-1">Total Pendapatan</div>
+      <div class="text-lg font-bold text-green-600">Rp 12.500.000</div>
+   </div>
+   <div class="bg-slate-50 p-4 rounded-xl shadow text-slate-700">
+      <div class="text-xs uppercase text-slate-500 font-semibold mb-1">Total Terjual</div>
+      <div class="text-lg font-bold text-blue-600">145 pcs</div>
+   </div>
+   <div class="bg-slate-50 p-4 rounded-xl shadow text-slate-700">
+      <div class="text-xs uppercase text-slate-500 font-semibold mb-1">Neraca Stok</div>
+      <div class="text-lg font-bold text-yellow-600">+35 pcs</div>
+   </div>
+   </div>
+
+   <!-- Tabel Produk -->
+   <table class="min-w-full bg-white rounded-lg shadow-md overflow-hidden text-slate-700 text-sm">
+   <thead class="bg-slate-100">
+      <tr>
+         <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">#</th>
+         <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Nama Produk</th>
+         <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Stok Saat Ini</th>
+         <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Total Terjual</th>
+         <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">Grafik Penjualan</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+         <td class="py-3 px-4 border-t border-slate-200">1</td>
+         <td class="py-3 px-4 border-t border-slate-200">Kaos Polos</td>
+         <td class="py-3 px-4 border-t border-slate-200 text-blue-600 font-semibold">35 pcs</td>
+         <td class="py-3 px-4 border-t border-slate-200 text-green-600 font-semibold">60 pcs</td>
+         <td class="py-3 px-4 border-t border-slate-200"><canvas id="chart1" height="60"></canvas></td>
+      </tr>
+      <tr class="hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+         <td class="py-3 px-4 border-t border-slate-200">2</td>
+         <td class="py-3 px-4 border-t border-slate-200">Kemeja Flanel</td>
+         <td class="py-3 px-4 border-t border-slate-200 text-blue-600 font-semibold">15 pcs</td>
+         <td class="py-3 px-4 border-t border-slate-200 text-green-600 font-semibold">33 pcs</td>
+         <td class="py-3 px-4 border-t border-slate-200"><canvas id="chart2" height="60"></canvas></td>
+      </tr>
+   </tbody>
+   </table>
+   `;
+
+      setTimeout(() => {
+      new Chart(document.getElementById('chart1'), {
+         type: 'bar',
+         data: {
+            labels: ['Jan', 'Feb', 'Mar'],
+            datasets: [{
+            label: 'Kaos Polos',
+            data: [20, 25, 15],
+            backgroundColor: '#3b82f6'
+            }]
+         },
+         options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 5 } }
+            }
+         }
+      });
+
+      new Chart(document.getElementById('chart2'), {
+         type: 'line',
+         data: {
+            labels: ['Jan', 'Feb', 'Mar'],
+            datasets: [{
+            label: 'Kemeja Flanel',
+            data: [10, 12, 11],
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+            fill: true,
+            tension: 0.4
+            }]
+         },
+         options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 5 } }
+            }
+         }
+      });
+      }, 0);
+  
+  });
+
+  const tombolDiscount = document.getElementById("Diskon_barang_popup_edit");
+  tombolDiscount.addEventListener("click", () => {
+      const hargaNormal = 100000;
+
+   Konteks_Popup.innerHTML = `
+      <div class=" justify-start bg-white rounded-lg shadow-lg p-6 text-slate-800">
+         <h2 class="text-xl font-semibold mb-6">Diskon untuk Produk: <span class="font-bold">Kaos Polos</span></h2>
+
+         <form id="form-diskon" class="space-y-5 text-left">
+
+         <div>
+            <label for="jenisDiskon" class="block mb-1 font-medium text-slate-700">Jenis Diskon</label>
+            <select id="jenisDiskon" name="jenisDiskon" class="w-full rounded-md border border-slate-300 p-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400">
+               <option value="percent">Persentase (%)</option>
+               <option value="nominal">Nominal (Rp)</option>
+            </select>
+         </div>
+
+         <div>
+            <label for="nilaiDiskon" class="block mb-1 font-medium text-slate-700">Nilai Diskon</label>
+            <input type="number" id="nilaiDiskon" name="nilaiDiskon" min="0" placeholder="Masukkan nilai diskon" class="w-full rounded-md border border-slate-300 p-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400" />
+         </div>
+
+         <div class="grid grid-cols-2 gap-2">
+            <div>
+               <label for="tanggalMulai" class="block mb-1 font-medium text-slate-700">Tanggal Mulai</label>
+               <input type="date" id="tanggalMulai" name="tanggalMulai" class="w-full rounded-md border border-slate-300 p-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400" />
+            </div>
+
+            <div>
+               <label for="tanggalBerakhir" class="block mb-1 font-medium text-slate-700">Tanggal Berakhir (Opsional)</label>
+               <input type="date" id="tanggalBerakhir" name="tanggalBerakhir" class="w-full rounded-md border border-slate-300 p-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400" />
+            </div>
+         </div>
+
+         <div>
+            <label for="catatan" class="block mb-1 font-medium text-slate-700">Catatan</label>
+            <textarea id="catatan" name="catatan" rows="3" placeholder="Misal: Diskon ulang tahun" class="w-full rounded-md border border-slate-300 p-2 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-slate-400"></textarea>
+         </div>
+
+         <div class="mt-4 font-semibold">
+            <div>Harga Normal: <span id="hargaNormal">Rp ${hargaNormal.toLocaleString('id-ID')}</span></div>
+            <div>Harga Setelah Diskon: <span id="hargaDiskon" class="text-blue-600">-</span></div>
+         </div>
+
+         <div class="mt-6 flex justify-start space-x-3">
+            <button type="reset" class="px-4 py-2 rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition">Batal</button>
+            <button type="submit" class="px-4 py-2 rounded-md bg-slate-700 text-white hover:bg-slate-900 transition">Simpan Diskon</button>
+         </div>
+         </form>
+
+         
+      </div>
+   `;
+
+   const jenisDiskon = document.getElementById('jenisDiskon');
+   const nilaiDiskon = document.getElementById('nilaiDiskon');
+   const hargaDiskon = document.getElementById('hargaDiskon');
+
+   function updateHargaDiskon() {
+      let diskon = Number(nilaiDiskon.value);
+      if (isNaN(diskon) || diskon <= 0) {
+         hargaDiskon.textContent = '-';
+         hargaDiskon.classList.remove('text-red-600');
+         hargaDiskon.classList.add('text-blue-600');
+         return;
+      }
+
+      let hargaFinal;
+      if (jenisDiskon.value === 'percent') {
+         hargaFinal = hargaNormal - (hargaNormal * diskon / 100);
+      } else {
+         hargaFinal = hargaNormal - diskon;
+      }
+
+      if (hargaFinal < 0) hargaFinal = 0;
+
+      hargaDiskon.textContent = `Rp ${hargaFinal.toLocaleString('id-ID')}`;
+
+      if (hargaFinal < hargaNormal * 0.3) {
+         hargaDiskon.classList.remove('text-blue-600');
+         hargaDiskon.classList.add('text-red-600'); // warning kalau diskon terlalu besar
+      } else {
+         hargaDiskon.classList.remove('text-red-600');
+         hargaDiskon.classList.add('text-blue-600');
+      }
+   }
+
+   jenisDiskon.addEventListener('change', updateHargaDiskon);
+   nilaiDiskon.addEventListener('input', updateHargaDiskon);
+
+   document.getElementById('form-diskon').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const dataDiskon = {
+         jenis: jenisDiskon.value,
+         nilai: Number(nilaiDiskon.value),
+         mulai: document.getElementById('tanggalMulai').value,
+         berakhir: document.getElementById('tanggalBerakhir').value,
+         catatan: document.getElementById('catatan').value,
+      };
+      console.log('Data Diskon Disimpan:', dataDiskon);
+      alert('Diskon berhasil disimpan!');
+   });
+  });
+
+  const tombolCS = document.getElementById("CS_barang_popup_edit");
+  tombolCS.addEventListener("click", () => {
+
+  Konteks_Popup.innerHTML = `
+    <div class="space-y-6">
+      <!-- Ringkasan -->
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="text-slate-500 text-sm">Total Feedback</div>
+          <div class="text-xl font-bold text-slate-800">320</div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="text-slate-500 text-sm">Pelanggan Puas</div>
+          <div class="text-xl font-bold text-green-600">68%</div>
+        </div>
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="text-slate-500 text-sm">Pelanggan Kecewa</div>
+          <div class="text-xl font-bold text-red-600">12%</div>
+        </div>
+      </div>
+
+      <!-- Chart Pie -->
+      <div class="bg-white p-4 rounded-lg shadow">
+        <h2 class="text-slate-800 text-lg font-semibold mb-2">Distribusi Kepuasan</h2>
+        <canvas id="kepuasanChart" class="w-[200px] max-w-[200px] mx-auto"></canvas>
+      </div>
+
+      <!-- Komentar -->
+      <div class="bg-white p-4 rounded-lg shadow max-h-64 overflow-y-auto">
+        <h2 class="text-slate-800 text-lg font-semibold mb-3">Komentar Pelanggan</h2>
+        <ul class="space-y-3">
+          <li class="p-3 bg-slate-50 rounded border-l-4 border-green-500">
+            <div class="text-sm text-slate-600 italic">"Barangnya bagus dan pengiriman cepat!"</div>
+            <div class="text-xs text-slate-400 mt-1">— Rudi, 3 hari lalu</div>
+          </li>
+          <li class="p-3 bg-slate-50 rounded border-l-4 border-yellow-500">
+            <div class="text-sm text-slate-600 italic">"Lumayan, tapi agak lambat sampai."</div>
+            <div class="text-xs text-slate-400 mt-1">— Sari, 5 hari lalu</div>
+          </li>
+          <li class="p-3 bg-slate-50 rounded border-l-4 border-red-500">
+            <div class="text-sm text-slate-600 italic">"Ukuran tidak sesuai, kecewa."</div>
+            <div class="text-xs text-slate-400 mt-1">— Dika, 7 hari lalu</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  // Chart.js init
+  setTimeout(() => {
+    const ctx = document.getElementById('kepuasanChart');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Puas', 'Biasa Saja', 'Kecewa'],
+        datasets: [{
+          data: [68, 20, 12],
+          backgroundColor: ['#10b981', '#facc15', '#ef4444'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#334155',
+              font: {
+                size: 7
+              }
+            }
+          }
+        }
+      }
+    });
+  }, 0);
+  });
+</script>
+
+
 
    </body>
 

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -71,11 +72,52 @@ func (server *Lingkup) Inisialisasi(appConfig AppConfig, dbConfig DBconfig) {
 }
 
 func cekEnv(nilai, fallback string) string {
-	if nilai, ok := os.LookupEnv(nilai); ok {
-		return nilai
+	if v, ok := os.LookupEnv(nilai); ok {
+		return v
 	}
 
 	return fallback
+}
+
+// Upgrader WebSocket (biar bisa upgrade HTTP ke WS)
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		// Atur kebijakan origin sesuai kebutuhan, ini buka semua origin
+		return true
+	},
+}
+
+// Handler WebSocket
+func (server *Lingkup) handleWebSocket(w http.ResponseWriter, r *http.Request) {
+	// Upgrade HTTP connection ke WebSocket
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("Gagal upgrade ke WebSocket:", err)
+		return
+	}
+	defer conn.Close()
+
+	log.Println("Client WebSocket connected:", r.RemoteAddr)
+
+	// Loop baca pesan dari client
+	for {
+		messageType, message, err := conn.ReadMessage()
+		if err != nil {
+			log.Println("WebSocket read error:", err)
+			break
+		}
+
+		log.Printf("Pesan diterima: %s\n", message)
+
+		// Contoh: Echo balik pesan yang diterima
+		err = conn.WriteMessage(messageType, []byte("Server balas: "+string(message)))
+		if err != nil {
+			log.Println("WebSocket write error:", err)
+			break
+		}
+	}
+
+	log.Println("Client WebSocket disconnected:", r.RemoteAddr)
 }
 
 func Jalan() {
@@ -107,7 +149,6 @@ func Jalan() {
 
 	// Menjalankan server
 	server.Jalan(appConfig.AppHost + ":" + appConfig.AppPort)
-
 }
 
 func (server *Lingkup) Jalan(alamat string) {
