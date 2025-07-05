@@ -206,20 +206,32 @@ func CheckBaju(w http.ResponseWriter, db *gorm.DB, nama string, jenis string, ju
 }
 
 func AmbilKeranjangUser(w http.ResponseWriter, db *gorm.DB, nama, user_id string) []map[string]string {
+	fmt.Println("===> Memulai pengambilan data keranjang user")
+	fmt.Println("Parameter diterima: nama =", nama, ", user_id =", user_id)
+
 	var barangs []Ambil_Barang
 
+	// Menjalankan query ke database
+	fmt.Println("Menjalankan query untuk mengambil data dari tabel keranjang")
 	err := db.Table("keranjang").
 		Select(`"Nama", "Harga", "Ukuran", "Jenis", "Jumlah", "deskripsi"`).
 		Where(`"id_user" = ?`, user_id).
 		Find(&barangs).Error
 
+	// Cek apakah ada error
 	if err != nil {
-		fmt.Println("Gagal mengambil data keranjang:", err)
+		fmt.Println("❌ Gagal mengambil data keranjang dari database:", err)
 		return nil
 	}
 
+	fmt.Println("✅ Data berhasil diambil dari database")
+	fmt.Printf("Jumlah baris yang ditemukan: %d\n", len(barangs))
+
+	// Proses konversi data ke bentuk map[string]string
 	var result []map[string]string
-	for _, barang := range barangs {
+	for i, barang := range barangs {
+		fmt.Printf("➤ Memproses baris ke-%d: %+v\n", i+1, barang)
+
 		m := map[string]string{
 			"nama":      barang.Nama,
 			"harga":     barang.Harga,
@@ -228,8 +240,11 @@ func AmbilKeranjangUser(w http.ResponseWriter, db *gorm.DB, nama, user_id string
 			"ukuran":    barang.Ukuran,
 			"deskripsi": barang.Deskripsi,
 		}
+
+		fmt.Printf("   ↳ Data dikonversi: %+v\n", m)
 		result = append(result, m)
 	}
 
+	fmt.Println("✅ Semua data berhasil diproses dan dikembalikan")
 	return result
 }

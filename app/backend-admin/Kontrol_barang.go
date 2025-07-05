@@ -2,8 +2,10 @@ package backendadmin
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -24,6 +26,12 @@ type BarangCustom struct {
 	M             int    `gorm:"column:M"`
 	XL            int    `gorm:"column:XL"`
 	S             int    `gorm:"column:S"`
+	MasukPada     string `gorm:"column:Masuk_Pada"`
+	TerjualS      string `gorm:"TerjualS"`
+	TerjualM      string `gorm:"TerjualM"`
+	TerjualL      string `gorm:"TerjualL"`
+	TerjualX      string `gorm:"TerjualX"`
+	TerjualXL     string `gorm:"TerjualXL"`
 }
 
 func AmbilDataShort(w http.ResponseWriter, db *gorm.DB, Jenis string) []map[string]interface{} {
@@ -157,5 +165,179 @@ func HapusBarang(w http.ResponseWriter, db *gorm.DB, id_barang, nama, jenis_paka
 	return map[string]interface{}{
 		"status":  true,
 		"message": fmt.Sprintf("Berhasil menghapus %d data", result.RowsAffected),
+	}
+}
+
+func AmbilDataStok(w http.ResponseWriter, db *gorm.DB, nama, gender string) []map[string]interface{} {
+	var hasil []BarangCustom
+
+	// Struct hasil akhir, disesuaikan dengan alias SQL
+	type Barang struct {
+		ID      int32  `json:"id"`
+		Kode    int32  `json:"kode"`
+		Nama    string `json:"nama"`
+		Harga   int32  `json:"harga"`
+		Jenis   string `json:"jenis"`
+		Warna   string `json:"Warna"`
+		Untuk   string `json:"untuk"`
+		IdInduk int32  `json:"id_induk"`
+		Status  string `json:"status"`
+		Ukuran  string `json:"Ukuran"`
+	}
+
+	err := db.Table("barang_custom").Where(`"nama" = ? AND "Gender" = ?`, nama, gender).Find(&hasil).Error
+	if err != nil {
+		log.Printf("Gagal mengambil data dari tabel barang_custom: %v\n", err)
+		http.Error(w, "Gagal mengambil data stok dari database", http.StatusInternalServerError)
+		return nil
+	}
+
+	if len(hasil) == 0 {
+		log.Printf("Tidak ditemukan data barang_custom untuk nama: %s dan gender: %s\n", nama, gender)
+		return nil
+	}
+
+	var finalData []map[string]interface{}
+
+	for _, item := range hasil {
+		var data []Barang
+
+		var table, kodeAlias, namaAlias, hargaAlias, jenisAlias string
+
+		switch strings.ToLower(item.Kategori) {
+		case "baju":
+			table = `"Baju"`
+			kodeAlias = `"Kode_baju"`
+			namaAlias = `"Nama_baju"`
+			hargaAlias = `"Harga_baju"`
+			jenisAlias = `"Jenis_baju"`
+		case "celana":
+			table = `"Celana"`
+			kodeAlias = `"Kode_Celana"`
+			namaAlias = `"Nama_Celana"`
+			hargaAlias = `"Harga_Celana"`
+			jenisAlias = `"Jenis_Celana"`
+		case "sepatu":
+			table = `"Sepatu"`
+			kodeAlias = `"kode_sepatu"`
+			namaAlias = `"nama_sepatu"`
+			hargaAlias = `"harga_sepatu"`
+			jenisAlias = `"jenis_sepatu"`
+		default:
+			log.Printf("Kategori tidak dikenal: %s, kode: %q\n", item.Kategori, item.ID)
+			continue
+		}
+
+		query := fmt.Sprintf(`
+			SELECT 
+				id, 
+				%s AS kode, 
+				%s AS nama, 
+				%s AS harga, 
+				%s AS jenis, 
+				"Warna", 
+				untuk, 
+				id_induk, 
+				status, 
+				"Ukuran" 
+			FROM %s 
+			WHERE id_induk = ?`, kodeAlias, namaAlias, hargaAlias, jenisAlias, table)
+
+		if err := db.Raw(query, item.ID).Scan(&data).Error; err != nil {
+			log.Printf("Gagal mengambil detail untuk id_induk %d dari tabel %s, error: %v\n", item.ID, table, err)
+			continue
+		}
+
+		// Ubah ke map
+		for _, b := range data {
+			row := map[string]interface{}{
+				"id":       b.ID,
+				"kode":     b.Kode,
+				"nama":     b.Nama,
+				"harga":    b.Harga,
+				"jenis":    b.Jenis,
+				"warna":    b.Warna,
+				"untuk":    b.Untuk,
+				"id_induk": b.IdInduk,
+				"status":   b.Status,
+				"ukuran":   b.Ukuran,
+			}
+			finalData = append(finalData, row)
+		}
+	}
+
+	fmt.Println(finalData, "==> Final Data Gabungan")
+	return finalData
+}
+
+func HapusBarangChild(w http.ResponseWriter, db *gorm.DB, nama, kode, jenis, ukuran, kode_barang string) map[string]string {
+	fmt.Println("===> [HapusBarangChild] Proses dimulai")
+
+	// Step 1: Ambil kategori dari tabel barang_custom
+	var kategori string
+	err := db.Table("barang_custom").
+		Select("kategori").
+		Where(`"nama" = ? AND "id" = ?`, nama, kode).
+		Scan(&kategori).Error
+
+	if err != nil {
+		fmt.Println(" Gagal mengambil kategori dari barang_custom:", err)
+		return map[string]string{
+			"status":  "false",
+			"message": "Gagal mengambil kategori dari barang_custom",
+		}
+	}
+
+	Table := kategori
+
+	// Jadikan lowercaseo
+	fmt.Println(" Kategori ditemukan dan dikonversi ke lowercase:", kategori)
+
+	// Step 2: Coba nama kolom dengan huruf besar
+	namaKolom := fmt.Sprintf(`"Nama_%s"`, kategori)
+	kodeKolom := fmt.Sprintf(`"Kode_%s"`, kategori)
+	query := fmt.Sprintf("%s = ? AND %s = ?", namaKolom, kodeKolom)
+
+	fmt.Println(" Mencoba menghapus data dengan kolom:", namaKolom, "&", kodeKolom)
+	result := db.Table(kategori).Where(query, nama, kode_barang).Delete(nil)
+
+	if result.Error != nil || result.RowsAffected == 0 {
+		// Step 3: Fallback ke nama kolom huruf kecil
+		fmt.Println(" Gagal atau tidak ada baris terhapus, mencoba nama kolom huruf kecil...")
+
+		namaKolomLower := fmt.Sprintf(`"Nama_%s"`, strings.ToLower(kategori))
+		kodeKolomLower := fmt.Sprintf(`"Kode_%s"`, strings.ToLower(kategori))
+
+		queryLower := fmt.Sprintf("%s = ? AND %s = ?", namaKolomLower, kodeKolomLower)
+
+		resultFallback := db.Table(Table).Where(queryLower, nama, kode_barang).Delete(nil)
+		if resultFallback.Error != nil {
+			fmt.Println(" Gagal menghapus data dari tabel kategori (fallback):", resultFallback.Error)
+			return map[string]string{
+				"status":  "false",
+				"message": "Gagal menghapus data dari tabel kategori (fallback)",
+			}
+		}
+
+		if resultFallback.RowsAffected == 0 {
+			fmt.Println(" Tidak ada baris yang terhapus dalam fallback.")
+			return map[string]string{
+				"status":  "false",
+				"message": "Data tidak ditemukan atau sudah dihapus",
+			}
+		}
+
+		fmt.Println(" Data berhasil dihapus (fallback) dari tabel", kategori)
+		return map[string]string{
+			"status":  "true",
+			"message": "Data berhasil dihapus (fallback)",
+		}
+	}
+
+	// Jika berhasil langsung dari percobaan pertama
+	fmt.Println(" Data berhasil dihapus dari tabel", kategori)
+	return map[string]string{
+		"status":  "true",
+		"message": "Data berhasil dihapus",
 	}
 }

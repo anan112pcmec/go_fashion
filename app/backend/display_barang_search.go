@@ -283,38 +283,45 @@ func TarikDatSemuaWanita(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 }
 
 func FotoProduk(w http.ResponseWriter, data json.RawMessage, db *gorm.DB) {
-	// Decode JSON request ke struct RequestData
+	fmt.Println("===> [FotoProduk] Memulai proses pengambilan foto produk")
+
+	// Step 1: Decode JSON request ke struct RequestData
 	var requestData RequestData
+	fmt.Println("[Step 1] Mencoba decode JSON...")
 	if err := json.Unmarshal(data, &requestData); err != nil {
-		errMsg := fmt.Sprintf("❌ Gagal membaca data JSON: %v", err)
+		errMsg := fmt.Sprintf("❌ [Step 1] Gagal membaca data JSON: %v", err)
 		fmt.Println(errMsg)
 		http.Error(w, "Gagal membaca data", http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("✅ JSON berhasil dibaca: Nama=%s, JenisPakaian=%s\n", requestData.Nama, requestData.JenisPakaian)
+	fmt.Printf("✅ [Step 1] JSON berhasil dibaca: Nama='%s', JenisPakaian='%s'\n", requestData.Nama, requestData.JenisPakaian)
 
-	// Query langsung dari tabel barang_custom
+	// Step 2: Query data gambar dari tabel barang_custom
 	var barang struct {
 		File []byte `gorm:"column:file"`
 	}
-	if err := db.Table("barang_custom").Select("file").
+	fmt.Printf("[Step 2] Mencoba mengambil data gambar dari database untuk: Nama='%s', JenisPakaian='%s'\n", requestData.Nama, requestData.JenisPakaian)
+	if err := db.Table("barang_custom").
+		Select("file").
 		Where("nama = ? AND jenis_pakaian = ?", requestData.Nama, requestData.JenisPakaian).
 		First(&barang).Error; err != nil {
-		errMsg := fmt.Sprintf("❌ Data tidak ditemukan untuk nama '%s' dan jenis_pakaian '%s': %v",
-			requestData.Nama, requestData.JenisPakaian, err)
+		errMsg := fmt.Sprintf("❌ [Step 2] Data tidak ditemukan di database: %v", err)
 		fmt.Println(errMsg)
 		http.Error(w, "Data tidak ditemukan", http.StatusNotFound)
 		return
 	}
-	fmt.Printf("✅ Data berhasil ditemukan dan diambil dari database untuk %s / %s\n",
-		requestData.Nama, requestData.JenisPakaian)
+	fmt.Println("✅ [Step 2] Data gambar berhasil ditemukan di database.")
 
-	// Kirim file gambar dalam bentuk biner
+	// Step 3: Kirim gambar ke client dalam bentuk biner
+	fmt.Println("[Step 3] Mengirim gambar ke client...")
 	w.Header().Set("Content-Disposition", "attachment; filename=foto_produk.jpg")
+	w.Header().Set("Content-Type", "image/jpeg") // Bisa juga "application/octet-stream" jika format file tidak pasti
 	if _, err := w.Write(barang.File); err != nil {
-		errMsg := fmt.Sprintf("❌ Gagal mengirim file ke response: %v", err)
+		errMsg := fmt.Sprintf("❌ [Step 3] Gagal mengirim file ke response: %v", err)
 		fmt.Println(errMsg)
 	} else {
-		fmt.Println("✅ File gambar berhasil dikirim ke client.")
+		fmt.Println("✅ [Step 3] File gambar berhasil dikirim ke client.")
 	}
+
+	fmt.Println("✅ [FotoProduk] Proses selesai tanpa error.")
 }

@@ -1044,22 +1044,45 @@ anime({
   let terpilih = "info_profil";
 
   elemenKanan.innerHTML = `
-        <div id="info-profil-containe">
+        <div id="info-profil-container" style="font-family: "Inter, sans-serif"">
             <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
             
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Nama</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="Anan">
-            </div>
-            
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">$}Username</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik">
+           <div class="grid grid-cols-[60%_40%] gap-6">
+            <!-- Kolom Form -->
+            <div> 
+                <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Nama</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="Anan">
+                </div>
+                
+                <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Username</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik">
+                </div>
+
+                <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Bio</label>
+                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu">
+                </div>
             </div>
 
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Bio</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu">
+            <!-- Kolom Edit Foto -->
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <!-- Canvas untuk preview -->
+                <canvas id="photoCanvas" class="w-40 h-40 border rounded-full bg-slate-100 shadow-inner" width="160" height="160">
+                                <div id="defaultIcon" class="absolute text-6xl text-slate-400 pointer-events-none">
+                <i class="fas fa-user-circle"></i>
+                </div>
+                </canvas>
+
+                <!-- Icon default jika belum ada foto -->
+
+                <!-- Input untuk upload -->
+                <label class="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
+                Ganti Foto
+                <input type="file" accept="image/*" class="hidden" id="uploadPhoto">
+                </label>
+            </div>
             </div>
         </div>
 
@@ -1096,7 +1119,18 @@ anime({
             <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
             <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
         </div>
+
+        <button class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Commit
+        </button>
+
         </div>
+
+
+        
     `;
 
   function showContainersWithAnimation(containerIds) {
@@ -1156,69 +1190,169 @@ anime({
 
   const semuaButtonKiri = document.querySelectorAll(".button_kiri");
 
-  semuaButtonKiri.forEach(function(button) {
-    button.addEventListener("click", function() {
+  semuaButtonKiri.forEach(async function(button) {
+    button.addEventListener("click", async function() {
       const idButton = this.id;
       console.log(this.id);
 
+      const nama = localStorage.getItem("nama");
+      const id  = localStorage.getItem("id");
+
       if(this.id == "info_profil"){
-      elemenKanan.innerHTML = `
-        <div id="info-profil-container" style="visibility: hidden;">
+      
+      const InfoUser = await fetch("/app/endpoint.go", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tujuan: "Ambil_Data_User_settings",
+            nama: `${nama}`,
+            iduser: `${id}`
+        }),
+        });
+
+        if (!InfoUser.ok) {
+        console.error("Fetch gagal:", InfoUser.statusText);
+        return;
+        }
+
+        const data = await InfoUser.json();
+
+        // Contoh: setelah dapat data, kamu bisa isi elemenKanan.innerHTML seperti ini
+        // (gunakan data sesuai struktur response-mu)
+        elemenKanan.innerHTML = `
+        <div id="info-profil-container">
             <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
-            
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Nama</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="Anan">
+            <div class="grid grid-cols-[60%_40%] gap-6">
+            <div>
+                <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Nama</label>
+                <input type="text" id="Nama_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nama}">
+                </div>
+                <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Username</label>
+                <input type="text" id="Username_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik" value="${data.username || ''}">
+                </div>
+                <div class="mb-4">
+                <label class="block  font-semibold text-slate-700 mb-1">Bio</label>
+                <input type="text" id="Bio_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu" value="${data.bio || ''}">
+                </div>
             </div>
-            
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Username</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik">
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <canvas id="photoCanvas" class="w-40 h-40 border rounded-full bg-slate-100 shadow-inner" width="160" height="160"></canvas>
+                <div id="defaultIcon" class="absolute text-6xl text-slate-400 pointer-events-none">
+                <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="flex gap-2">
+                <label class="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
+                    Ganti Foto
+                    <input type="file" accept="image/*" class="hidden" id="uploadPhoto">
+                </label>
+                <label class="cursor-pointer bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
+                    X
+                    <input type="button" class="hidden" id="HapusPhoto">
+                </label>
+                </div>
             </div>
-
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Bio</label>
-            <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu">
             </div>
         </div>
-
-        <!-- Info Pribadi -->
         <div id="info-pribadi-container">
-        <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
-        
-        <div class="mb-4">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
+            <div class="mb-4">
             <label class="block font-semibold text-slate-700 mb-1">User ID</label>
-            <input type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="115221259">
-        </div>
-
-        <div class="mb-4">
+            <input type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="${data.id}">
+            </div>
+            <div class="mb-4">
             <label class="block font-semibold text-slate-700 mb-1">E-mail</label>
-            <input type="email" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="adyaryarade@gmail.com">
-        </div>
-
-        <div class="mb-4">
+            <input type="email" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.email}">
+            </div>
+            <div class="mb-4">
             <label class="block font-semibold text-slate-700 mb-1">Nomor HP</label>
-            <input type="tel" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="6281389709265">
-        </div>
-
-        <div class="mb-4">
+            <input type="tel" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nomorhp}">
+            </div>
+            <div class="mb-4">
             <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
             <select class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
-            <option selected disabled>Pilih Jenis Kelamin</option>
-            <option>Laki-laki</option>
-            <option>Perempuan</option>
-            <option>Lainnya</option>
+                <option disabled ${data.gender ? "" : "selected"}>Pilih Jenis Kelamin</option>
+                <option ${data.gender === "Laki-laki" ? "selected" : ""}>Laki-laki</option>
+                <option ${data.gender === "Perempuan" ? "selected" : ""}>Perempuan</option>
+                <option ${data.gender === "Lainnya" ? "selected" : ""}>Lainnya</option>
             </select>
-        </div>
-
-        <div class="mb-4">
+            </div>
+            <div class="mb-4">
             <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
-            <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+            <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.tanggal_lahir || ''}">
+            </div>
+            <button class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Commit
+            </button>
         </div>
-        </div>
-    `;
+        `;
+
 
     showContainersWithAnimation(["info-profil-container", "info-pribadi-container"]);
+
+    const canvas = document.getElementById("photoCanvas");
+    const ctx = canvas.getContext("2d");
+    const uploadInput = document.getElementById("uploadPhoto");
+    const defaultIcon = document.getElementById("defaultIcon");
+
+    // Fungsi menggambar gambar dalam bentuk bulat
+    function drawImageCircular(img) {
+        const diameter = canvas.width;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
+
+        // Menyesuaikan ukuran dan posisi gambar
+        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        const x = (canvas.width / 2) - (img.width / 2) * scale;
+        const y = (canvas.height / 2) - (img.height / 2) * scale;
+        
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+        ctx.restore();
+    }
+
+    uploadInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            drawImageCircular(img);
+            defaultIcon.style.display = "none"; // sembunyikan icon default
+        };
+        img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    const hapusBtn = document.getElementById("HapusPhoto");
+
+    hapusBtn.addEventListener("click", function () {
+        // Bersihkan canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Tampilkan kembali icon default
+        defaultIcon.style.display = "flex";
+
+        // Reset input file (opsional)
+        uploadInput.value = "";
+    });
+
+   
+
+
 
     } else if(this.id == "alamat"){
         elemenKanan.innerHTML = `

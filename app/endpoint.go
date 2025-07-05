@@ -25,6 +25,7 @@ type AjaxRequest struct {
 	IdBarang     string          `json:"id_barang"`
 	JenisPakaian string          `json:"jenis_pakaian"`
 	Gender       string          `json:"gender"`
+	KodeBarang   string          `json:"kode_barang"`
 }
 
 type AjaxRequestFile struct {
@@ -158,6 +159,30 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 				var Hasil map[string]interface{}
 				fmt.Println("Menghapus Barang Keseluruhan")
 				Hasil = backendadmin.HapusBarang(w, server.database, req.IdBarang, req.Nama, req.JenisPakaian, req.Gender, req.Harga)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "ambil_suatu_stok_baju":
+				var Hasil []map[string]interface{}
+				Hasil = backendadmin.AmbilDataStok(w, server.database, req.Nama, req.Gender)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "Hapus_Salah_Satu_stok":
+				var Hasil map[string]string
+				Hasil = backendadmin.HapusBarangChild(w, server.database, req.Nama, req.IdBarang, req.Jenis, req.Ukuran, req.KodeBarang)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "Ambil_Data_User_settings":
+				var Hasil map[string]string
+				Hasil = backend.AmbilDataUser(w, server.database, req.Nama, req.IdUser)
 				fmt.Println(Hasil)
 				w.Header().Set("Content-Type", "application/json")
 				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
