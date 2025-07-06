@@ -8,6 +8,7 @@ import (
 
 	"github.com/anan112pcmec/go_fashion/app/backend"
 	backendadmin "github.com/anan112pcmec/go_fashion/app/backend-admin"
+
 )
 
 type AjaxRequest struct {
@@ -26,6 +27,11 @@ type AjaxRequest struct {
 	JenisPakaian string          `json:"jenis_pakaian"`
 	Gender       string          `json:"gender"`
 	KodeBarang   string          `json:"kode_barang"`
+	TanggalLahir string          `json:"tanggal_lahir"`
+	NomorHp      string          `json:"nomor_hp"`
+	Username     string          `json:"username"`
+	Bio          string          `json:"bio"`
+	Email        string          `json:"email"`
 }
 
 type AjaxRequestFile struct {
@@ -57,6 +63,9 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 		tujuan := r.FormValue("tujuan")
 		if tujuan == "Masukin_barang" {
 			backend.MasukanBarang(w, r, server.database)
+			return
+		} else if tujuan == "Masukin_Info_Pribadi" {
+			backend.MasukinInfoPribadi(w, server.database, r)
 			return
 		}
 	} else {
@@ -181,7 +190,7 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
 				}
 			case "Ambil_Data_User_settings":
-				var Hasil map[string]string
+				var Hasil map[string]interface{}
 				Hasil = backend.AmbilDataUser(w, server.database, req.Nama, req.IdUser)
 				fmt.Println(Hasil)
 				w.Header().Set("Content-Type", "application/json")

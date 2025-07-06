@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"gorm.io/gorm"
+
 )
 
 type BarangCustom struct {
@@ -178,36 +179,122 @@ func AmbilCelana(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]
 	return dataCelana
 }
 
-func ambilKacamata(w http.ResponseWriter, db *gorm.DB) []map[string]interface{} {
-	var kacamata []BarangCustom
+func ambilSepatu(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]interface{} {
+	var sepatu []BarangCustom
+	var dataSepatu []map[string]interface{}
 
-	if err := db.Table("barang_custom").Find(&kacamata).Error; err != nil {
-		http.Error(w, "Gagal mengambil data", http.StatusInternalServerError)
+	if untuk == "Pria" || untuk == "Wanita" {
+		err := db.Table("barang_custom").
+			Where(`EXISTS (
+				SELECT 1 FROM "Sepatu"
+				WHERE "Sepatu"."Nama_Sepatu" = "barang_custom"."nama"
+				AND "Sepatu"."Jenis_Sepatu" = "barang_custom"."jenis_pakaian"
+				AND "Sepatu"."untuk" = ?
+			)`, untuk).
+			Find(&sepatu).Error
+
+		if err != nil {
+			log.Println("Error mengambil data barang_custom (sepatu pria/wanita):", err)
+		} else {
+			for _, item := range sepatu {
+				dataSepatu = append(dataSepatu, map[string]interface{}{
+					"nama":          item.Nama,
+					"jenis_pakaian": item.JenisPakaian,
+					"deskripsi":     item.Deskripsi,
+					"kategori":      item.Kategori,
+					"harga":         item.Harga,
+					"warna":         item.Warna,
+					"stok":          item.Stok,
+					"ukuran":        item.Ukuran,
+				})
+			}
+		}
+
+	} else if untuk == "Semua" {
+		err := db.Table("barang_custom").
+			Where(`EXISTS (
+				SELECT 1 FROM "Sepatu"
+				WHERE "Sepatu"."Nama_Sepatu" = "barang_custom"."nama"
+				AND "Sepatu"."Jenis_Sepatu" = "barang_custom"."jenis_pakaian"
+			)`).
+			Find(&sepatu).Error
+
+		if err != nil {
+			log.Println("Error mengambil semua data sepatu:", err)
+		} else {
+			for _, item := range sepatu {
+				dataSepatu = append(dataSepatu, map[string]interface{}{
+					"nama":          item.Nama,
+					"jenis_pakaian": item.JenisPakaian,
+					"deskripsi":     item.Deskripsi,
+					"kategori":      item.Kategori,
+					"harga":         item.Harga,
+					"warna":         item.Warna,
+					"stok":          item.Stok,
+					"ukuran":        item.Ukuran,
+				})
+			}
+		}
 	}
 
+	return dataSepatu
+}
+
+func ambilKacamata(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]interface{} {
+	var kacamata []BarangCustom
 	var dataKacamata []map[string]interface{}
 
-	errkacamata := db.Table("barang_custom").
-		Where(`EXISTS (
-		SELECT 1 FROM "Kacamata" 
-		WHERE "Kacamata"."Nama_Kacamata" = "barang_custom"."nama" 
-		AND "Kacamata"."Jenis_Kacamata" = "barang_custom"."jenis_pakaian"
-    )`).Find(&kacamata).Error
+	if untuk == "Pria" || untuk == "Wanita" {
+		err := db.Table("barang_custom").
+			Where(`EXISTS (
+				SELECT 1 FROM "Kacamata"
+				WHERE "Kacamata"."Nama_Kacamata" = "barang_custom"."nama"
+				AND "Kacamata"."Jenis_Kacamata" = "barang_custom"."jenis_pakaian"
+				AND "Kacamata"."untuk" = ?
+			)`, untuk).
+			Find(&kacamata).Error
 
-	if errkacamata != nil {
-		log.Println("Error mengambil data barang_custom:", errkacamata)
-	} else {
-		for _, item := range kacamata {
-			dataKacamata = append(dataKacamata, map[string]interface{}{
-				"nama":          item.Nama,
-				"jenis_pakaian": item.JenisPakaian,
-				"deskripsi":     item.Deskripsi,
-				"kategori":      item.Kategori,
-				"harga":         item.Harga,
-				"warna":         item.Warna,
-				"stok":          item.Stok,
-				"ukuran":        item.Ukuran,
-			})
+		if err != nil {
+			log.Println("Error mengambil data barang_custom (kacamata pria/wanita):", err)
+		} else {
+			for _, item := range kacamata {
+				dataKacamata = append(dataKacamata, map[string]interface{}{
+					"nama":          item.Nama,
+					"jenis_pakaian": item.JenisPakaian,
+					"deskripsi":     item.Deskripsi,
+					"kategori":      item.Kategori,
+					"harga":         item.Harga,
+					"warna":         item.Warna,
+					"stok":          item.Stok,
+					"ukuran":        item.Ukuran,
+				})
+			}
+		}
+
+	} else if untuk == "Semua" {
+		err := db.Table("barang_custom").
+			Where(`EXISTS (
+				SELECT 1 FROM "Kacamata"
+				WHERE "Kacamata"."Nama_Kacamata" = "barang_custom"."nama"
+				AND "Kacamata"."Jenis_Kacamata" = "barang_custom"."jenis_pakaian"
+			)`).
+			Find(&kacamata).Error
+
+		if err != nil {
+			log.Println("Error mengambil semua data kacamata:", err)
+		} else {
+			for _, item := range kacamata {
+				dataKacamata = append(dataKacamata, map[string]interface{}{
+					"nama":          item.Nama,
+					"jenis_pakaian": item.JenisPakaian,
+					"deskripsi":     item.Deskripsi,
+					"kategori":      item.Kategori,
+					"harga":         item.Harga,
+					"warna":         item.Warna,
+					"stok":          item.Stok,
+					"ukuran":        item.Ukuran,
+				})
+			}
 		}
 	}
 
@@ -226,11 +313,13 @@ func TarikDatSemuaPria(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 
 	var dataProduk []map[string]interface{}
 
-	dataProduk = append(dataProduk, AmbilBaju(w, db, "Pria")...)
+	dataProduk = append(dataProduk, AmbilBaju(w, db, "Semua")...)
 
-	dataProduk = append(dataProduk, AmbilCelana(w, db, "Pria")...)
+	dataProduk = append(dataProduk, AmbilCelana(w, db, "Semua")...)
 
-	dataProduk = append(dataProduk, ambilKacamata(w, db)...)
+	dataProduk = append(dataProduk, ambilKacamata(w, db, "Semua")...)
+
+	dataProduk = append(dataProduk, ambilSepatu(w, db, "Semua")...)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(dataProduk)

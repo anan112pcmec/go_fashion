@@ -955,6 +955,24 @@ anime({
 
 {{define "Pengguna_side"}}
 
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- OpenLayers CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css" />
+
+<!-- OpenLayers JS -->
+<script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
+
+
+
+
+
 <style>
 #bagian_kanan_pengguna {
   overflow-y: scroll;
@@ -1200,196 +1218,484 @@ anime({
 
       if(this.id == "info_profil"){
       
-      const InfoUser = await fetch("/app/endpoint.go", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            tujuan: "Ambil_Data_User_settings",
-            nama: `${nama}`,
-            iduser: `${id}`
-        }),
-        });
+        const InfoUser = await fetch("/app/endpoint.go", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tujuan: "Ambil_Data_User_settings",
+                    nama: `${nama}`,
+                    iduser: `${id}`
+                }),
+            });
 
-        if (!InfoUser.ok) {
-        console.error("Fetch gagal:", InfoUser.statusText);
-        return;
-        }
+            if (!InfoUser.ok) {
+                console.error("Fetch gagal:", InfoUser.statusText);
+                return;
+            }
 
-        const data = await InfoUser.json();
+            const data = await InfoUser.json();
 
-        // Contoh: setelah dapat data, kamu bisa isi elemenKanan.innerHTML seperti ini
-        // (gunakan data sesuai struktur response-mu)
-        elemenKanan.innerHTML = `
-        <div id="info-profil-container">
-            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
-            <div class="grid grid-cols-[60%_40%] gap-6">
-            <div>
-                <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Nama</label>
-                <input type="text" id="Nama_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nama}">
+            console.log(data);
+
+            // Tampilkan form ke dalam elemenKanan
+            elemenKanan.innerHTML = `
+                <!-- Info Profil -->
+                <div id="info-profil-container">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Info Profil</h2>
+                    <div class="grid grid-cols-[60%_40%] gap-6">
+                        <div>
+                            <div class="mb-4">
+                                <label class="block font-semibold text-slate-700 mb-1">Nama</label>
+                                <input type="text" id="nama_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nama}">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block font-semibold text-slate-700 mb-1">Username</label>
+                                <input type="text" id="username_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik" value="${data.username || ''}">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block font-semibold text-slate-700 mb-1">Bio</label>
+                                <input type="text" id="bio_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu" value="${data.bio || ''}">
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center space-y-4">
+                            <canvas id="photoCanvas" class="w-40 h-40 border rounded-full bg-slate-100 shadow-inner" width="160" height="160"></canvas>
+                            <div id="defaultIcon" class="absolute text-6xl text-slate-400 pointer-events-none">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="flex gap-2">
+                                <label class="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
+                                    Ganti Foto
+                                    <input type="file" accept="image/*" class="hidden" id="uploadPhoto">
+                                </label>
+                                <label class="cursor-pointer bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
+                                    X
+                                    <input type="button" class="hidden" id="HapusPhoto">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Username</label>
-                <input type="text" id="Username_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Buat username yang unik" value="${data.username || ''}">
+
+                <!-- Info Pribadi -->
+                <div id="info-pribadi-container">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
+                    <div class="mb-4">
+                        <label class="block font-semibold text-slate-700 mb-1">User ID</label>
+                        <input id="id_user" type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="${data.id}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block font-semibold text-slate-700 mb-1">E-mail</label>
+                        <input type="email" id="email_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.email}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block font-semibold text-slate-700 mb-1">Nomor HP</label>
+                        <input type="tel" id="nomor_hp_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nomor_hp}">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+                        <select id="jenis_kelamin_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
+                            <option disabled ${data.gender ? "" : "selected"}>Pilih Jenis Kelamin</option>
+                            <option ${data.gender === "Laki-laki" ? "selected" : ""}>Laki-laki</option>
+                            <option ${data.gender === "Perempuan" ? "selected" : ""}>Perempuan</option>
+                            <option ${data.gender === "Lainnya" ? "selected" : ""}>Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
+                        <input type="date" id="tanggal_lahir_input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.tanggal_lahir || ''}">
+                    </div>
+                    <button id="commitButton" class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Commit
+                    </button>
                 </div>
-                <div class="mb-4">
-                <label class="block  font-semibold text-slate-700 mb-1">Bio</label>
-                <input type="text" id="Bio_Input" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Tulis bio tentangmu" value="${data.bio || ''}">
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center space-y-4">
-                <canvas id="photoCanvas" class="w-40 h-40 border rounded-full bg-slate-100 shadow-inner" width="160" height="160"></canvas>
-                <div id="defaultIcon" class="absolute text-6xl text-slate-400 pointer-events-none">
-                <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="flex gap-2">
-                <label class="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
-                    Ganti Foto
-                    <input type="file" accept="image/*" class="hidden" id="uploadPhoto">
-                </label>
-                <label class="cursor-pointer bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-150">
-                    X
-                    <input type="button" class="hidden" id="HapusPhoto">
-                </label>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div id="info-pribadi-container">
-            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Pribadi</h2>
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">User ID</label>
-            <input type="text" disabled class="w-full rounded-lg px-3 py-2 bg-slate-100 text-slate-500 border border-slate-300" value="${data.id}">
-            </div>
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">E-mail</label>
-            <input type="email" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.email}">
-            </div>
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Nomor HP</label>
-            <input type="tel" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.nomorhp}">
-            </div>
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
-            <select class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
-                <option disabled ${data.gender ? "" : "selected"}>Pilih Jenis Kelamin</option>
-                <option ${data.gender === "Laki-laki" ? "selected" : ""}>Laki-laki</option>
-                <option ${data.gender === "Perempuan" ? "selected" : ""}>Perempuan</option>
-                <option ${data.gender === "Lainnya" ? "selected" : ""}>Lainnya</option>
-            </select>
-            </div>
-            <div class="mb-4">
-            <label class="block font-semibold text-slate-700 mb-1">Tanggal Lahir</label>
-            <input type="date" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" value="${data.tanggal_lahir || ''}">
-            </div>
-            <button class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            Commit
-            </button>
-        </div>
-        `;
+            `;
+
+            // Animasi tampilan
+            showContainersWithAnimation(["info-profil-container", "info-pribadi-container"]);
+
+            // ------ Foto & Canvas ------
+            const canvas = document.getElementById("photoCanvas");
+            const ctx = canvas.getContext("2d");
+            const uploadInput = document.getElementById("uploadPhoto");
+            const defaultIcon = document.getElementById("defaultIcon");
+            const hapusBtn = document.getElementById("HapusPhoto");
+
+            // Fungsi menggambar foto bulat di canvas
+            function drawImageCircular(img) {
+                const diameter = canvas.width;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+
+                const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                const x = (canvas.width / 2) - (img.width / 2) * scale;
+                const y = (canvas.height / 2) - (img.height / 2) * scale;
+
+                ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                ctx.restore();
+            }
+
+            // Tampilkan foto dari backend jika tersedia
+            if (data.foto && typeof data.foto === "string" && data.foto.length > 0) {
+            const img = new Image();
+            img.onload = () => {
+                drawImageCircular(img);
+                defaultIcon.style.display = "none";
+            };
+            img.onerror = () => {
+                console.error("Gagal memuat gambar base64");
+            };
+            img.src = "data:image/jpeg;base64," + data.foto;
+            }
 
 
-    showContainersWithAnimation(["info-profil-container", "info-pribadi-container"]);
+            // Upload foto baru
+            uploadInput.addEventListener("change", function () {
+                const file = this.files[0];
+                if (!file) return;
 
-    const canvas = document.getElementById("photoCanvas");
-    const ctx = canvas.getContext("2d");
-    const uploadInput = document.getElementById("uploadPhoto");
-    const defaultIcon = document.getElementById("defaultIcon");
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        drawImageCircular(img);
+                        defaultIcon.style.display = "none";
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
 
-    // Fungsi menggambar gambar dalam bentuk bulat
-    function drawImageCircular(img) {
-        const diameter = canvas.width;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(diameter / 2, diameter / 2, diameter / 2, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.clip();
+            // Hapus foto → reset canvas
+            hapusBtn.addEventListener("click", function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                defaultIcon.style.display = "flex";
+                uploadInput.value = "";
+            });
 
-        // Menyesuaikan ukuran dan posisi gambar
-        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-        const x = (canvas.width / 2) - (img.width / 2) * scale;
-        const y = (canvas.height / 2) - (img.height / 2) * scale;
-        
-        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-        ctx.restore();
-    }
+            document.getElementById("commitButton").addEventListener("click", () => {
+                const nama_input = document.getElementById("nama_input").value.toString();
+                const nomor_hp_input = document.getElementById("nomor_hp_input").value.toString();
+                const username_input = document.getElementById("username_input").value.toString();
+                const bio_input = document.getElementById("bio_input").value.toString();
+                const Email_input = document.getElementById("email_input").value.toString();
+                const jenis_kelamin_input = document.getElementById("jenis_kelamin_input").value.toString();
+                const tanggal_lahir_input = document.getElementById("tanggal_lahir_input").value.toString();
+                const foto_input = document.getElementById("uploadPhoto").files[0]; // ambil file
+                const idnyah = document.getElementById("id_user").value.toString();
 
-    uploadInput.addEventListener("change", function () {
-        const file = this.files[0];
-        if (!file) return;
+                const formData = new FormData();
+                formData.append("tujuan", "Masukin_Info_Pribadi");
+                formData.append("iduser", idnyah); // pastikan variabel idnyah sudah didefinisikan
+                formData.append("namauser", nama_input);
+                formData.append("nomor_hp", nomor_hp_input);
+                formData.append("username", username_input);
+                formData.append("bio", bio_input);
+                formData.append("email", Email_input);
+                formData.append("gender", jenis_kelamin_input);
+                formData.append("tanggal_lahir", tanggal_lahir_input);
+                if (foto_input) {
+                    formData.append("foto", foto_input);
+                }
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-            drawImageCircular(img);
-            defaultIcon.style.display = "none"; // sembunyikan icon default
-        };
-        img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-
-    const hapusBtn = document.getElementById("HapusPhoto");
-
-    hapusBtn.addEventListener("click", function () {
-        // Bersihkan canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Tampilkan kembali icon default
-        defaultIcon.style.display = "flex";
-
-        // Reset input file (opsional)
-        uploadInput.value = "";
-    });
-
-   
-
+                fetch("/app/endpoint.go", {
+                    method: "POST",
+                    body: formData, // tidak pakai JSON.stringify karena kita pakai FormData
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                    console.log("Sukses:", data);
+                    // tampilkan notifikasi kalau perlu
+                    })
+                    .catch(err => {
+                    console.error("Gagal:", err);
+                    });
+            });
 
 
     } else if(this.id == "alamat"){
         elemenKanan.innerHTML = `
             <div id="info-alamat-container" style="">
-            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Alamat</h2>
+                <h2 class="text-lg font-bold mb-4 text-slate-800">Info Alamat</h2>
 
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
-                <textarea class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" rows="3" placeholder="Masukkan alamat lengkap tempat tinggalmu"></textarea>
+                <div class="grid grid-cols-[40%_60%]  ">
+                <!-- Kiri: form alamat (sudah ada) -->
+                <div>
+                    <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
+                    <textarea id="alamat_lengkap" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" rows="3" placeholder="Masukkan alamat lengkap tempat tinggalmu"></textarea>
+                    </div>
+                    <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Provinsi</label>
+                    <input id="provinsi" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan nama provinsi">
+                    </div>
+                    <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Kabupaten/Kota</label>
+                    <input id="kabupaten_kota" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kabupaten atau kota">
+                    </div>
+                </div>
+
+                <!-- Kanan: peta + navbar -->
+                <div class="flex p-2 flex-col h-full rounded-r-lg overflow-hidden bg-white">
+                    <!-- Map container, fleksibel memenuhi tinggi -->
+                    <div id="map" class="flex-grow w-full"></div>
+                    <!-- Navbar tipis di bawah -->
+                    <div class="flex justify-end gap-2 px-3 py-1 bg-slate-100 border-t border-slate-300">
+                    <!-- Tombol plus -->
+                    <button id="btnAdd" title="Tambah" class="p-1 rounded hover:bg-teal-200 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                    <!-- Tombol edit -->
+                    <button id="btnEdit" title="Edit" class="p-1 rounded hover:bg-teal-200 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                        </svg>
+                    </button>
+                    </div>
+                </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Kecamatan</label>
+                    <input id="kecamatan" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kecamatan">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Kelurahan/Desa</label>
+                    <input id="kelurahan_desa" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kelurahan atau desa">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Kode Pos</label>
+                    <input id="kode_pos" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kode pos">
+                </div>
+
+                <button id="commitAlamatButton" class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Commit
+                </button>
             </div>
 
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Provinsi</label>
-                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan nama provinsi">
-            </div>
+            <style>
+            /* Pastikan div map tinggi penuh di wadah flex-grow */
+            #map {
+                min-height: 0; /* supaya flex-grow di browser tertentu bekerja */
+            }
+            </style>
 
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Kabupaten/Kota</label>
-                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kabupaten atau kota">
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Kecamatan</label>
-                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kecamatan">
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Kelurahan/Desa</label>
-                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kelurahan atau desa">
-            </div>
-
-            <div class="mb-4">
-                <label class="block font-semibold text-slate-700 mb-1">Kode Pos</label>
-                <input type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kode pos">
-            </div>
-            </div>
         `;
+
+            const array_alamat = [];
+
+let map, vectorLayer, view;
+
+function initMap() {
+  // View awal
+  view = new ol.View({
+    center: ol.proj.fromLonLat([106.816666, -6.2]), // Jakarta
+    zoom: 11,
+  });
+
+  // Layer marker
+  vectorLayer = new ol.layer.Vector({
+    source: new ol.source.Vector(),
+  });
+
+  map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM(),
+      }),
+      vectorLayer,
+    ],
+    view: view,
+  });
+
+  // Lokasi user
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lon = pos.coords.longitude;
+        const lat = pos.coords.latitude;
+        const coords = ol.proj.fromLonLat([lon, lat]);
+        view.setCenter(coords);
+
+        const marker = new ol.Feature({
+          geometry: new ol.geom.Point(coords),
+        });
+
+        marker.setStyle(
+          new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 7,
+              fill: new ol.style.Fill({ color: '#10b981' }),
+              stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }),
+            }),
+          })
+        );
+
+        vectorLayer.getSource().addFeature(marker);
+      },
+      (err) => console.warn("Gagal mendapatkan lokasi:", err)
+    );
+  }
+}
+
+// Tambah alamat
+document.getElementById("btnAdd").addEventListener("click", () => {
+  const toastContent = document.createElement("div");
+  toastContent.classList = "rounded-xl"
+  toastContent.innerHTML = `
+    <div class="text-sm font-sans text-slate-800 bg-white rounded-xl shadow-md p-5 border border-slate-200 max-w-md mx-auto">
+
+  <!-- Himbauan -->
+  <div class="mb-4 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-lg px-4 py-3 text-xs">
+    <strong class="font-medium text-sm">Catatan:</strong> Anda hanya perlu mengisi <span class="font-semibold">Nama Alamat</span> dan <span class="font-semibold">Deskripsi</span>. Koordinat lokasi akan otomatis terdeteksi berdasarkan posisi Anda saat ini.
+  </div>
+
+  <!-- Form -->
+  <label class="block mb-1 text-slate-700 font-semibold">Nama Alamat</label>
+  <input id="input-nama-alamat" class="w-full px-3 py-2 mb-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 transition text-sm bg-slate-50" placeholder="Contoh: Rumah Utama" />
+
+  <label class="block mb-1 text-slate-700 font-semibold">Deskripsi</label>
+  <input id="input-desk-alamat" class="w-full px-3 py-2 mb-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 transition text-sm bg-slate-50" placeholder="Contoh: Tempat tinggal sehari-hari" />
+
+  <p class="text-xs text-slate-500 italic mb-3">* Koordinat akan otomatis tersimpan berdasarkan lokasi Anda saat ini</p>
+
+  <!-- Tombol -->
+  <button id="btn-simpan-alamat" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium w-full transition shadow-sm">
+    Simpan Alamat
+  </button>
+
+</div>
+
+  `;
+
+  const toast = Toastify({
+    node: toastContent,
+    duration: -1,
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    close: true,
+    // backgroundColor dihapus
+    style: {
+        background: "transparent",
+        boxShadow: "none",
+        padding: 0,
+    },
+  });
+
+  toast.showToast();
+
+  setTimeout(() => {
+    document.getElementById("btn-simpan-alamat").addEventListener("click", () => {
+      const nama = document.getElementById("input-nama-alamat").value.trim();
+      const desk = document.getElementById("input-desk-alamat").value.trim();
+
+      if (!nama || !desk) {
+        Toastify({
+          text: "Nama dan deskripsi harus diisi!",
+          duration: 3000,
+          backgroundColor: "#ef4444",
+        }).showToast();
+        return;
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude.toFixed(6);
+            const lon = pos.coords.longitude.toFixed(6);
+            const format = `${nama}:${desk}[${lat},${lon}]`;
+            array_alamat.push(format);
+
+            const marker = new ol.Feature({
+              geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+            });
+
+            marker.setStyle(
+              new ol.style.Style({
+                image: new ol.style.Icon({
+                  anchor: [0.5, 1],
+                  src: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+                  scale: 0.05,
+                }),
+                text: new ol.style.Text({
+                  text: nama,
+                  offsetY: -25,
+                  fill: new ol.style.Fill({ color: "#333" }),
+                  stroke: new ol.style.Stroke({ color: "#fff", width: 2 }),
+                }),
+              })
+            );
+
+            vectorLayer.getSource().addFeature(marker);
+            toast.hideToast();
+
+            Toastify({
+              text: "Alamat berhasil ditambahkan!",
+              duration: 3000,
+              backgroundColor: "#10b981",
+            }).showToast();
+          },
+          (err) => {
+            Toastify({
+              text: "Gagal mendapatkan lokasi.",
+              duration: 3000,
+              backgroundColor: "#ef4444",
+            }).showToast();
+          }
+        );
+      }
+    });
+  }, 100);
+});
+
+window.addEventListener("resize", () => {
+  map.updateSize();
+});
+
+initMap();
+
+
+            
+
+        document.getElementById("commitAlamatButton").addEventListener("click", () => {
+            const alamatLengkap = document.getElementById("alamat_lengkap").value;
+            const provinsi = document.getElementById("provinsi").value;
+            const kabupatenKota = document.getElementById("kabupaten_kota").value;
+            const kecamatan = document.getElementById("kecamatan").value;
+            const kelurahanDesa = document.getElementById("kelurahan_desa").value;
+            const kodePos = document.getElementById("kode_pos").value;
+
+            // Contoh kirim data alamat ke server atau proses lain
+            console.log({
+                alamatLengkap,
+                provinsi,
+                kabupatenKota,
+                kecamatan,
+                kelurahanDesa,
+                kodePos
+            });
+
+            // Bisa tambah validasi dan fetch ke backend di sini...
+        });
+
 
         showContainersWithAnimation(["info-alamat-container"]);
 
