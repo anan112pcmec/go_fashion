@@ -8,30 +8,38 @@ import (
 
 	"github.com/anan112pcmec/go_fashion/app/backend"
 	backendadmin "github.com/anan112pcmec/go_fashion/app/backend-admin"
-
 )
 
 type AjaxRequest struct {
-	Tujuan       string          `json:"tujuan"`
-	Data         json.RawMessage `json:"data"`
-	Nama         string          `json:"nama"`
-	Jenis        string          `json:"jenis"`
-	Ukuran       string          `json:"ukuran"`
-	Jumlah       string          `json:"jumlah"`
-	Harga        string          `json:"harga"`
-	Stok         string          `json:"stok"`
-	NamaUser     string          `json:"namauser"`
-	IdUser       string          `json:"iduser"`
-	Deskripsi    string          `json:"deskripsi"`
-	IdBarang     string          `json:"id_barang"`
-	JenisPakaian string          `json:"jenis_pakaian"`
-	Gender       string          `json:"gender"`
-	KodeBarang   string          `json:"kode_barang"`
-	TanggalLahir string          `json:"tanggal_lahir"`
-	NomorHp      string          `json:"nomor_hp"`
-	Username     string          `json:"username"`
-	Bio          string          `json:"bio"`
-	Email        string          `json:"email"`
+	Tujuan        string          `json:"tujuan"`
+	Data          json.RawMessage `json:"data"`
+	Nama          string          `json:"nama"`
+	Jenis         string          `json:"jenis"`
+	Ukuran        string          `json:"ukuran"`
+	Jumlah        string          `json:"jumlah"`
+	Harga         string          `json:"harga"`
+	Stok          string          `json:"stok"`
+	NamaUser      string          `json:"namauser"`
+	IdUser        string          `json:"iduser"`
+	Deskripsi     string          `json:"deskripsi"`
+	IdBarang      string          `json:"id_barang"`
+	JenisPakaian  string          `json:"jenis_pakaian"`
+	Gender        string          `json:"gender"`
+	KodeBarang    string          `json:"kode_barang"`
+	TanggalLahir  string          `json:"tanggal_lahir"`
+	NomorHp       string          `json:"nomor_hp"`
+	Username      string          `json:"username"`
+	Bio           string          `json:"bio"`
+	Email         string          `json:"email"`
+	AlamatLengkap any             `json:"alamat_lengkap"`
+	Provinsi      string          `json:"provinsi"`
+	KabupatenKota string          `json:"kabupaten_kota"`
+	Kecamatan     string          `json:"kecamatan"`
+	KelurahanDesa string          `json:"kelurahan_desa"`
+	KodePos       string          `json:"kode_pos"`
+	Koordinat     string          `json:"koordinat"`
+	NamaAlamat    string          `json:"namaalamat"`
+	JenisAlamat   string          `json:"jenisalamat"`
 }
 
 type AjaxRequestFile struct {
@@ -192,6 +200,22 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 			case "Ambil_Data_User_settings":
 				var Hasil map[string]interface{}
 				Hasil = backend.AmbilDataUser(w, server.database, req.Nama, req.IdUser)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "Masukin_Alamat_Baru":
+				var Hasil map[string]string
+				Hasil = backend.MasukanAlamatBaru(server.database, req.AlamatLengkap, req.IdUser, req.Provinsi, req.KabupatenKota, req.Kecamatan, req.KelurahanDesa, req.KodePos, req.Koordinat, req.NamaAlamat, req.JenisAlamat)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "Ambil_Data_alamat_settings":
+				var Hasil []map[string]interface{}
+				Hasil = backend.KirimAlamatPengguna(server.database, req.IdUser)
 				fmt.Println(Hasil)
 				w.Header().Set("Content-Type", "application/json")
 				if err := json.NewEncoder(w).Encode(Hasil); err != nil {

@@ -1207,14 +1207,13 @@ anime({
   });
 
   const semuaButtonKiri = document.querySelectorAll(".button_kiri");
+  const nama = localStorage.getItem("nama");
+  const id  = localStorage.getItem("id");
 
   semuaButtonKiri.forEach(async function(button) {
     button.addEventListener("click", async function() {
       const idButton = this.id;
       console.log(this.id);
-
-      const nama = localStorage.getItem("nama");
-      const id  = localStorage.getItem("id");
 
       if(this.id == "info_profil"){
       
@@ -1424,165 +1423,259 @@ anime({
 
     } else if(this.id == "alamat"){
         elemenKanan.innerHTML = `
-            <div id="info-alamat-container" style="">
-                <h2 class="text-lg font-bold mb-4 text-slate-800">Info Alamat</h2>
 
-                <div class="grid grid-cols-[40%_60%]  ">
-                <!-- Kiri: form alamat (sudah ada) -->
+            <div id="toggle-alamat" class="w-full flex items-center justify-between px-4 py-3 bg-white text-slate-700 border border-slate-300 rounded-md shadow-sm cursor-pointer hover:bg-slate-50 transition">
+            <span class="font-medium">Tambahkan Alamat Baru</span>
+            <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path id="toggle-icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /> <!-- icon plus -->
+            </svg>
+            </div>
+
+            <!-- Elemen inti -->
+            <div id="info-alamat-container" style="overflow: hidden; max-height: 0; transition: max-height 0.4s ease;">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">Info Alamat</h2>
+
+            <div class="grid grid-cols-[40%_60%]">
+                <!-- Kiri: form alamat -->
                 <div>
-                    <div class="mb-4">
+                <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Nama Alamat</label>
+                    <textarea id="nama_alamat" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" rows="3" placeholder="Masukkan alamat lengkap tempat tinggalmu"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block font-semibold text-slate-700 mb-1">Jenis Alamat</label>
+                    <select id="jenis_alamat" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white text-slate-700">
+                        <option value="" disabled selected>Pilih jenis alamat</option>
+                        <option value="Rumah">Rumah</option>
+                        <option value="Kantor">Kantor</option>
+                        <option value="Tempat Lain">Tempat Lain</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
                     <label class="block font-semibold text-slate-700 mb-1">Alamat Lengkap</label>
                     <textarea id="alamat_lengkap" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" rows="3" placeholder="Masukkan alamat lengkap tempat tinggalmu"></textarea>
-                    </div>
-                    <div class="mb-4">
+                </div>
+                <div class="mb-4">
                     <label class="block font-semibold text-slate-700 mb-1">Provinsi</label>
                     <input id="provinsi" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan nama provinsi">
-                    </div>
-                    <div class="mb-4">
+                </div>
+                <div class="mb-4">
                     <label class="block font-semibold text-slate-700 mb-1">Kabupaten/Kota</label>
                     <input id="kabupaten_kota" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kabupaten atau kota">
-                    </div>
+                </div>
                 </div>
 
                 <!-- Kanan: peta + navbar -->
                 <div class="flex p-2 flex-col h-full rounded-r-lg overflow-hidden bg-white">
-                    <!-- Map container, fleksibel memenuhi tinggi -->
-                    <div id="map" class="flex-grow w-full"></div>
-                    <!-- Navbar tipis di bawah -->
-                    <div class="flex justify-end gap-2 px-3 py-1 bg-slate-100 border-t border-slate-300">
-                    <!-- Tombol plus -->
-                    <button id="btnAdd" title="Tambah" class="p-1 rounded hover:bg-teal-200 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
-                    <!-- Tombol edit -->
-                    <button id="btnEdit" title="Edit" class="p-1 rounded hover:bg-teal-200 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
-                        </svg>
-                    </button>
-                    </div>
+                <div id="map" class="flex-grow w-full"></div>
+                <div class="flex justify-end gap-2 px-3 py-1 bg-slate-100 border-t border-slate-300">
+                    <div class="text-sm font-semibold text-slate-500"> <strong>*alamat</strong> yang diambil Adalah posisi anda saat ini</div>
                 </div>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block font-semibold text-slate-700 mb-1">Kecamatan</label>
-                    <input id="kecamatan" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kecamatan">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block font-semibold text-slate-700 mb-1">Kelurahan/Desa</label>
-                    <input id="kelurahan_desa" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kelurahan atau desa">
-                </div>
-
-                <div class="mb-4">
-                    <label class="block font-semibold text-slate-700 mb-1">Kode Pos</label>
-                    <input id="kode_pos" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kode pos">
-                </div>
-
-                <button id="commitAlamatButton" class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Commit
-                </button>
             </div>
 
+            <div class="mb-4 mt-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kecamatan</label>
+                <input id="kecamatan" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kecamatan">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kelurahan/Desa</label>
+                <input id="kelurahan_desa" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kelurahan atau desa">
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-semibold text-slate-700 mb-1">Kode Pos</label>
+                <input id="kode_pos" type="text" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white" placeholder="Masukkan kode pos">
+            </div>
+
+            <button id="commitAlamatButton" class="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Tambah Alamat
+            </button>
+            </div>
+
+            <div class="flex items-center gap-3 my-4">
+            <div class="flex-grow border-t border-slate-300"></div>
+            <span class="text-xs text-slate-500 font-medium">Koordinat Titikmu</span>
+            <div class="flex-grow border-t border-slate-300"></div>
+            </div>
+
+           <div id="daftar_alamat_user">
+
+           </div>
+
+            <!-- Tinggi minimum peta agar tidak hancur -->
             <style>
-            /* Pastikan div map tinggi penuh di wadah flex-grow */
             #map {
-                min-height: 0; /* supaya flex-grow di browser tertentu bekerja */
+                min-height: 0;
             }
             </style>
 
         `;
 
-            const array_alamat = [];
-
-let map, vectorLayer, view;
-
-function initMap() {
-  // View awal
-  view = new ol.View({
-    center: ol.proj.fromLonLat([106.816666, -6.2]), // Jakarta
-    zoom: 11,
-  });
-
-  // Layer marker
-  vectorLayer = new ol.layer.Vector({
-    source: new ol.source.Vector(),
-  });
-
-  map = new ol.Map({
-    target: 'map',
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM(),
-      }),
-      vectorLayer,
-    ],
-    view: view,
-  });
-
-  // Lokasi user
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lon = pos.coords.longitude;
-        const lat = pos.coords.latitude;
-        const coords = ol.proj.fromLonLat([lon, lat]);
-        view.setCenter(coords);
-
-        const marker = new ol.Feature({
-          geometry: new ol.geom.Point(coords),
+        const response = await fetch("/app/endpoint.go", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                tujuan: "Ambil_Data_alamat_settings",
+                iduser: id
+            }),
         });
 
-        marker.setStyle(
-          new ol.style.Style({
-            image: new ol.style.Circle({
-              radius: 7,
-              fill: new ol.style.Fill({ color: '#10b981' }),
-              stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }),
-            }),
-          })
-        );
+        const InfoUser = await response.json();
+        console.log("Data user:", InfoUser);
 
-        vectorLayer.getSource().addFeature(marker);
-      },
-      (err) => console.warn("Gagal mendapatkan lokasi:", err)
-    );
-  }
-}
+        const container_alamat = document.getElementById("daftar_alamat_user");
+        container_alamat.innerHTML = ""; // Kosongkan kontainer
 
-// Tambah alamat
-document.getElementById("btnAdd").addEventListener("click", () => {
+        InfoUser.forEach((item) => {
+            if (item.Status !== "Berhasil") return;
+
+            const namaAlamat = item.JenisAlamat || "Alamat";
+            const alamatLengkap = item.AlamatLengkap || "";
+            const wilayah = `${item.KabupatenKota}, Provinsi ${item.Provinsi}`;
+            const koordinat = item.Koordinat;
+
+            let iframeSrc = "";
+            if (koordinat) {
+                const [latStr, lonStr] = koordinat.split(",").map(s => s.trim());
+                const lat = parseFloat(latStr);
+                const lon = parseFloat(lonStr);
+                const lat2 = lat + 0.0002;
+                const lon2 = lon + 0.0002;
+
+                iframeSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lon},${lat},${lon2},${lat2}&layer=mapnik&marker=${lat},${lon}`;
+            }
+
+            const html = `
+            <div class="w-full px-4 py-3 mb-4 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center font-[Inter, sans-serif]">
+                <!-- Informasi Alamat -->
+                <div class="flex flex-col gap-1">
+                    <div class="text-sm font-medium text-teal-600 flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>${namaAlamat}</span>
+                    </div>
+                    <div class="text-xs text-slate-600">
+                        ${alamatLengkap}
+                    </div>
+                    <div class="text-xs text-slate-500 font-medium">
+                        ${wilayah}
+                    </div>
+                </div>
+
+                <!-- Map OpenStreetMap -->
+                <div class="w-40 h-24 rounded overflow-hidden border border-slate-300 shadow-sm">
+                    <iframe
+                        class="w-full h-full"
+                        src="${iframeSrc}"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            `;
+
+            container_alamat.insertAdjacentHTML("beforeend", html);
+        });
+
+
+
+         const toggleDiv = document.getElementById("toggle-alamat");
+            const container = document.getElementById("info-alamat-container");
+            const icon = document.getElementById("toggle-icon");
+            const iconPath = document.getElementById("toggle-icon-path");
+            let open = false;
+
+            toggleDiv.addEventListener("click", () => {
+                open = !open;
+                if (open) {
+                container.style.maxHeight = container.scrollHeight + "px";
+                iconPath.setAttribute("d", "M19 9l-7 7-7-7"); // chevron-down
+                } else {
+                container.style.maxHeight = "0";
+                iconPath.setAttribute("d", "M12 4v16m8-8H4"); // plus
+                }
+            });
+
+            const array_alamat = [];
+
+            let map, vectorLayer, view;
+
+            function initMap() {
+            // View awal
+            view = new ol.View({
+                center: ol.proj.fromLonLat([106.816666, -6.2]), // Jakarta
+                zoom: 11,
+            });
+
+            // Layer marker
+            vectorLayer = new ol.layer.Vector({
+                source: new ol.source.Vector(),
+            });
+
+            map = new ol.Map({
+                target: 'map',
+                layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                }),
+                vectorLayer,
+                ],
+                view: view,
+            });
+
+            // Lokasi user
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lon = pos.coords.longitude;
+                    const lat = pos.coords.latitude;
+                    const coords = ol.proj.fromLonLat([lon, lat]);
+                    view.setCenter(coords);
+
+                    const marker = new ol.Feature({
+                    geometry: new ol.geom.Point(coords),
+                    });
+
+                    marker.setStyle(
+                    new ol.style.Style({
+                        image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({ color: '#10b981' }),
+                        stroke: new ol.style.Stroke({ color: '#ffffff', width: 2 }),
+                        }),
+                    })
+                    );
+
+                    vectorLayer.getSource().addFeature(marker);
+                },
+                (err) => console.warn("Gagal mendapatkan lokasi:", err)
+                );
+            }
+            }
+            window.addEventListener("resize", () => {
+            map.updateSize();
+            });
+
+            initMap();
+            
+           document.getElementById("commitAlamatButton").addEventListener("click", () => {
+  // 1. Tampilkan Toastify loading
   const toastContent = document.createElement("div");
-  toastContent.classList = "rounded-xl"
+  toastContent.classList = "rounded-xl";
   toastContent.innerHTML = `
-    <div class="text-sm font-sans text-slate-800 bg-white rounded-xl shadow-md p-5 border border-slate-200 max-w-md mx-auto">
-
-  <!-- Himbauan -->
-  <div class="mb-4 bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-lg px-4 py-3 text-xs">
-    <strong class="font-medium text-sm">Catatan:</strong> Anda hanya perlu mengisi <span class="font-semibold">Nama Alamat</span> dan <span class="font-semibold">Deskripsi</span>. Koordinat lokasi akan otomatis terdeteksi berdasarkan posisi Anda saat ini.
-  </div>
-
-  <!-- Form -->
-  <label class="block mb-1 text-slate-700 font-semibold">Nama Alamat</label>
-  <input id="input-nama-alamat" class="w-full px-3 py-2 mb-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 transition text-sm bg-slate-50" placeholder="Contoh: Rumah Utama" />
-
-  <label class="block mb-1 text-slate-700 font-semibold">Deskripsi</label>
-  <input id="input-desk-alamat" class="w-full px-3 py-2 mb-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 transition text-sm bg-slate-50" placeholder="Contoh: Tempat tinggal sehari-hari" />
-
-  <p class="text-xs text-slate-500 italic mb-3">* Koordinat akan otomatis tersimpan berdasarkan lokasi Anda saat ini</p>
-
-  <!-- Tombol -->
-  <button id="btn-simpan-alamat" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium w-full transition shadow-sm">
-    Simpan Alamat
-  </button>
-
-</div>
-
+    <div class="text-sm font-sans text-slate-800 bg-white rounded-xl shadow-md p-4 border border-slate-200 max-w-xs mx-auto text-center">
+      <p class="font-medium text-sm text-slate-700 mb-1">Sebentar...</p>
+      <p class="text-xs text-slate-500">Alamat sedang didaftarkan</p>
+    </div>
   `;
 
   const toast = Toastify({
@@ -1591,110 +1684,104 @@ document.getElementById("btnAdd").addEventListener("click", () => {
     gravity: "top",
     position: "right",
     stopOnFocus: true,
-    close: true,
-    // backgroundColor dihapus
+    close: false,
     style: {
-        background: "transparent",
-        boxShadow: "none",
-        padding: 0,
+      background: "transparent",
+      boxShadow: "none",
+      padding: 0,
     },
   });
 
   toast.showToast();
 
-  setTimeout(() => {
-    document.getElementById("btn-simpan-alamat").addEventListener("click", () => {
-      const nama = document.getElementById("input-nama-alamat").value.trim();
-      const desk = document.getElementById("input-desk-alamat").value.trim();
+  // 2. Ambil data input alamat
+  const alamatLengkap = document.getElementById("alamat_lengkap").value.trim();
+  const provinsi = document.getElementById("provinsi").value.trim();
+  const kabupatenKota = document.getElementById("kabupaten_kota").value.trim();
+  const kecamatan = document.getElementById("kecamatan").value.trim();
+  const kelurahanDesa = document.getElementById("kelurahan_desa").value.trim();
+  const kodePos = document.getElementById("kode_pos").value.trim();
+  const namaAlamat = document.getElementById("nama_alamat").value.trim();
+  const jenisAlamat = document.getElementById("jenis_alamat").value.trim();
 
-      if (!nama || !desk) {
-        Toastify({
-          text: "Nama dan deskripsi harus diisi!",
-          duration: 3000,
-          backgroundColor: "#ef4444",
-        }).showToast();
-        return;
-      }
+  console.log(alamatLengkap);
+  console.log(id_user);
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const lat = pos.coords.latitude.toFixed(6);
-            const lon = pos.coords.longitude.toFixed(6);
-            const format = `${nama}:${desk}[${lat},${lon}]`;
-            array_alamat.push(format);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const latitude = pos.coords.latitude.toFixed(6);
+        const longitude = pos.coords.longitude.toFixed(6);
 
-            const marker = new ol.Feature({
-              geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
-            });
-
-            marker.setStyle(
-              new ol.style.Style({
-                image: new ol.style.Icon({
-                  anchor: [0.5, 1],
-                  src: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-                  scale: 0.05,
-                }),
-                text: new ol.style.Text({
-                  text: nama,
-                  offsetY: -25,
-                  fill: new ol.style.Fill({ color: "#333" }),
-                  stroke: new ol.style.Stroke({ color: "#fff", width: 2 }),
-                }),
-              })
-            );
-
-            vectorLayer.getSource().addFeature(marker);
+        // Kirim data satu per satu fieldnya
+        fetch("/app/endpoint.go", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tujuan: "Masukin_Alamat_Baru",
+            iduser: id_user,
+            alamat_lengkap: alamatLengkap,
+            provinsi: provinsi,
+            kabupaten_kota: kabupatenKota,
+            kecamatan: kecamatan,
+            kelurahan_desa: kelurahanDesa,
+            kode_pos: kodePos,
+            koordinat: `${parseFloat(latitude)}, ${parseFloat(longitude)}`,
+            namaalamat : namaAlamat,
+            jenisalamat : jenisAlamat
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error("Gagal dari server");
+            return res.json();
+          })
+          .then((data) => {
             toast.hideToast();
-
             Toastify({
-              text: "Alamat berhasil ditambahkan!",
+              text: "Alamat Baru Kamu sudah berhasil TerdaftarYa",
               duration: 3000,
               backgroundColor: "#10b981",
             }).showToast();
-          },
-          (err) => {
+          })
+          .catch((err) => {
+            toast.hideToast();
             Toastify({
-              text: "Gagal mendapatkan lokasi.",
+              text: "Wah ada kendala di server. Coba lagi nanti.",
               duration: 3000,
               backgroundColor: "#ef4444",
             }).showToast();
-          }
-        );
+            console.error("Kesalahan saat mengirim alamat:", err);
+          });
+      },
+      (error) => {
+        toast.hideToast();
+        Toastify({
+          text: "Gagal mendeteksi lokasi device kamu.",
+          duration: 3000,
+          backgroundColor: "#ef4444",
+        }).showToast();
+        console.error("Geolocation error:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       }
-    });
-  }, 100);
+    );
+  } else {
+    toast.hideToast();
+    Toastify({
+      text: "Perangkat kamu tidak mendukung geolokasi.",
+      duration: 3000,
+      backgroundColor: "#ef4444",
+    }).showToast();
+  }
 });
 
-window.addEventListener("resize", () => {
-  map.updateSize();
-});
-
-initMap();
 
 
-            
-
-        document.getElementById("commitAlamatButton").addEventListener("click", () => {
-            const alamatLengkap = document.getElementById("alamat_lengkap").value;
-            const provinsi = document.getElementById("provinsi").value;
-            const kabupatenKota = document.getElementById("kabupaten_kota").value;
-            const kecamatan = document.getElementById("kecamatan").value;
-            const kelurahanDesa = document.getElementById("kelurahan_desa").value;
-            const kodePos = document.getElementById("kode_pos").value;
-
-            // Contoh kirim data alamat ke server atau proses lain
-            console.log({
-                alamatLengkap,
-                provinsi,
-                kabupatenKota,
-                kecamatan,
-                kelurahanDesa,
-                kodePos
-            });
-
-            // Bisa tambah validasi dan fetch ke backend di sini...
-        });
 
 
         showContainersWithAnimation(["info-alamat-container"]);

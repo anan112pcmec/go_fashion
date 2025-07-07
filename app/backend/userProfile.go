@@ -2,6 +2,7 @@ package backend
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -9,7 +10,6 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
-
 )
 
 type UserInformation struct {
@@ -37,6 +37,19 @@ type RequestUserSettings struct {
 	Email        string `json:"email"`
 	Gender       string `json:"gender"`
 	TanggalLahir string `json:"tanggal_lahir"`
+}
+
+type Alamat struct {
+	IdUser        int32  `gorm:"column:id_user"`
+	Alamat1       string `gorm:"column:Alamat1"`
+	AlamatLengkap string `gorm:"column:Alamat_lengkap"`
+	Provinsi      string `gorm:"column:Provinsi"`
+	KabupatenKota string `gorm:"column:Kabupaten/Kota"`
+	Kecamatan     string `gorm:"column:Kecamatan"`
+	Kelurahan     string `gorm:"column:Kelurahan"`
+	KodePos       string `gorm:"column:Kode_pos"`
+	Koordinat     string `gorm:"column:Koordinat"`
+	JenisAlamat   string `gorm:"column:JenisAlamat"`
 }
 
 func AmbilDataUser(w http.ResponseWriter, db *gorm.DB, nama, id string) map[string]interface{} {
@@ -174,4 +187,131 @@ func MasukinInfoPribadi(w http.ResponseWriter, db *gorm.DB, r *http.Request) {
 		"Status":  "berhasil",
 		"Message": "Data user berhasil diperbarui",
 	})
+}
+
+func MasukanAlamatBaru(db *gorm.DB, alamatlengkap any, iduser, provinsi, kabupatenkota, kecamatan, kelurahandesa, kodepos, koordinat, namaalamat, jenisalamat string) map[string]string {
+	// Konversi ID user ke integer
+	idInt, err := strconv.Atoi(iduser)
+	if err != nil {
+		return map[string]string{
+			"Status": "Gagal",
+			"Pesan":  "ID user tidak valid",
+		}
+	}
+
+	// Validasi user
+	var user UserInformation
+	result := db.Table("user").Where("id = ?", idInt).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return map[string]string{
+				"Status": "Gagal",
+				"Pesan":  "User tidak ditemukan",
+			}
+		}
+		return map[string]string{
+			"Status": "Gagal",
+			"Pesan":  "Kesalahan saat cek user",
+		}
+	}
+
+	// Masukkan data ke dalam tabel Alamat
+	alamat := Alamat{
+		IdUser:        int32(idInt),
+		Alamat1:       namaalamat,
+		AlamatLengkap: fmt.Sprintf("%v", alamatlengkap),
+		Provinsi:      provinsi,
+		KabupatenKota: kabupatenkota,
+		Kecamatan:     kecamatan,
+		Kelurahan:     kelurahandesa,
+		KodePos:       kodepos,
+		Koordinat:     koordinat,
+		JenisAlamat:   jenisalamat,
+	}
+
+	if err := db.Table("Alamat").Create(&alamat).Error; err != nil {
+		return map[string]string{
+			"Status": "Gagal",
+			"Pesan":  "Gagal menyimpan alamat",
+		}
+	}
+
+	return map[string]string{
+		"Status": "Berhasil",
+		"Pesan":  "Alamat berhasil disimpan",
+	}
+}
+
+func KirimAlamatPengguna(db *gorm.DB, iduser string) []map[string]interface{} {
+	var hasil []map[string]interface{}
+
+	// Konversi iduser ke int
+	idInt, err := strconv.Atoi(iduser)
+	if err != nil {
+		return []map[string]interface{}{
+			{
+				"Status": "Gagal",
+				"Pesan":  "ID user tidak valid",
+			},
+		}
+	}
+
+	// Validasi user
+	var user UserInformation
+	result := db.Table("user").Where("id = ?", idInt).First(&user)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return []map[string]interface{}{
+				{
+					"Status": "Gagal",
+					"Pesan":  "User tidak ditemukan",
+				},
+			}
+		}
+		return []map[string]interface{}{
+			{
+				"Status": "Gagal",
+				"Pesan":  "Kesalahan saat validasi user",
+			},
+		}
+	}
+
+	// Ambil semua alamat milik user
+	var daftarAlamat []Alamat
+	if err := db.Table("Alamat").Where("id_user = ?", idInt).Find(&daftarAlamat).Error; err != nil {
+		return []map[string]interface{}{
+			{
+				"Status": "Gagal",
+				"Pesan":  "Gagal mengambil data alamat",
+			},
+		}
+	}
+
+	// Jika tidak ada alamat
+	if len(daftarAlamat) == 0 {
+		return []map[string]interface{}{
+			{
+				"Status": "Kosong",
+				"Pesan":  "Belum ada alamat yang tersimpan",
+			},
+		}
+	}
+
+	// Format hasil ke []map[string]interface{}
+	for _, a := range daftarAlamat {
+		hasil = append(hasil, map[string]interface{}{
+			"Alamat1":       a.Alamat1,
+			"AlamatLengkap": a.AlamatLengkap,
+			"Provinsi":      a.Provinsi,
+			"KabupatenKota": a.KabupatenKota,
+			"Kecamatan":     a.Kecamatan,
+			"Kelurahan":     a.Kelurahan,
+			"KodePos":       a.KodePos,
+			"Koordinat":     a.Koordinat,
+			"JenisAlamat":   a.JenisAlamat,
+			"Status":        "Berhasil",
+		})
+	}
+
+	return hasil
 }
