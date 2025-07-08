@@ -182,12 +182,16 @@ func ambilSepatu(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]
 	var sepatu []BarangCustom
 	var dataSepatu []map[string]interface{}
 
+	log.Println("Fungsi ambilSepatu dijalankan dengan parameter untuk =", untuk)
+
 	if untuk == "Pria" || untuk == "Wanita" {
+		log.Println("Mencoba mengambil data sepatu untuk:", untuk)
+
 		err := db.Table("barang_custom").
 			Where(`EXISTS (
 				SELECT 1 FROM "Sepatu"
-				WHERE "Sepatu"."Nama_Sepatu" = "barang_custom"."nama"
-				AND "Sepatu"."Jenis_Sepatu" = "barang_custom"."jenis_pakaian"
+				WHERE "Sepatu"."nama_sepatu" = "barang_custom"."nama"
+				AND "Sepatu"."jenis_sepatu" = "barang_custom"."jenis_pakaian"
 				AND "Sepatu"."untuk" = ?
 			)`, untuk).
 			Find(&sepatu).Error
@@ -195,7 +199,9 @@ func ambilSepatu(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]
 		if err != nil {
 			log.Println("Error mengambil data barang_custom (sepatu pria/wanita):", err)
 		} else {
-			for _, item := range sepatu {
+			log.Printf("Berhasil mengambil %d data sepatu untuk %s\n", len(sepatu), untuk)
+			for i, item := range sepatu {
+				log.Printf("Data ke-%d: %+v\n", i+1, item)
 				dataSepatu = append(dataSepatu, map[string]interface{}{
 					"nama":          item.Nama,
 					"jenis_pakaian": item.JenisPakaian,
@@ -210,18 +216,22 @@ func ambilSepatu(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]
 		}
 
 	} else if untuk == "Semua" {
+		log.Println("Mencoba mengambil semua data sepatu")
+
 		err := db.Table("barang_custom").
 			Where(`EXISTS (
 				SELECT 1 FROM "Sepatu"
-				WHERE "Sepatu"."Nama_Sepatu" = "barang_custom"."nama"
-				AND "Sepatu"."Jenis_Sepatu" = "barang_custom"."jenis_pakaian"
+				WHERE "Sepatu"."nama_sepatu" = "barang_custom"."nama"
+				AND "Sepatu"."jenis_sepatu" = "barang_custom"."jenis_pakaian"
 			)`).
 			Find(&sepatu).Error
 
 		if err != nil {
 			log.Println("Error mengambil semua data sepatu:", err)
 		} else {
-			for _, item := range sepatu {
+			log.Printf("Berhasil mengambil %d data semua sepatu\n", len(sepatu))
+			for i, item := range sepatu {
+				log.Printf("Data ke-%d: %+v\n", i+1, item)
 				dataSepatu = append(dataSepatu, map[string]interface{}{
 					"nama":          item.Nama,
 					"jenis_pakaian": item.JenisPakaian,
@@ -234,7 +244,12 @@ func ambilSepatu(w http.ResponseWriter, db *gorm.DB, untuk string) []map[string]
 				})
 			}
 		}
+
+	} else {
+		log.Println("Parameter 'untuk' tidak valid:", untuk)
 	}
+
+	log.Println("Fungsi ambilSepatu selesai dijalankan")
 
 	return dataSepatu
 }
@@ -312,13 +327,13 @@ func TarikDatSemuaPria(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 
 	var dataProduk []map[string]interface{}
 
+	dataProduk = append(dataProduk, ambilSepatu(w, db, "Semua")...)
+
 	dataProduk = append(dataProduk, AmbilBaju(w, db, "Semua")...)
 
 	dataProduk = append(dataProduk, AmbilCelana(w, db, "Semua")...)
 
 	dataProduk = append(dataProduk, ambilKacamata(w, db, "Semua")...)
-
-	dataProduk = append(dataProduk, ambilSepatu(w, db, "Semua")...)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(dataProduk)

@@ -2,6 +2,7 @@ package backend
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -166,28 +167,61 @@ func UpdateKeranjangPengguna(w http.ResponseWriter, db *gorm.DB, id, nama_barang
 	return hasil
 }
 
-func CheckBaju(w http.ResponseWriter, db *gorm.DB, nama string, jenis string, jumlah string, ukuran string) map[string]string {
+func CheckBarang(w http.ResponseWriter, db *gorm.DB, nama string, jenis string, jumlah string, ukuran, kategori string) map[string]string {
 	var count int64
 	ukuranGede := strings.ToUpper(ukuran)
 	hasil := make(map[string]string)
 
-	// Hitung jumlah baju yang sesuai
-	err := db.Table(`"Baju"`).
-		Where(`"Nama_baju" = ? AND "Jenis_baju" = ? AND "Ukuran" = ?`, nama, jenis, ukuranGede).
+	// Mapping kategori ke nama tabel & kolom
+	var (
+		namaTabel   string
+		kolomNama   string
+		kolomJenis  string
+		jenisBarang string
+	)
+
+	switch kategori {
+	case "Baju":
+		namaTabel = `"Baju"`
+		kolomNama = `"Nama_baju"`
+		kolomJenis = `"Jenis_baju"`
+		jenisBarang = "Baju"
+	case "Celana":
+		namaTabel = `"Celana"`
+		kolomNama = `"Nama_Celana"`
+		kolomJenis = `"Jenis_Celana"`
+		jenisBarang = "Celana"
+	case "Kacamata":
+		namaTabel = `"Kacamata"`
+		kolomNama = `"Nama_Kacamata"`
+		kolomJenis = `"Jenis_Kacamata"`
+		jenisBarang = "Kacamata"
+	case "Sepatu":
+		namaTabel = "Sepatu"
+		kolomNama = "nama_sepatu"
+		kolomJenis = "jenis_sepatu"
+		jenisBarang = "Sepatu"
+	default:
+		hasil["status"] = "Gagal"
+		hasil["item"] = "Jenis barang tidak dikenali"
+		return hasil
+	}
+
+	// Query stok
+	err := db.Table(namaTabel).
+		Where(fmt.Sprintf(`%s = ? AND %s = ? AND "Ukuran" = ?`, kolomNama, kolomJenis), nama, jenis, ukuranGede).
 		Count(&count).Error
 
 	if err != nil {
-		fmt.Println("Error hitung jumlah baju:", err)
+		log.Println("Gagal hitung stok", jenisBarang, ":", err)
 		hasil["status"] = "Gagal"
 		hasil["item"] = "Terjadi kesalahan saat menghitung stok"
 		return hasil
 	}
 
-	fmt.Println("Total jumlah baju yang sesuai:", count)
-
 	jumlahInt, err := strconv.ParseInt(jumlah, 10, 64)
 	if err != nil {
-		fmt.Println("Error konversi jumlah:", err)
+		log.Println("Gagal konversi jumlah:", err)
 		hasil["status"] = "Gagal"
 		hasil["item"] = "Jumlah yang diberikan tidak valid"
 		return hasil
@@ -199,7 +233,7 @@ func CheckBaju(w http.ResponseWriter, db *gorm.DB, nama string, jenis string, ju
 	} else {
 		sisa := count - jumlahInt
 		hasil["status"] = "Berhasil"
-		hasil["item"] = fmt.Sprintf("Baju tersedia, sisa stok setelah order: %d", sisa)
+		hasil["item"] = fmt.Sprintf("%s tersedia, sisa stok setelah order: %d", jenisBarang, sisa)
 	}
 
 	return hasil

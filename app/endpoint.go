@@ -40,6 +40,7 @@ type AjaxRequest struct {
 	Koordinat     string          `json:"koordinat"`
 	NamaAlamat    string          `json:"namaalamat"`
 	JenisAlamat   string          `json:"jenisalamat"`
+	Kategori      string          `json:"kategori"`
 }
 
 type AjaxRequestFile struct {
@@ -119,7 +120,7 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 				}
 			case "barang_keranjang":
 				var Databaju = make(map[string]string)
-				Databaju = backend.CheckBaju(w, server.database, req.Nama, req.Jenis, req.Jumlah, req.Ukuran)
+				Databaju = backend.CheckBarang(w, server.database, req.Nama, req.Jenis, req.Jumlah, req.Ukuran, req.Kategori)
 				// ✅ Kirim hasil dalam format JSON
 				w.Header().Set("Content-Type", "application/json")
 				if err := json.NewEncoder(w).Encode(Databaju); err != nil {

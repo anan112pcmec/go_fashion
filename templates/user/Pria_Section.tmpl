@@ -143,8 +143,10 @@
 
           <div class="bg-white px-3 text-center shadow-sm">
             <p class="text-[10px] text-gray-500 mb-1">Jumlah Pesan</p>
+            <p style="display: none ;" class="text-[10px] text-gray-500 mb-1">Kategori: <span id="kategori_barang_popup"></span></p>
             <input type="number" id="jumlah_pesan" min="1" value="1" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full border border-gray-300 rounded px-2 py-1" />
           </div>
+
         </div>
       </div>
 
@@ -376,6 +378,7 @@
             let totalData = data.length;
             let result = getStartEndRanges(totalData);
             console.log(result);
+            console.log(data);
 
             document.getElementById("dari").textContent = totalData;
             document.getElementById("mulai").textContent = start;
@@ -434,7 +437,7 @@
                 card.setAttribute("data-ukuran", item.ukuran);
                 // Menambahkan atribut custom ke dalam card
                 card.setAttribute("nama", item.nama);
-                card.setAttribute("jenis_pakaian", item.jenis_pakaian);
+                card.setAttribute("data-kategori", item.kategori);
                 card.setAttribute("deskripsi", item.deskripsi);
 
                 // Pastikan nama tidak mengandung karakter yang tidak valid untuk class
@@ -593,8 +596,9 @@
               const stok = card.dataset.stok;
               const warna = card.dataset.warna;
               const ukuran = card.dataset.ukuran;
+              const kategori = card.dataset.kategori;
 
-              Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna);
+              Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna, kategori);
             });
           });
 

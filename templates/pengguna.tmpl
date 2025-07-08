@@ -323,13 +323,15 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <script>
-async function Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna) {
+async function Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna, jenis_pakaian) {
   console.log("berasal dari pop up barang", nama, harga, deskripsi, id, jenis, stok, ukuran, warna);
   document.getElementById("deskripsi_barang_popup").innerHTML = deskripsi;
   document.getElementById("nama_barang_popup").innerHTML = nama;
   document.getElementById("harga_barang_popup").innerHTML = harga;
   document.getElementById("jenis_barang_popup").innerHTML = jenis;
   document.getElementById("stok_barang_popup").innerHTML = stok;
+  document.getElementById("kategori_barang_popup").innerHTML = jenis_pakaian;
+
   let opsiwarna = document.createElement("option");
   opsiwarna.text = warna;
   opsiwarna.value = warna;
@@ -436,6 +438,7 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     let harga = document.getElementById("harga_barang_popup").innerHTML;
     let jenis = document.getElementById("jenis_barang_popup").innerHTML;
     let stok = document.getElementById("stok_barang_popup").innerHTML;
+    const kategori = document.getElementById("kategori_barang_popup").innerHTML;
     let select = document.getElementById("ukuran_barang_popup").value;
     let jumlah = document.getElementById("jumlah_pesan").value;
     let id_user = String(localStorage.getItem('id') ?? '');
@@ -457,7 +460,8 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
             nama: nama,
             jenis: jenis,
             jumlah: jumlah,
-            ukuran: select
+            ukuran: select,
+            kategori: kategori
         })
     })
     .then(response => response.json())
@@ -1564,6 +1568,10 @@ anime({
                     <div class="text-xs text-slate-600">
                         ${alamatLengkap}
                     </div>
+                    <div class="text-xs text-slate-600">
+                        ${alamatLengkap}
+                    </div>
+                    
                     <div class="text-xs text-slate-500 font-medium">
                         ${wilayah}
                     </div>
