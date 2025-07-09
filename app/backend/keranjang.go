@@ -85,16 +85,6 @@ func MasukanKeranjang(w http.ResponseWriter, db *gorm.DB, nama, harga, jenis, st
 		}
 	}
 
-	// Update status baju menjadi "dikeranjangi"
-	err1 := db.Exec(`
-		UPDATE "Baju" SET "status" = 'dikeranjangi' 
-		WHERE "Nama_baju" = ? AND "Ukuran" = ? AND "Jenis_baju" = ?
-	`, nama, ukuran, jenis).Error
-
-	if err1 != nil {
-		return fmt.Sprintf("Gagal mengubah status baju: %v", err1)
-	}
-
 	return "Berhasil menambahkan atau memperbarui keranjang dan mengubah status baju"
 }
 

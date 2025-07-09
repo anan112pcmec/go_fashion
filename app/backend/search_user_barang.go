@@ -15,13 +15,15 @@ type Aksi struct {
 }
 
 func TarikDataPencarianPria(w http.ResponseWriter, r *http.Request, db *gorm.DB, Data string) {
-	fmt.Println(Data, "ini sianying")
+	fmt.Println(Data)
 
 	var items []BarangCustom
 
 	clean := strings.Trim(Data, `"`)
 	// Query ke database
-	if err := db.Table("barang_custom").Where("nama = ?", clean).Find(&items).Error; err != nil {
+	if err := db.Table("barang_custom").
+		Where("nama LIKE ?", "%"+clean+"%").
+		Find(&items).Error; err != nil {
 		http.Error(w, "Gagal mengambil data", http.StatusInternalServerError)
 		return
 	} else {

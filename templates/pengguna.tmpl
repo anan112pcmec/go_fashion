@@ -651,26 +651,7 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     <div class="  p-2 flex flex-col items-center bg-white max-h-[756px]">
 
   <!-- Search Bar -->
-  <div class="w-full  mx-auto mt-4 mb-4">
-  <div class="flex items-center gap-3 px-4 py-2 rounded-full shadow-lg backdrop-blur-md bg-white/50 border border-gray-200 hover:shadow-xl transition duration-300 ease-in-out">
-
-    <!-- Ikon Search -->
-    <i class="fas fa-search text-gray-500 text-lg"></i>
-
-    <!-- Input -->
-    <input
-      type="text"
-      placeholder="Cari produk, kategori, atau merk..."
-      class="flex-grow bg-transparent outline-none text-sm text-gray-800 placeholder-gray-500"
-    />
-
-    <!-- Tombol Voice atau Scan (Opsional) -->
-    <button class="text-gray-400 hover:text-teal-600 transition">
-      <i class="fas fa-microphone-alt"></i>
-    </button>
-
-  </div>
-</div>
+  
 
 
   <!-- Display Barang -->
@@ -681,7 +662,29 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     <!-- Contoh Barang -->
     
     <!-- Tambahkan elemen lainnya secara dinamis -->
+    
+
   </div>
+  <button onclick="tampilkanBarangTerpilih()" 
+    class="fixed bottom-6 right-6 z-10000 backdrop-blur-md bg-white/70 border border-teal-300 shadow-lg text-teal-800 font-semibold px-4 py-2 rounded-xl hover:bg-white/90 transition-all">
+    Tampilkan Pilihan
+</button>
+
+<script>
+function tampilkanBarangTerpilih() {
+    const checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
+    const barangDipilih = [];
+
+    checkboxTerpilih.forEach(cb => {
+        const nama = cb.dataset.nama;
+        const ukuran = cb.dataset.ukuran;
+        barangDipilih.push({ nama, ukuran });
+    });
+
+    console.log("Barang yang dicentang:", barangDipilih);
+}
+
+</script>
 
 </div>
 
@@ -818,6 +821,16 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     elemenKeranjang.style.visibility = 'visible';     
     elemenKeranjang.style.opacity = 0;                
     elemenKeranjang.style.transform = 'translateX(100%)'; 
+
+    async function toggleCentang(checkbox, nama, ukuran) {
+    if (checkbox.checked) {
+        console.log(`Barang dipilih: ${nama} ukuran ${ukuran}`);
+        // Tambahkan logika misalnya: push ke array pilihan
+    } else {
+        console.log(`Barang dibatalkan: ${nama} ukuran ${ukuran}`);
+        // Hapus dari array atau logika lainnya
+    }
+}
     
 
     document.getElementById("display_barang_keranjang").innerHTML = `
@@ -879,21 +892,32 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
                             <div class="text-sm text-teal-600 truncate" title="Jenis Barang dan Ukuran">${barang.jenis} • ${barang.ukuran}</div>
                         </div>
                         <div class="text-sm text-gray-600 line-clamp-2">${barang.deskripsi}</div>
-                        <div class="flex items-center space-x-4 mt-2">
-                            <div class="flex items-center border border-teal-400 rounded-md overflow-hidden select-none w-max">
-                                <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="KurangiJum('${barang.nama}', '${barang.ukuran}')" aria-label="Kurangi jumlah">−</button>
-                                <div id="jumlah_barang_${barang.nama}_${barang.ukuran}" class="px-4 py-1 text-teal-900 font-semibold min-w-[2rem] text-center">${barang.jumlah}</div>
-                                <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="TambahJum('${barang.nama}', '${barang.ukuran}')" aria-label="Tambah jumlah">+</button>
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center border border-teal-400 rounded-md overflow-hidden select-none w-max">
+                                    <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="KurangiJum('${barang.nama}', '${barang.ukuran}')">−</button>
+                                    <div id="jumlah_barang_${barang.nama}_${barang.ukuran}" class="px-4 py-1 text-teal-900 font-semibold min-w-[2rem] text-center">${barang.jumlah}</div>
+                                    <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="TambahJum('${barang.nama}', '${barang.ukuran}')">+</button>
+                                </div>
+                                <button class="text-red-600 hover:text-red-800" aria-label="Hapus produk">
+                                    <i class="fas fa-trash-alt text-lg"></i>
+                                </button>
+                                <button class="text-teal-600 hover:text-teal-800" aria-label="Tambahkan ke favorit">
+                                    <i class="fas fa-heart text-lg"></i>
+                                </button>
                             </div>
-                            <button class="text-red-600 hover:text-red-800" aria-label="Hapus produk">
-                                <i class="fas fa-trash-alt text-lg"></i>
-                            </button>
-                            <button class="text-teal-600 hover:text-teal-800" aria-label="Tambahkan ke favorit">
-                                <i class="fas fa-heart text-lg"></i>
-                            </button>
+
+                            <!-- Tombol Centang di Paling Kanan -->
+                            <label class="cursor-pointer flex items-center space-x-2">
+                                <input type="checkbox" class="hidden peer checkbox-barang" onchange="toggleCentang('this', '${barang.nama}', '${barang.ukuran}')">
+                                <div class="w-6 h-6 rounded-full border-2 border-teal-500 peer-checked:bg-teal-500 flex items-center justify-center">
+                                    <i class="fas fa-check text-white text-sm hidden peer-checked:inline-block"></i>
+                                </div>
+                            </label>
                         </div>
                     </div>
                 </div>
+
             `;
 
         });
@@ -946,10 +970,6 @@ anime({
     duration: 1000,
     easing: 'easeOutExpo'
 });
-
-
-
-
     
 
 });

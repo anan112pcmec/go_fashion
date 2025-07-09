@@ -187,41 +187,106 @@
   </div>
 </div>
 
-       <div class="grid grid-cols-12 items-center p-4 gap-3 bg-white shadow-sm rounded-md border border-gray-200">
-    <!-- Tombol Kembali -->
-    <div class="col-span-1 flex justify-center">
-        <button class="w-10 h-10 bg-green-100 hover:bg-green-200 text-green-600 rounded-md flex items-center justify-center transition">
-            <i class="fa-solid fa-arrow-left text-lg"></i>
-        </button>
-    </div>
+      <div style="display: grid; grid-template-columns: 10% 78% 10%; gap: 1rem; align-items: center;">
+  
+  <!-- Tombol + Select -->
+  <div style="display: flex; gap: 0.75rem; align-items: center;">
+    <button class="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-md flex items-center justify-center transition">
+      <i class="fa-solid fa-arrow-left text-lg"></i>
+    </button>
 
-    <!-- Input Pencarian + Voice -->
-    <div class="col-span-9  flex items-center bg-gray-100 rounded-md border border-gray-300 px-2 py-1.5">
-        <input 
-            type="text" 
-            placeholder="Cari produk, brand, atau kategori" 
-            id="cari_produk" 
-            class="flex-grow bg-transparent focus:outline-none px-2 text-sm text-gray-700"
-        >
-        <!-- Voice icon -->
-        <button class="text-gray-500 hover:text-green-600 transition" title="Pencarian suara">
-            <i class="fas fa-microphone text-lg"></i>
-        </button>
-    </div>
+    <select class="px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+      <option value="" disabled selected>Pilih Pakaian</option>
+      <option value="baju">Baju</option>
+      <option value="celana">Celana</option>
+      <option value="sepatu">Sepatu</option>
+      <option value="lainnya">Lainnya</option>
+    </select>
 
-    <!-- Tombol Cari -->
-    <div class="col-span-2">
-        <button 
-            id="cari_produk_button" 
-            class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md transition"
-        >
-            Cari
-        </button>
-    </div>
-
-    <!-- Ikon Tambahan -->
     
+  </div>
+
+  <!-- Input Pencarian -->
+  <input 
+    type="text" 
+    placeholder="Cari produk, brand, atau kategori" 
+    id="cari_produk" 
+    style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #D1D5DB; border-radius: 0.375rem; font-size: 0.875rem; color: #374151; outline: none;"
+    onfocus="this.style.borderColor='#22c55e'"
+    onblur="this.style.borderColor='#D1D5DB'"
+  >
+
+  <!-- Tombol Cari -->
+  <button 
+    id="cari_produk_button" 
+    style="background-color: #22c55e; color: white; font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.375rem; border: none; cursor: pointer; transition: background-color 0.3s ease;"
+    onmouseover="this.style.backgroundColor='#16a34a'"
+    onmouseout="this.style.backgroundColor='#22c55e'"
+  >
+    Cari
+  </button>
+  
+
 </div>
+
+ <!-- Swiper Container -->
+<div class="SwiperOpsi">
+  <div class="swiper-wrapper gap-2">
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Instan</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Ready Stock</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">COD</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Baru</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Bekas</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Promo</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Pre Order</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Gratis Ongkir</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Tersedia Hari Ini</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Diskon Ongkir</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Bisa Bayar di Tempat</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Pengiriman Cepat</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Best Seller</button>
+    </div>
+    <div class="swiper-slide w-auto">
+      <button class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm font-medium shadow-sm">Harga Termurah</button>
+    </div>
+  </div>
+</div>
+
+<script>
+ var swiper = new Swiper(".SwiperOpsi", {
+  slidesPerView: 'auto', // penting agar ukuran mengikuti isi
+  freeMode: true,         // biar geser bebas
+  grabCursor: true        // biar UX-nya enak
+});
+
+</script>
+
+
 
 
     

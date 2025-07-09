@@ -10,7 +10,6 @@ import (
 	"strconv"
 
 	"gorm.io/gorm"
-
 )
 
 type UserInformation struct {
