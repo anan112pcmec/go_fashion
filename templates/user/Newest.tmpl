@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.1/rellax.min.js"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+     <!-- Leaflet CSS -->
+        <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-o9N1j8xT7bO3PhmCGL+0Rs3GHI1smh7aCkPzYaxjUPg=" 
+        crossorigin=""/>
+        <!-- Leaflet JS -->
+    <script 
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+    integrity="sha256-o9N1j8xT7bO3PhmCGL+0Rs3GHI1smh7aCkPzYaxjUPg=" 
+    crossorigin="">
+    </script>
+
+
+    
+
+
+    <!-- Swiper.js CSS -->
+    
+    <style>
+        /* Custom Tailwind Config */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+    </style>
+    <style>
+    select option {
+        text-align: center;
+    }
+    </style>
+
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    {{ template "header"}}
+   {{ template "sidebar"}}
+
+   {{ template "fungsi_barang" }}
+   <div id="sisa-ruang" style="width: 112rem; margin-left: 7rem; margin-right: 1.875rem; height: 100rem; margin-top: 4.25rem; background: white; border: 1px solid #d1d1d1; border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
+   {{ template "keranjang" }}
+   {{template "Pengguna_side"}}
+
+    </div>
+
+    
+</body>
+</html>

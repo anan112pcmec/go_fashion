@@ -20,12 +20,13 @@ type Keranjang struct {
 }
 
 type Ambil_Barang struct {
-	Nama      string `gorm:"column:Nama"`
-	Harga     string `gorm:"column:Harga"`
-	Ukuran    string `gorm:"column:Ukuran"`
-	Jenis     string `gorm:"column:Jenis"`
-	Jumlah    int32  `gorm:"column:Ukuran"`
-	Deskripsi string `gorm:"column:deskripsi"`
+	Nama        string `gorm:"column:Nama"`
+	Harga       string `gorm:"column:Harga"`
+	Ukuran      string `gorm:"column:Ukuran"`
+	Jenis       string `gorm:"column:Jenis"`
+	Jumlah      int32  `gorm:"column:Ukuran"`
+	Deskripsi   string `gorm:"column:deskripsi"`
+	HargaSatuan int32  `gorm:"column:harga"`
 }
 
 // Pastikan GORM pakai tabel "keranjang"
@@ -238,8 +239,9 @@ func AmbilKeranjangUser(w http.ResponseWriter, db *gorm.DB, nama, user_id string
 	// Menjalankan query ke database
 	fmt.Println("Menjalankan query untuk mengambil data dari tabel keranjang")
 	err := db.Table("keranjang").
-		Select(`"Nama", "Harga", "Ukuran", "Jenis", "Jumlah", "deskripsi"`).
-		Where(`"id_user" = ?`, user_id).
+		Select(`keranjang."Nama", keranjang."Harga", keranjang."Ukuran", keranjang."Jenis", keranjang."Jumlah", keranjang."deskripsi", barang_custom."harga"`).
+		Joins(`JOIN barang_custom ON keranjang."Nama" = barang_custom."nama" AND keranjang."deskripsi" = barang_custom."deskripsi"`).
+		Where(`keranjang."id_user" = ?`, user_id).
 		Find(&barangs).Error
 
 	// Cek apakah ada error
@@ -257,18 +259,60 @@ func AmbilKeranjangUser(w http.ResponseWriter, db *gorm.DB, nama, user_id string
 		fmt.Printf("➤ Memproses baris ke-%d: %+v\n", i+1, barang)
 
 		m := map[string]string{
-			"nama":      barang.Nama,
-			"harga":     barang.Harga,
-			"jumlah":    fmt.Sprintf("%d", barang.Jumlah),
-			"jenis":     barang.Jenis,
-			"ukuran":    barang.Ukuran,
-			"deskripsi": barang.Deskripsi,
+			"nama":         barang.Nama,
+			"harga":        barang.Harga,
+			"jumlah":       fmt.Sprintf("%d", barang.Jumlah),
+			"jenis":        barang.Jenis,
+			"ukuran":       barang.Ukuran,
+			"deskripsi":    barang.Deskripsi,
+			"harga_satuan": fmt.Sprintf("%d", barang.HargaSatuan),
 		}
 
-		fmt.Printf("   ↳ Data dikonversi: %+v\n", m)
+		fmt.Printf("   Data dikonversi: %+v\n", m)
 		result = append(result, m)
 	}
 
 	fmt.Println("✅ Semua data berhasil diproses dan dikembalikan")
 	return result
+}
+
+func HapusBarangDariKeranjang(db *gorm.DB, nama, ukuran, jumlah, namauser, iduser string) map[string]interface{} {
+	// Step 1: Konversi iduser ke int
+	id, err := strconv.Atoi(iduser)
+	if err != nil {
+		return map[string]interface{}{
+			"status": "gagal",
+			"pesan":  "ID user tidak valid",
+		}
+	}
+
+	// Step 2: Validasi user
+	var user struct {
+		ID   int
+		Nama string
+	}
+
+	if err := db.Table(`"user"`).
+		Where(`"id" = ?`, id).
+		First(&user).Error; err != nil {
+		return map[string]interface{}{
+			"status": "gagal",
+			"pesan":  "User tidak ditemukan",
+		}
+	}
+
+	// Step 3: Hapus dari keranjang
+	if err := db.Table(`"keranjang"`).
+		Where(`"id_user" = ? AND "Nama" = ? AND "Ukuran" = ? AND "Jumlah" = ?`, iduser, nama, ukuran, jumlah).
+		Delete(nil).Error; err != nil {
+		return map[string]interface{}{
+			"status": "gagal",
+			"pesan":  "Gagal menghapus barang dari keranjang",
+		}
+	}
+
+	// Step 4: Sukses
+	return map[string]interface{}{
+		"status": "berhasil",
+	}
 }

@@ -665,24 +665,43 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     
 
   </div>
-  <button onclick="tampilkanBarangTerpilih()" 
-    class="fixed bottom-6 right-6 z-10000 backdrop-blur-md bg-white/70 border border-teal-300 shadow-lg text-teal-800 font-semibold px-4 py-2 rounded-xl hover:bg-white/90 transition-all">
-    Tampilkan Pilihan
-</button>
+    <div class="fixed flex bottom-6 right-6 z-10000 backdrop-blur-md bg-white/70 shadow-lg text-teal-800 font-semibold px-4 py-2 rounded-xl hover:bg-white/90 transition-all">
+    <span id="span_total_harganyoo"></span>
+    <button onclick="tampilkanBarangTerpilih()" 
+        class="border border-teal-300 ">
+        Order
+    </button>
+    </div>
 
 <script>
 function tampilkanBarangTerpilih() {
     const checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
     const barangDipilih = [];
+    const fullFormat = [];
+    let totalHarga = 0;
 
     checkboxTerpilih.forEach(cb => {
         const nama = cb.dataset.nama;
         const ukuran = cb.dataset.ukuran;
-        barangDipilih.push({ nama, ukuran });
+        const harga = parseFloat(cb.dataset.harga.replace(/\./g, '')) || 0;
+        const jumlah = cb.dataset.jumlah;
+        const jumlahnya = document.getElementById(jumlah).innerHTML;
+        barangDipilih.push({ nama, ukuran, harga, jumlahnya });
+        harga_final = harga * parseInt(jumlahnya);
+        fullFormat.push({ nama, ukuran, harga });
     });
-
-    console.log("Barang yang dicentang:", barangDipilih);
+    let hasilnyoo = 0;
+    fullFormat.forEach(format => {
+        console.log("Harga:", format.harga);
+        hasilnyoo += format.harga;
+    });
+    console.log(hasilnyoo)
+    document.getElementById("span_total_harganyoo").innerHTML = hasilnyoo;
+    console.log("Total Harga:", totalHarga.toLocaleString("id-ID", { style: "currency", currency: "IDR" }));
+    console.log("Barang Dipilih:", barangDipilih);
+    console.log("Full Format:", `[${fullFormat.join(", ")}]`);
 }
+
 
 </script>
 
@@ -816,15 +835,73 @@ function tampilkanBarangTerpilih() {
         }
     }
 
+
+    async function HapusDariKeranjang(namabarang, ukuranbarang, jumlahbarang, namauser, iduser) {
+    try {
+        const jumlah = document.getElementById(jumlahbarang).innerHTML;
+
+        console.log(namabarang, ukuranbarang, jumlah, namauser);
+
+        const response = await fetch("/app/endpoint.go", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            tujuan: "HapusDariKeranjang",
+            nama: namabarang,
+            ukuran: ukuranbarang,
+            jumlah: `${jumlah}`,
+            namauser: namauser,
+            iduser: `${iduser}`
+        }),
+        });
+
+        if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Response dari server:", data);
+
+        
+        if (data.status === "berhasil") {
+        const cardId = `barang_card_${namabarang}`;
+        const cardElement = document.getElementById(cardId);
+
+        if (cardElement) {
+            anime({
+            targets: `#${cardId}`,
+            opacity: [1, 0],
+            scale: [1, 0.95],
+            easing: "easeInOutQuad",
+            duration: 500,
+            complete: () => {
+                cardElement.remove();
+            },
+            });
+        }
+        } else {
+        console.warn("Penghapusan gagal:", data.pesan || "Tidak diketahui");
+        // Tambahan opsional: tampilkan notifikasi ke user
+        // alert("Gagal menghapus: " + (data.pesan || "Silakan coba lagi"));
+        }
+
+    } catch (error) {
+        console.error("Gagal menghapus dari keranjang:", error);
+        // Tambahan opsional: tampilkan notifikasi ke user
+    }
+    }
+
     
    elemenBukaKeranjang?.addEventListener("click", async function () {
     elemenKeranjang.style.visibility = 'visible';     
     elemenKeranjang.style.opacity = 0;                
     elemenKeranjang.style.transform = 'translateX(100%)'; 
 
-    async function toggleCentang(checkbox, nama, ukuran) {
+    async function toggleCentang(checkbox, nama, ukuran, harga) {
     if (checkbox.checked) {
-        console.log(`Barang dipilih: ${nama} ukuran ${ukuran}`);
+        console.log(`Barang dipilih: ${nama} ukuran ${ukuran} harga ${harga}`);
         // Tambahkan logika misalnya: push ke array pilihan
     } else {
         console.log(`Barang dibatalkan: ${nama} ukuran ${ukuran}`);
@@ -881,7 +958,7 @@ function tampilkanBarangTerpilih() {
             const imgUrl = URL.createObjectURL(blob);
 
             return `
-                <div class="barang-item opacity-0 translate-y-5 my-2 bg-white rounded-xl shadow p-4 flex space-x-4 items-start border-b-4 border-b-gradient-teal mb-4">
+                <div id="barang_card_${barang.nama}" class="barang-item opacity-0 translate-y-5 my-2 bg-white rounded-xl shadow p-4 flex space-x-4 items-start border-b-4 border-b-gradient-teal mb-4">
                     <div class="w-24 h-24 bg-gray-300 rounded-md shadow-inner flex-shrink-0 overflow-hidden">
                         <img src="${imgUrl}" alt="Foto ${barang.nama}" class="w-full h-full object-cover">
                     </div>
@@ -899,17 +976,36 @@ function tampilkanBarangTerpilih() {
                                     <div id="jumlah_barang_${barang.nama}_${barang.ukuran}" class="px-4 py-1 text-teal-900 font-semibold min-w-[2rem] text-center">${barang.jumlah}</div>
                                     <button class="px-3 py-1 text-teal-700 hover:bg-teal-100 transition" onclick="TambahJum('${barang.nama}', '${barang.ukuran}')">+</button>
                                 </div>
-                                <button class="text-red-600 hover:text-red-800" aria-label="Hapus produk">
+                                <button
+                                class="text-red-600 hover:text-red-800"
+                                aria-label="Hapus produk"
+                                onclick="HapusDariKeranjang(
+                                    '${barang.nama}',
+                                    '${barang.ukuran}',
+                                    'jumlah_barang_${barang.nama}_${barang.ukuran}',
+                                    '${nama}',
+                                    '${id}'
+                                )"
+                                >
                                     <i class="fas fa-trash-alt text-lg"></i>
                                 </button>
                                 <button class="text-teal-600 hover:text-teal-800" aria-label="Tambahkan ke favorit">
                                     <i class="fas fa-heart text-lg"></i>
                                 </button>
+                                <span class="text-base text-teal-700 font-semibold bg-teal-50 px-2 py-1 rounded-md shadow-sm border border-teal-200">
+                                    <i class="fa-solid fa-tags"></i> ${barang.harga_satuan}
+                                </span>
+
                             </div>
 
                             <!-- Tombol Centang di Paling Kanan -->
                             <label class="cursor-pointer flex items-center space-x-2">
-                                <input type="checkbox" class="hidden peer checkbox-barang" onchange="toggleCentang('this', '${barang.nama}', '${barang.ukuran}')">
+                                <input 
+                                 data-nama="${barang.nama}"
+                                data-ukuran="${barang.ukuran}"
+                                data-harga="${barang.harga_satuan}"
+                                data-jumlah ="jumlah_barang_${barang.nama}_${barang.ukuran}" 
+                                type="checkbox" class="hidden peer checkbox-barang" onchange="toggleCentang('this', '${barang.nama}', '${barang.ukuran}', '${barang.harga}')">
                                 <div class="w-6 h-6 rounded-full border-2 border-teal-500 peer-checked:bg-teal-500 flex items-center justify-center">
                                     <i class="fas fa-check text-white text-sm hidden peer-checked:inline-block"></i>
                                 </div>
