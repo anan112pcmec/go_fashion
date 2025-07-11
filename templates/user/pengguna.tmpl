@@ -226,11 +226,8 @@
     </div>
 
     <script>
-    // Ambil alamat dari elemen
 const alamat = document.getElementById("alamat_user").textContent.trim();
 
-// Pastikan Leaflet sudah dimuat sebelum menjalankan ini
-// Gunakan API Nominatim OpenStreetMap untuk geocoding
 fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(alamat)}`)
   .then(response => response.json())
   .then(data => {

@@ -665,13 +665,17 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     
 
   </div>
-    <div class="fixed flex bottom-6 right-6 z-10000 backdrop-blur-md bg-white/70 shadow-lg text-teal-800 font-semibold px-4 py-2 rounded-xl hover:bg-white/90 transition-all">
-    <span id="span_total_harganyoo"></span>
+    <div class="fixed bottom-6 right-6 z-50 ">
+    <span id="span_total_harganyoo" class="text-lg">
+        <!-- Total harga akan muncul di sini -->
+        Rp 0
+    </span>
     <button onclick="tampilkanBarangTerpilih()" 
-        class="border border-teal-300 ">
+        class="border border-teal-500 text-teal-700 bg-white px-4 py-2 rounded-lg hover:bg-teal-100 hover:border-teal-600 transition-all">
         Order
     </button>
     </div>
+
 
 <script>
 function tampilkanBarangTerpilih() {
@@ -688,15 +692,15 @@ function tampilkanBarangTerpilih() {
         const jumlahnya = document.getElementById(jumlah).innerHTML;
         barangDipilih.push({ nama, ukuran, harga, jumlahnya });
         harga_final = harga * parseInt(jumlahnya);
-        fullFormat.push({ nama, ukuran, harga });
+        fullFormat.push({ nama, ukuran, harga_final });
     });
     let hasilnyoo = 0;
     fullFormat.forEach(format => {
-        console.log("Harga:", format.harga);
-        hasilnyoo += format.harga;
+        console.log("Harga:", format.harga_final);
+        hasilnyoo += format.harga_final;
     });
     console.log(hasilnyoo)
-    document.getElementById("span_total_harganyoo").innerHTML = hasilnyoo;
+    document.getElementById("span_total_harganyoo").innerHTML = `Rp.${hasilnyoo}`;
     console.log("Total Harga:", totalHarga.toLocaleString("id-ID", { style: "currency", currency: "IDR" }));
     console.log("Barang Dipilih:", barangDipilih);
     console.log("Full Format:", `[${fullFormat.join(", ")}]`);
@@ -1528,7 +1532,7 @@ anime({
 
                 fetch("/app/endpoint.go", {
                     method: "POST",
-                    body: formData, // tidak pakai JSON.stringify karena kita pakai FormData
+                    body: formData, 
                 })
                     .then(res => res.json())
                     .then(data => {
