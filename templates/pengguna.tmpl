@@ -482,7 +482,7 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
                 const status = data.status.toLowerCase();
                 if (status === "berhasil") {
                     Toastify({
-                        text: data.item,
+                        text: "Barang Telah Berhasil Kamu Pesan",
                         duration: 3000,
                         gravity: "top",
                         position: "center",
@@ -650,61 +650,112 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     <!-- Kolom 2 -->
     <div class="  p-2 flex flex-col items-center bg-white max-h-[756px]">
 
-  <!-- Search Bar -->
-  
-
-
-  <!-- Display Barang -->
-  <div
-    id="display_barang_keranjang"
-    class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-2 space-y-4"
-  >
-    <!-- Contoh Barang -->
-    
-    <!-- Tambahkan elemen lainnya secara dinamis -->
-    
-
-  </div>
-    <div class="fixed bottom-6 right-6 z-50 ">
-    <span id="span_total_harganyoo" class="text-lg">
-        <!-- Total harga akan muncul di sini -->
-        Rp 0
-    </span>
-    <button onclick="tampilkanBarangTerpilih()" 
-        class="border border-teal-500 text-teal-700 bg-white px-4 py-2 rounded-lg hover:bg-teal-100 hover:border-teal-600 transition-all">
-        Order
-    </button>
+    <div class="swiper swiper_keranjang h-full">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide w-full">
+        <div
+            id="display_barang_keranjang"
+            class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-4 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-gray-200"
+        >
+            <!-- Isi barang keranjang di sini -->
+        </div>
+        </div>
     </div>
+    </div>
+    <script>
+  var swiper = new Swiper(".swiper_keranjang", {
+    slidesPerView: 1,
+    spaceBetween: 10,
+    // opsi tambahan jika perlu, misal pagination/navigation
+  });
+</script>
+   <div class="fixed bottom-6 right-6 z-50 flex items-center gap-4 px-5 py-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-teal-200 transition-all">
+  
+  <!-- Total Harga -->
+  <span id="span_total_harganyoo" class="text-xl font-semibold text-teal-800">
+    Rp 0
+  </span>
+
+  <!-- Tombol Order -->
+  <button 
+    onclick="tampilkanBarangTerpilih('Submit')" 
+    class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-md transition-all duration-300"
+  >
+    <i class="fa-solid fa-basket-shopping text-base"></i>
+    Order
+  </button>
+
+</div>
 
 
 <script>
-function tampilkanBarangTerpilih() {
-    const checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
-    const barangDipilih = [];
-    const fullFormat = [];
-    let totalHarga = 0;
 
-    checkboxTerpilih.forEach(cb => {
-        const nama = cb.dataset.nama;
-        const ukuran = cb.dataset.ukuran;
-        const harga = parseFloat(cb.dataset.harga.replace(/\./g, '')) || 0;
-        const jumlah = cb.dataset.jumlah;
-        const jumlahnya = document.getElementById(jumlah).innerHTML;
-        barangDipilih.push({ nama, ukuran, harga, jumlahnya });
-        harga_final = harga * parseInt(jumlahnya);
-        fullFormat.push({ nama, ukuran, harga_final });
-    });
-    let hasilnyoo = 0;
-    fullFormat.forEach(format => {
-        console.log("Harga:", format.harga_final);
-        hasilnyoo += format.harga_final;
-    });
-    console.log(hasilnyoo)
-    document.getElementById("span_total_harganyoo").innerHTML = `Rp.${hasilnyoo}`;
-    console.log("Total Harga:", totalHarga.toLocaleString("id-ID", { style: "currency", currency: "IDR" }));
-    console.log("Barang Dipilih:", barangDipilih);
-    console.log("Full Format:", `[${fullFormat.join(", ")}]`);
+let checkboxTerpilih = []; 
+const barangDipilih = [];
+const fullFormat = [];
+let totalHarga = 0;
+
+function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
+
+    if (submit === "MencentangBarang") {
+        barangDipilih.length = 0;
+        fullFormat.length = 0;
+        totalHarga = 0;
+
+        checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
+
+        checkboxTerpilih.forEach(cb => {
+            const nama = cb.dataset.nama;
+            const ukuran = cb.dataset.ukuran;
+            const harga = parseFloat(cb.dataset.harga.replace(/\./g, '')) || 0;
+            const jumlah = cb.dataset.jumlah;
+            const jumlahnya = parseInt(document.getElementById(jumlah).innerText);
+
+            const harga_final = harga * jumlahnya;
+
+            barangDipilih.push({ nama, ukuran, harga, jumlahnya, harga_final });
+            fullFormat.push({ nama, ukuran, harga_final });
+
+            totalHarga += harga_final;
+        });
+
+    } else if (submit === "Submit") {
+        console.log("OkeSubmitDilakukan");
+        // Debug log
+        console.log("Total Harga:", totalHarga.toLocaleString("id-ID", { style: "currency", currency: "IDR" }));
+        console.log("Barang Dipilih:", barangDipilih);
+        console.log("Full Format:", fullFormat);
+
+    } else if (submit === "Ubah_Pesanan") {
+        console.log(namanya, "nihcou");
+
+        totalHarga = 0;
+
+        barangDipilih.forEach((barang, i) => {
+            if (barang.nama === namanya) {
+                console.log(namanya, "Ada dalam list");
+
+                // Update jumlah & harga_final
+                barang.jumlahnya = Jumlahnya;
+                barang.harga_final = barang.harga * Jumlahnya;
+
+                // Sync ke fullFormat juga
+                fullFormat[i] = {
+                    nama: barang.nama,
+                    ukuran: barang.ukuran,
+                    harga_final: barang.harga_final
+                };
+            }
+
+            totalHarga += barang.harga * barang.jumlahnya;
+        });
+    }
+
+    // Update tampilan total
+    document.getElementById("span_total_harganyoo").innerHTML = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 }
+
+
 
 
 </script>
@@ -740,7 +791,7 @@ function tampilkanBarangTerpilih() {
         if (!response.ok) throw new Error('Gagal mengambil data');
         const data = await response.json();
         console.log(data);
-        return data; // misal ini objek data barang
+        return data; 
     }
     anime({
             targets: elemenKeranjang,
@@ -817,6 +868,7 @@ function tampilkanBarangTerpilih() {
             const jumlahElem = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`);
             if (jumlahElem) {
                 jumlahElem.textContent = jumlahInt;
+                tampilkanBarangTerpilih("Ubah_Pesanan", jumlahInt, namaBarang);
             }
         } else {
             alert("Jumlah minimal adalah 1");
@@ -833,6 +885,7 @@ function tampilkanBarangTerpilih() {
             const jumlahElem = document.getElementById(`jumlah_barang_${namaBarang}_${ukuran}`);
             if (jumlahElem) {
                 jumlahElem.textContent = jumlahInt;
+                tampilkanBarangTerpilih("Ubah_Pesanan", jumlahInt, namaBarang);
             }
         } else {
             alert("Jumlah minimal adalah 1");
@@ -1004,16 +1057,20 @@ function tampilkanBarangTerpilih() {
 
                             <!-- Tombol Centang di Paling Kanan -->
                             <label class="cursor-pointer flex items-center space-x-2">
-                                <input 
-                                 data-nama="${barang.nama}"
+                            <input 
+                                data-nama="${barang.nama}"
                                 data-ukuran="${barang.ukuran}"
                                 data-harga="${barang.harga_satuan}"
-                                data-jumlah ="jumlah_barang_${barang.nama}_${barang.ukuran}" 
-                                type="checkbox" class="hidden peer checkbox-barang" onchange="toggleCentang('this', '${barang.nama}', '${barang.ukuran}', '${barang.harga}')">
-                                <div class="w-6 h-6 rounded-full border-2 border-teal-500 peer-checked:bg-teal-500 flex items-center justify-center">
-                                    <i class="fas fa-check text-white text-sm hidden peer-checked:inline-block"></i>
-                                </div>
+                                data-jumlah="jumlah_barang_${barang.nama}_${barang.ukuran}" 
+                                type="checkbox" 
+                                class="hidden peer checkbox-barang"
+                                onchange="tampilkanBarangTerpilih('MencentangBarang', '0', '0')";
+                            >
+                            <div class="w-6 h-6 check-elemen rounded-full border-2 border-teal-500 peer-checked:bg-teal-500 flex items-center justify-center">
+                                <i class="fas fa-check text-white text-sm hidden peer-checked:inline-block"></i>
+                            </div>
                             </label>
+
                         </div>
                     </div>
                 </div>
@@ -1040,6 +1097,8 @@ function tampilkanBarangTerpilih() {
         document.getElementById("display_barang_keranjang").innerHTML = `<p class="text-red-600">Gagal memuat data keranjang.</p>`;
         console.error("Error:", error);
     }
+
+    
 
     console.log(jenis_ui);
 

@@ -90,39 +90,79 @@ func MasukanKeranjang(w http.ResponseWriter, db *gorm.DB, nama, harga, jenis, st
 }
 
 func UpdateKeranjangPengguna(w http.ResponseWriter, db *gorm.DB, id, nama_barang, jumlah, ukuran string) map[string]string {
-	var count int64
 	var harga int64
+	var kategori string
 
-	// 1. Cek apakah barang dengan nama dan ukuran tersedia di barang_custom
+	// 1. Ambil kategori dari barang_custom berdasarkan nama barang
 	err1 := db.Table(`"barang_custom"`).
-		Where(`"nama" = ? `, nama_barang).
+		Select(`"kategori"`).
+		Where(`"nama" = ?`, nama_barang).
+		Scan(&kategori).Error
+
+	if err1 != nil || kategori == "" {
+		hasil := map[string]string{
+			"Status": "Gagal: Kategori tidak ditemukan di barang_custom",
+		}
+		fmt.Println(hasil)
+		return hasil
+	}
+
+	// 2. Cek dan ambil harga dari tabel kategori (misalnya: tabel "Baju", "Sepatu", dll)
+	var count int64
+	var tablekategori string
+	var tableUkuran string
+	if kategori == "Baju" {
+		tablekategori = "baju"
+		tableUkuran = "Ukuran"
+	} else if kategori == "Celana" {
+		tablekategori = "Celana"
+		tableUkuran = "Ukuran"
+	} else if kategori == "Sepatu" {
+		tablekategori = "sepatu"
+		tableUkuran = "Ukuran"
+	}
+	// Bentuk nama kolom dinamis, misalnya: Nama_Baju
+
+	var namaKolom string
+	Harga := "Harga"
+
+	if kategori == "Celana" || kategori == "Baju" || kategori == "Kacamata" {
+		namaKolom = fmt.Sprintf("Nama_%s", tablekategori)
+	} else {
+		namaKolom = fmt.Sprintf("nama_%s", tablekategori)
+		Harga = "harga"
+	}
+
+	// Query dengan nama kolom dinamis
+	err2 := db.Table(fmt.Sprintf(`"%s"`, kategori)).
+		Where(fmt.Sprintf(`"%s" = ? AND "%s" = ?`, namaKolom, tableUkuran), nama_barang, ukuran).
 		Count(&count).Error
 
-	if err1 != nil || count == 0 {
+	if err2 != nil || count == 0 {
 		hasil := map[string]string{
-			"Status": "Gagal: Barang dengan ukuran tidak ditemukan di barang_custom",
+			"Status": fmt.Sprintf("Gagal: Barang dengan nama '%s' dan ukuran '%s' tidak ditemukan di tabel kategori '%s'", nama_barang, ukuran, kategori),
 		}
 		fmt.Println(hasil)
 		return hasil
 	}
 
-	// 2. Ambil harga berdasarkan nama dan ukuran
-	err2 := db.Table(`"barang_custom"`).
-		Select(`"harga"`).
-		Where(`"nama" = ?`, nama_barang).
+	// 3. Ambil harga dari tabel kategori
+	err3 := db.Table(fmt.Sprintf(`"%s"`, kategori)).
+		Select(fmt.Sprintf(`"%s_%s"`, Harga, tablekategori)).
+		Where(fmt.Sprintf(`"%s" = ? AND "%s" = ?`, namaKolom, tableUkuran), nama_barang, ukuran).
 		Scan(&harga).Error
 
-	if err2 != nil {
+	if err3 != nil {
 		hasil := map[string]string{
-			"Status": "Gagal Mendapatkan Harga Satuan",
+			"Status": "Gagal Mendapatkan Harga dari Tabel Kategori",
 		}
 		fmt.Println(hasil)
 		return hasil
 	}
 
-	// 3. Konversi jumlah
-	jumlahInt, err3 := strconv.Atoi(jumlah)
-	if err3 != nil {
+	// 4. Konversi jumlah
+	jumlahInt, err4 := strconv.Atoi(jumlah)
+	if err4 != nil {
 		hasil := map[string]string{
 			"Status": "Jumlah tidak valid",
 		}
@@ -130,19 +170,19 @@ func UpdateKeranjangPengguna(w http.ResponseWriter, db *gorm.DB, id, nama_barang
 		return hasil
 	}
 
-	// 4. Hitung total harga
+	// 5. Hitung total harga
 	totalHarga := int64(jumlahInt) * harga
 	totalHargaStr := strconv.FormatInt(totalHarga, 10)
 
-	// 5. Update ke tabel keranjang
-	err4 := db.Table(`"keranjang"`).
+	// 6. Update ke tabel keranjang
+	err5 := db.Table(`"keranjang"`).
 		Where(`"id_user" = ? AND "Nama" = ? AND "Ukuran" = ?`, id, nama_barang, ukuran).
 		Updates(map[string]interface{}{
 			"Jumlah": jumlahInt,
 			"Harga":  totalHargaStr,
 		}).Error
 
-	if err4 != nil {
+	if err5 != nil {
 		hasil := map[string]string{
 			"Status": "Gagal Mengupdate Keranjang",
 		}
@@ -150,9 +190,12 @@ func UpdateKeranjangPengguna(w http.ResponseWriter, db *gorm.DB, id, nama_barang
 		return hasil
 	}
 
-	// 6. Sukses
+	// 7. Sukses
 	hasil := map[string]string{
-		"Status": "Berhasil",
+		"Status":      "Berhasil",
+		"Kategori":    kategori,
+		"HargaSatuan": fmt.Sprintf("%d", harga),
+		"HargaTotal":  totalHargaStr,
 	}
 	fmt.Println(hasil)
 	return hasil

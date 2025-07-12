@@ -259,151 +259,286 @@ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURICompo
 
     </script>
 
-        <div style="flex: 9; border-radius: 10px; overflow-x: auto; white-space: nowrap;">
-        
-            <div class="swiper-container mySwiper" style="width: 100%; overflow: hidden; padding: 20px;">
-                <div class="swiper-wrapper" style="display: flex; gap: 15px;">
-                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-400 to-sky-400 mb-2">
-                    <i class="ri-shirt-fill text-white text-xl"></i>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Pakaian</span>
-                <small class="text-xs text-gray-500">12 varian • 3 coming soon</small>
-            </div>
+        <div style="flex: 8; border-radius: 10px; overflow-x: auto; white-space: nowrap;">
 
-            <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-400 to-purple-500 mb-2 text-white text-xl">
-                    👟
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Sepatu</span>
-                <small class="text-xs text-gray-500">8 varian • 2 coming soon</small>
-                </div>
+        <div class="swiper-container mySwiper w-full overflow-hidden px-5 py-6">
+  <div class="swiper-wrapper flex gap-4">
 
-                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-200 mb-2 text-white text-xl">
-                    <i class="fa-solid fa-helmet-safety"></i>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Topi</span>
-                <small class="text-xs text-gray-500">5 varian • 1 coming soon</small>
-                </div>
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-400 to-sky-400 shadow-inner mb-3 transition-all duration-300 group-hover:scale-110">
+        <i class="ri-shirt-fill text-white text-xl"></i>
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Pakaian</span>
+      <small class="text-[11px] text-gray-500">12 varian • 3 coming soon</small>
+    </div>
 
-                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-400 mb-2 text-white text-xl">
-                    <i class="fa-solid fa-glasses"></i>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Kacamata</span>
-                <small class="text-xs text-gray-500">6 varian • 4 coming soon</small>
-                </div>
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-indigo-400 to-purple-500 shadow-inner mb-3 text-white text-xl group-hover:scale-110 transition">
+        👟
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Sepatu</span>
+      <small class="text-[11px] text-gray-500">8 varian • 2 coming soon</small>
+    </div>
 
-                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-red-500 mb-2 text-white text-xl">
-                    <i class="fas fa-ring"></i>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Cincin</span>
-                <small class="text-xs text-gray-500">3 varian • 5 coming soon</small>
-                </div>
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-200 shadow-inner mb-3 text-white text-xl group-hover:scale-110 transition">
+        <i class="fa-solid fa-helmet-safety"></i>
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Topi</span>
+      <small class="text-[11px] text-gray-500">5 varian • 1 coming soon</small>
+    </div>
 
-                <div class="swiper-slide min-w-[110px] flex flex-col items-center justify-center p-4 rounded-xl bg-white shadow hover:shadow-lg transition-all duration-200 cursor-pointer text-center hover:scale-105">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-lime-400 mb-2 text-white text-xl">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-                <span class="text-sm font-semibold text-gray-800">Tas</span>
-                <small class="text-xs text-gray-500">10 varian • 2 coming soon</small>
-                </div>
-                </div>
-            </div>
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-cyan-400 shadow-inner mb-3 text-white text-xl group-hover:scale-110 transition">
+        <i class="fa-solid fa-glasses"></i>
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Kacamata</span>
+      <small class="text-[11px] text-gray-500">6 varian • 4 coming soon</small>
+    </div>
+
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-red-500 shadow-inner mb-3 text-white text-xl group-hover:scale-110 transition">
+        <i class="fas fa-ring"></i>
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Cincin</span>
+      <small class="text-[11px] text-gray-500">3 varian • 5 coming soon</small>
+    </div>
+
+    <!-- Item -->
+    <div class="swiper-slide min-w-[120px] flex flex-col items-center justify-center px-4 py-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center hover:scale-105 group">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-500 to-lime-400 shadow-inner mb-3 text-white text-xl group-hover:scale-110 transition">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <span class="text-sm font-semibold text-gray-800 mb-1">Tas</span>
+      <small class="text-[11px] text-gray-500">10 varian • 2 coming soon</small>
+    </div>
+
+  </div>
+</div>
+
         </div>
 
     </div>
 
 <div style="display: flex; gap: 1rem; height: 158px;">
-    <div style="flex: 4;" class="bg-gradient-to-r from-gray-50 via-teal-100 to-teal-300 
-    hover:from-gray-50 hover:via-teal-200 hover:to-teal-600 
-    transition-all duration-1000 ease-in-out 
-    transform hover:-translate-x-2 
-    p-6 rounded-xl border-l-2 border-teal-500 shadow-lg 
-    hover:shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-800">Pesanan Aktif</h3>
-        <i class="fas fa-box text-2xl text-gray-50"></i>
+
+    <style>
+    @keyframes spin-slow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+    animation: spin-slow 4s linear infinite;
+    }
+
+    @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+    }
+    .animate-bounce-slow {
+    animation: bounce-slow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(3deg); }
+    75% { transform: rotate(-3deg); }
+    }
+    .animate-wiggle {
+    animation: wiggle 2s ease-in-out infinite;
+    }
+
+    .animate-count-up {
+    counter-reset: count-up 0;
+    }
+    </style>
+
+
+    <!-- Pesanan Aktif -->
+    <div style="flex: 4;" class="group bg-gradient-to-br from-white via-teal-50 to-teal-100 
+        p-5 rounded-xl border border-teal-200 shadow-md 
+        transition-all duration-700 ease-in-out hover:shadow-lg">
+
+        <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-gray-700 group-hover:text-teal-700 transition-colors duration-500">Pesanan Aktif</h3>
+        <div class="w-9 h-9 rounded-full bg-teal-400 text-white flex items-center justify-center shadow-inner animate-spin-slow">
+            <i class="fas fa-box text-sm"></i>
+        </div>
+        </div>
+        <p class="text-3xl font-bold text-teal-600 animate-count-up" data-count="5">0</p>
+        <p class="text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Sedang dalam proses</p>
     </div>
-    <p class="text-3xl font-bold text-teal-500">5</p>
-    <p class="text-sm text-gray-600">Sedang dalam proses</p>
-</div>
 
-<!-- Wishlist -->
-<div style="flex: 4;" class="bg-gradient-to-r from-gray-50 via-pink-100 to-pink-300 
-    hover:from-gray-50 hover:via-pink-200 hover:to-pink-600 
-    transition-all duration-1000 ease-in-out 
-    transform hover:-translate-x-2 
-    p-6 rounded-xl border-l-2 border-pink-500 shadow-lg 
-    hover:shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-800">Wishlist</h3>
-        <i class="fas fa-heart text-2xl text-gray-50"></i>
+    <!-- Wishlist -->
+    <div style="flex: 4;" class="group bg-gradient-to-br from-white via-pink-50 to-pink-100 
+        p-5 rounded-xl border border-pink-200 shadow-md 
+        transition-all duration-700 ease-in-out hover:shadow-lg">
+
+        <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-gray-700 group-hover:text-pink-700 transition-colors duration-500">Wishlist</h3>
+        <div class="w-9 h-9 rounded-full bg-pink-400 text-white flex items-center justify-center shadow-inner animate-wiggle">
+            <i class="fas fa-heart text-sm"></i>
+        </div>
+        </div>
+        <p class="text-3xl font-bold text-pink-600 animate-count-up" data-count="12">0</p>
+        <p class="text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Produk disimpan</p>
     </div>
-    <p class="text-3xl font-bold text-pink-500">12</p>
-    <p class="text-sm text-gray-600">Produk disimpan</p>
-</div>
 
-<!-- Kupon Tersedia -->
-<div style="flex: 4;" 
-    class="bg-gradient-to-r from-gray-50 via-fuchsia-100 to-fuchsia-400 
-    hover:from-gray-50 hover:via-fuchsia-200 hover:to-fuchsia-600 
-    transition-all duration-700 ease-in-out 
-    transform hover:-translate-x-2 
-    p-6 rounded-xl border-l-2 border-purple-500 shadow-lg 
-    hover:shadow-xl">
-    
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-800">Kupon Anda</h3>
-        <i class="fa-solid fa-ticket text-2xl text-gray-50 transition-transform duration-1000 hover:-translate-x-1"></i>
+    <!-- Kupon -->
+    <div style="flex: 4;" class="group bg-gradient-to-br from-white via-fuchsia-50 to-fuchsia-100 
+        p-5 rounded-xl border border-fuchsia-200 shadow-md 
+        transition-all duration-700 ease-in-out hover:shadow-lg">
+
+        <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-gray-700 group-hover:text-fuchsia-700 transition-colors duration-500">Kupon Anda</h3>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-500 text-white flex items-center justify-center shadow-inner animate-bounce-slow">
+            <i class="fa-solid fa-ticket text-sm"></i>
+        </div>
+        </div>
+        <p class="text-3xl font-bold text-fuchsia-600 animate-count-up" data-count="3">0</p>
+        <p class="text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500">Kupon aktif siap digunakan</p>
+        <p class="text-xs text-fuchsia-700 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">🎁 1 kupon akan berakhir dalam 2 hari</p>
     </div>
-    
-    <p class="text-3xl font-bold text-purple-500">3</p>
-    <p class="text-sm text-gray-600 mb-1">Kupon aktif siap digunakan</p>
-    <p class="text-xs text-purple-700 font-medium">🎁 1 kupon akan berakhir dalam 2 hari</p>
+
+    <script>
+    document.querySelectorAll('.animate-count-up').forEach(el => {
+    const count = parseInt(el.dataset.count, 10);
+    let current = 0;
+    const speed = 25;
+
+    const updateCount = () => {
+        current++;
+        el.innerText = current;
+        if (current < count) setTimeout(updateCount, speed);
+    };
+
+    updateCount();
+    });
+    </script>
+
 </div>
 
+        
 
+        <div style="width: 98%;" class="mt-1" id="saran_untuk_user">
+        <div id="untuk_user">
+        </div> 
 
-
-</div>
-
-    
-
-    <div style="width: 98%;" class="mt-1" id="saran_untuk_user">
-    <div id="untuk_user">
-    </div> 
-
-    <div id="event1" style="
-            border-radius: 24px;
-            height: 200px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-    ">
-            <div class="swiper mySwiperevent1" style="height: 100%;">
-                <div class="swiper-wrapper wiper1" style="height: 100%;">
-                    <!-- Slider items here -->
+        <div id="event1" style="
+                border-radius: 24px;
+                height: 200px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                overflow: hidden;
+        ">
+                <div class="swiper mySwiperevent1" style="height: 100%;">
+                    <div class="swiper-wrapper wiper1" style="height: 100%;">
+                        <!-- Slider items here -->
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="grid grid-cols-[50%_50%] h-screen gap-4 p-4 bg-slate-50">
+
+  <!-- 4 Box Kiri -->
+  <div class="grid grid-rows-[25%_25%_25%_25%] gap-4">
+
+    <!-- Paling Dicari -->
+    <div class="rounded-xl bg-white shadow hover:shadow-md border border-slate-200 p-4 transition-all duration-300">
+      <div class="flex items-center gap-4">
+        <div class="bg-teal-500 text-white w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div>
+          <h4 class="text-sm text-slate-500">Paling Dicari</h4>
+          <p class="text-base font-semibold text-slate-800">Kaos Oversize</p>
+          <p class="text-xs text-slate-400">1.250 pencarian</p>
+        </div>
+      </div>
     </div>
 
-    <div class="grid grid-cols-[50%_50%] h-screen gap-4 p-4">
-  <!-- Kolom 1: grid 4 baris, masing-masing 25% -->
-  <div class="grid grid-rows-[25%_25%_25%_25%] gap-4">
-    <div class="bg-blue-100 rounded-xl flex items-center justify-center">Row 1</div>
-    <div class="bg-blue-200 rounded-xl flex items-center justify-center">Row 2</div>
-    <div class="bg-blue-300 rounded-xl flex items-center justify-center">Row 3</div>
-    <div class="bg-blue-400 rounded-xl flex items-center justify-center">Row 4</div>
+    <!-- Paling Laris -->
+    <div class="rounded-xl bg-white shadow hover:shadow-md border border-slate-200 p-4 transition-all duration-300">
+      <div class="flex items-center gap-4">
+        <div class="bg-teal-400 text-white w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <div>
+          <h4 class="text-sm text-slate-500">Paling Laris</h4>
+          <p class="text-base font-semibold text-slate-800">Sneakers Putih</p>
+          <p class="text-xs text-slate-400">890 pembelian</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lagi Tren -->
+    <div class="rounded-xl bg-white shadow hover:shadow-md border border-slate-200 p-4 transition-all duration-300">
+      <div class="flex items-center gap-4">
+        <div class="bg-teal-300 text-white w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div>
+          <h4 class="text-sm text-slate-500">Tren Minggu Ini</h4>
+          <p class="text-base font-semibold text-slate-800">Celana Cargo</p>
+          <p class="text-xs text-slate-400">Naik 67%</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- High Value -->
+    <div class="rounded-xl bg-white shadow hover:shadow-md border border-slate-200 p-4 transition-all duration-300">
+      <div class="flex items-center gap-4">
+        <div class="bg-teal-600 text-white w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div>
+          <h4 class="text-sm text-slate-500">High-End</h4>
+          <p class="text-base font-semibold text-slate-800">Jaket Kulit</p>
+          <p class="text-xs text-slate-400">Rp 1.200.000</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Kolom 2: satu sel penuh -->
-  <div class="bg-gray-100 rounded-xl flex items-center justify-center">
-    Kolom 2
+  <!-- Box Kanan -->
+  <div class="rounded-xl bg-white border border-slate-200 shadow p-6 overflow-y-auto">
+    <h3 class="text-lg font-bold text-slate-800 mb-4">🔥 Produk Teratas Minggu Ini</h3>
+
+    <div class="space-y-4">
+      <div class="flex items-center gap-4 hover:bg-slate-100 p-3 rounded-lg transition">
+        <img src="https://via.placeholder.com/48" class="rounded-lg w-12 h-12 object-cover" />
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Hoodie Hitam</p>
+          <p class="text-xs text-slate-400">Rp 245.000 • 310x dibeli</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 hover:bg-slate-100 p-3 rounded-lg transition">
+        <img src="https://via.placeholder.com/48" class="rounded-lg w-12 h-12 object-cover" />
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Jam Sporty</p>
+          <p class="text-xs text-slate-400">Rp 399.000 • 270x dibeli</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 hover:bg-slate-100 p-3 rounded-lg transition">
+        <img src="https://via.placeholder.com/48" class="rounded-lg w-12 h-12 object-cover" />
+        <div>
+          <p class="text-sm font-semibold text-slate-700">Sneakers Monokrom</p>
+          <p class="text-xs text-slate-400">Rp 549.000 • 220x dibeli</p>
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>
+
 
 
     
@@ -470,27 +605,32 @@ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURICompo
                     const slide = document.createElement("div");
 
                     slide.innerHTML = `
-                       <div class="item_swiper w-40 bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg hover:scale-[1.03] transition-all duration-300 relative">
-    <!-- Badge Diskon (kiri atas) -->
-    <div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-pulse z-10">
-        -15%
-    </div>
+                      <div class="item_swiper w-40 bg-white rounded-2xl shadow-md overflow-hidden relative group transition-all duration-500 hover:shadow-xl">
 
-    <!-- Badge Jenis Pakaian (kanan atas) -->
-    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-md z-10">
-        ${item.kategori || 'Baju'}
-    </div>
+                        <!-- Badge Diskon -->
+                        <div class="absolute top-2 left-2 bg-gradient-to-br from-red-500 to-red-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10 animate-pulse">
+                            -15%
+                        </div>
 
-    <!-- Gambar Produk -->
-    <div class="bg-gray-100 aspect-square flex items-center justify-center">
-        <img src="${item.fotoUrl}" alt="${item.nama}" class="object-contain w-4/5 h-4/5" />
-    </div>
+                        <!-- Badge Kategori -->
+                        <div class="absolute top-2 right-2 bg-gradient-to-br from-emerald-500 to-green-400 text-white text-[10px] font-medium px-2 py-0.5 rounded-full shadow-sm z-10">
+                            ${item.kategori || 'Baju'}
+                        </div>
 
-    <!-- Harga -->
-    <div class="p-3 text-center">
-        <div class="text-sm font-semibold text-gray-900">Rp${item.harga.toLocaleString('id-ID')}</div>
-    </div>
-</div>
+                        <!-- Gambar Produk -->
+                        <div class="bg-gray-50 aspect-square flex items-center justify-center group-hover:bg-gray-100 transition-colors duration-500">
+                            <img src="${item.fotoUrl}" alt="${item.nama}" class="object-contain w-4/5 h-4/5 scale-100 group-hover:scale-105 transition-transform duration-700 ease-in-out" />
+                        </div>
+
+                        <!-- Harga Produk -->
+                        <div class="p-3 text-center">
+                            <div class="text-sm font-semibold text-gray-800 group-hover:text-teal-600 transition-colors duration-500">
+                            Rp${item.harga.toLocaleString('id-ID')}
+                            </div>
+                        </div>
+
+                        </div>
+
 
                     `;
 
