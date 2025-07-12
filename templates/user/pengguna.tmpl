@@ -56,7 +56,6 @@
     {{ template "header"}}
    {{ template "sidebar"}}
 
-   {{ template "fungsi_barang" }}
    <div id="sisa-ruang" style="width: 112rem; margin-left: 7rem; margin-right: 1.875rem; height: 100rem; margin-top: 4.25rem; background: white; border: 1px solid #d1d1d1; border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 1rem; padding: 1rem;">
    {{ template "keranjang" }}
    {{template "Pengguna_side"}}
@@ -65,136 +64,89 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <!-- Popup -->
-<div class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 backdrop-blur-sm">
-  <div class="relative bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] flex flex-col md:flex-row w-full max-w-5xl p-8 md:p-10 animate-fade-in transition-all duration-300 ease-in-out">
+  <div style="display:none;" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[9999] pointer-events-auto">
+  <div class="relative bg-white/80 backdrop-blur-md rounded-3xl border border-gray-200 shadow-[0_12px_40px_rgba(0,0,0,0.2)] flex flex-col md:flex-row w-full max-w-5xl p-8 md:p-10 animate-fade-in transition-all duration-500 ease-in-out z-[10000]">
 
     <!-- Tombol Close -->
-    <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-2xl font-extrabold transition-transform duration-200 hover:scale-125" onclick="closePopup()">
+    <button class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold transition-transform duration-300 hover:scale-125" onclick="closePopup()">
       &times;
     </button>
 
     <!-- Kolom Kiri -->
-    <div class="md:w-1/2 md:pr-8 flex flex-col justify-between">
+    <div class="md:w-1/2 md:pr-10 flex flex-col justify-between">
       <div>
-        <h2 class="text-3xl font-bold text-gray-800 mb-5 tracking-tight" id="nama_barang_popup">Nama Barang</h2>
+        <h2 class="text-3xl font-bold text-gray-800 mb-5 tracking-tight leading-tight" id="nama_barang_popup">Nama Barang</h2>
 
-        <div class="bg-gray-100 rounded-2xl h-32 flex items-center justify-center text-base text-center text-gray-600 mb-6 px-6 shadow-inner" id="deskripsi_barang_popup">
-          Deskripsi barang sebesar box ini.
+        <div class="bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl h-32 flex items-center justify-center text-base text-gray-600 mb-6 px-6 shadow-inner p-6 overflow-auto break-words">
+          <p id="deskripsi_barang_popup" class="text-left"></p>
         </div>
 
-        <p class="text-sm font-medium text-gray-500 mb-8 italic break-words max-w-xs" id="jenis_barang_popup">
-        
-        </p>
+        <p class="text-sm font-medium text-gray-500 mb-8 italic break-words max-w-xs" id="jenis_barang_popup"></p>
 
-        <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
-        <div class="bg-white  py-2 px-3 text-center shadow-sm">
-            <p class="text-[10px] text-gray-500 mb-1">Ukuran</p>
-            <select id="ukuran_barang_popup" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full">
-            <!-- opsi ukuran di sini -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white/60 border border-gray-200 p-4 rounded-2xl shadow-sm backdrop-blur">
+          <div>
+            <p class="text-[11px] text-gray-500 mb-1">Ukuran</p>
+            <select id="ukuran_barang_popup" class="text-sm text-gray-800 font-semibold bg-white border border-gray-300 rounded-md px-2 py-1 outline-none w-full">
+              <!-- opsi -->
             </select>
-        </div>
+          </div>
 
-        <div class="bg-white   py-2 px-3 text-center shadow-sm">
-            <p class="text-[10px] text-gray-500 mb-1">Warna</p>
-            <select id="warna_barang_popup" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full">
-            <!-- opsi warna di sini -->
+          <div>
+            <p class="text-[11px] text-gray-500 mb-1">Warna</p>
+            <select id="warna_barang_popup" class="text-sm text-gray-800 font-semibold bg-white border border-gray-300 rounded-md px-2 py-1 outline-none w-full">
+              <!-- opsi -->
             </select>
-        </div>
+          </div>
 
-        <div class="bg-white  px-3 text-center shadow-sm">
-            <p class="text-[10px] text-gray-500 mb-1">Jumlah Pesan</p>
-            <input type="number" id="jumlah_pesan" min="1" value="1" class="text-sm text-gray-700 font-semibold bg-transparent outline-none w-full border border-gray-300 rounded px-2 py-1" />
+          <div>
+            <p class="text-[11px] text-gray-500 mb-1">Jumlah Pesan</p>
+            <input type="number" id="jumlah_pesan" min="1" value="1" class="text-sm text-gray-800 font-semibold bg-white border border-gray-300 rounded-md px-2 py-1 w-full" />
+            <p style="" class="text-[10px] text-gray-500 mt-1">Kategori: <span id="kategori_barang_popup"></span></p>
+          </div>
         </div>
-        </div>
-
       </div>
 
-      <div class="flex flex-col gap-4">
-        <!-- Harga -->
-        <div class="bg-gray-900 text-white py-3 rounded-full text-center text-lg font-semibold tracking-wide shadow-md hover:bg-black transition-all duration-200" id="harga_barang_popup">
+      <!-- Harga & Tombol -->
+      <div class="flex flex-col gap-4 mt-8">
+        <div class="bg-emerald-500/90 text-white py-3 rounded-full text-center text-lg font-bold tracking-wide shadow-md hover:bg-emerald-600 transition-all duration-300" id="harga_barang_popup">
           Rp 199.000
         </div>
 
-        <!-- Tombol Tambah ke Keranjang -->
-        <button class="bg-teal-500 text-white py-3 rounded-full w-full flex items-center justify-center gap-3 font-semibold text-lg shadow-lg hover:bg-orange-600 transition-all duration-200" id="tambah_keranjang_popup">
+        <button class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white py-3 rounded-full w-full flex items-center justify-center gap-3 font-semibold text-lg shadow-xl hover:brightness-110 transition-all duration-300" id="tambah_keranjang_popup">
           <i class="fa-solid fa-cart-shopping text-base"></i>
           Tambah ke Keranjang
         </button>
       </div>
     </div>
 
-    <!-- Garis Pemisah -->
-    <div class="hidden md:block border-l mx-8 border-gray-200"></div>
+    <!-- Divider -->
+    <div class="hidden md:block border-l mx-10 border-gray-200/70"></div>
 
-    <div class="md:w-1/2 flex flex-col items-center justify-center mt-8 md:mt-0 relative space-y-4">
-    <!-- Teks di atas gambar -->
-    <p class="text-sm font-semibold text-gray-700 tracking-wide">Foto Produk</p>
+    <!-- Kolom Kanan -->
+    <div class="md:w-1/2 flex flex-col items-center justify-center mt-8 md:mt-0 relative space-y-5">
+      <p class="text-sm font-semibold text-gray-700 tracking-wide">Foto Produk</p>
 
-    <!-- Container gambar -->
-    <div class="w-60 h-80 bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-inner">
+      <div class="w-60 h-80 bg-gradient-to-br from-gray-100 via-white to-gray-50 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-inner border border-gray-200">
         <img src="https://via.placeholder.com/250x180" alt="Foto Barang" class="object-contain max-h-full max-w-full transition-transform duration-300 hover:scale-105" id="foto_barang_popup" />
-
-        <!-- Watermark -->
         <div class="absolute bottom-2 right-3 text-[10px] text-gray-400 select-none pointer-events-none tracking-wide">
-        © Faizh Shop
+          © Faizh Shop
         </div>
-        
+      </div>
+
+      <!-- Info stok -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 w-full max-w-[20rem]" style="display:none">
+        <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
+          <p class="text-[10px] text-gray-500">Stok</p>
+          <p class="text-sm font-semibold text-gray-700" id="stok_barang_popup">50</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Kotak info stok/warna/ukuran/keranjang -->
-<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 w-full max-w-[20rem]" style="display:none">
-  <!-- Stok -->
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">Stok</p>
-    <p class="text-sm font-semibold text-gray-700" id="stok_barang_popup">50</p>
-  </div>
-
-  <!-- Warna (dropdown tapi dalam box yang sama) -->
-
-
-  <!-- Ukuran (dropdown) -->
-  
-
-
-</div>
-
-<div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-4 w-full max-w-[20rem]">
-  <!-- Stok -->
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">S :</p>
-    <p class="text-sm font-semibold text-gray-700" >50</p>
-  </div>
-
-  <!-- Ukuran (dropdown) -->
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">M :</p>
-    <p class="text-sm font-semibold text-gray-700" >50</p>
-  </div>
-
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">L :</p>
-    <p class="text-sm font-semibold text-gray-700" >50</p>
-  </div>
-
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">X :</p>
-    <p class="text-sm font-semibold text-gray-700" >50</p>
-  </div>
-
-  <div class="bg-white border border-gray-300 rounded-lg py-2 px-3 text-center shadow-sm">
-    <p class="text-[10px] text-gray-500">XL :</p>
-    <p class="text-sm font-semibold text-gray-700" >50</p>
-  </div>
-
-
-</div>
-
-    </div>
-
-
-
   </div>
 </div>
+
+{{ template "fungsi_barang" }}
+
 
 
 <script>
@@ -540,12 +492,6 @@ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURICompo
 </div>
 
 
-
-    
-
-
-    
-
     <script>
         function getRandomDelay(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -745,6 +691,7 @@ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURICompo
                             data-stok="${item.stok}"
                             data-warna="${item.warna}"
                             data-ukuran="${item.ukuran}"
+                            data-kategori="${item.kategori}""
                         >
                             <!-- Badge Diskon -->
                             <div class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow z-10 animate-pulse">
@@ -835,12 +782,13 @@ fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURICompo
                                 const stok = barang.dataset.stok;
                                 const warna = barang.dataset.warna;
                                 membuka_popup = true
+                                const kategori = barang.dataset.kategori;
 
                                      
 
                                 if (membuka_popup) {
                                 // Panggil fungsi dengan data yang diambil
-                                Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna);
+                                Pop_up_Barang(nama, harga, deskripsi, id, jenis, stok, ukuran, warna, kategori);
 
                                 const popup = document.querySelector('.fixed.inset-0');
                                 if (popup) {
@@ -984,6 +932,8 @@ anime({
     </script>
 
    {{ template "logic_keranjang" }}
+   
+
 
     
 </body>

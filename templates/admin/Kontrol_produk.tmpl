@@ -760,6 +760,16 @@ async function DataStokBarang(){
             </thead>
             <tbody id="DataBajuTable"></tbody>
             </table>
+
+            <div class="mb-5 py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">
+            <button
+               class="flex items-center gap-2 text-sm bg-teal-500 text-white px-4 py-2 rounded-lg shadow hover:bg-teal-600 transition-all duration-300 active:scale-95"
+            >
+               <i class="fa-solid fa-plus"></i>
+               Tambah Barang
+            </button>
+            </div>
+
          `;
 
          // AMBIL LAGI tbody setelah dia muncul di DOM
@@ -800,6 +810,7 @@ async function DataStokBarang(){
 
          Konteks_Popup.innerHTML = `
             <table id="table-stok" class="min-w-full bg-white rounded-lg shadow-md overflow-hidden text-slate-700 text-sm">
+            
             <thead class="bg-slate-100">
                <tr>
                   <th class="py-3 px-4 text-left uppercase font-semibold tracking-wide text-slate-600">No</th>

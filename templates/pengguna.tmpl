@@ -444,12 +444,12 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
     let id_user = String(localStorage.getItem('id') ?? '');
     let namanya = String(localStorage.getItem('nama') ?? '');
 
+    console.log(deskripsi, nama, harga, jenis, stok, kategori, select, jumlah, id_user, namanya)
 
     console.log(id_user);
 
     console.log("namanye:", nama);
     
-
     fetch("/app/endpoint.go", {
         method: "POST",
         headers: {
@@ -647,45 +647,32 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
         </div> <!-- End of Inner Flex -->
     </div> <!-- End of Kolom 1 -->
 
-    <!-- Kolom 2 -->
-    <div class="  p-2 flex flex-col items-center bg-white max-h-[756px]">
+    <div class=" p-2 flex flex-col items-center bg-white max-h-[756px]">
 
-    <div class="swiper swiper_keranjang h-full">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide w-full">
         <div
-            id="display_barang_keranjang"
-            class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-4 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-gray-200"
+        id="display_barang_keranjang"
+        class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-4 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-gray-200"
         >
             <!-- Isi barang keranjang di sini -->
         </div>
-        </div>
-    </div>
-    </div>
-    <script>
-  var swiper = new Swiper(".swiper_keranjang", {
-    slidesPerView: 1,
-    spaceBetween: 10,
-    // opsi tambahan jika perlu, misal pagination/navigation
-  });
-</script>
-   <div class="fixed bottom-6 right-6 z-50 flex items-center gap-4 px-5 py-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-teal-200 transition-all">
-  
-  <!-- Total Harga -->
-  <span id="span_total_harganyoo" class="text-xl font-semibold text-teal-800">
-    Rp 0
-  </span>
+                
+        <div class="fixed bottom-3 right-3 z-50 flex items-center gap-4 px-5 py-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-teal-200 transition-all">
+        
+        <!-- Total Harga -->
+        <span id="span_total_harganyoo" class="text-xl font-semibold text-teal-800">
+            Rp 0
+        </span>
 
-  <!-- Tombol Order -->
-  <button 
-    onclick="tampilkanBarangTerpilih('Submit')" 
-    class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-md transition-all duration-300"
-  >
-    <i class="fa-solid fa-basket-shopping text-base"></i>
-    Order
-  </button>
+        <!-- Tombol Order -->
+        <button 
+            onclick="" 
+            class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-md transition-all duration-300"
+        >
+            <i class="fa-solid fa-basket-shopping text-base"></i>
+            Order
+        </button>
 
-</div>
+    </div>
 
 
 <script>
@@ -694,6 +681,7 @@ let checkboxTerpilih = [];
 const barangDipilih = [];
 const fullFormat = [];
 let totalHarga = 0;
+
 
 function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
 
