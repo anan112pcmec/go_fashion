@@ -327,6 +327,89 @@
 
 {{/* bootscript digunakan saat program dimulai */}}
 <script>
+
+async function AmbilWishlist(namanya, id_user) {
+  try {
+    const response = await fetch("/app/endpoint.go", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        tujuan: "Mengambil_Wishlist",
+        namauser: namanya,
+        iduser: id_user
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data wishlist dari server");
+    }
+
+    const data = await response.json();
+
+    console.log("Nih wishlist yang diambil:", data);
+
+    // Kalau data null atau bukan array, anggap kosong
+    const wishlistArray = Array.isArray(data) ? data : [];
+
+    // Buat set berisi nama pakaian dari wishlist
+    const namaWishlist = new Set(wishlistArray.map(item => item.NamaPakaian));
+
+    // Ambil semua elemen DOM yang ID-nya diawali dengan 'wishlist_element_'
+    const semuaElemenWishlist = document.querySelectorAll("[id^='wishlist_element_']");
+
+    semuaElemenWishlist.forEach(elem => {
+      const namaPakaian = elem.id.replace("wishlist_element_", "");
+
+      if (namaWishlist.has(namaPakaian)) {
+        // Jika nama ada di wishlist
+        elem.innerHTML = `<i class="fa-solid fa-bookmark text-lg"></i>`;
+      } else {
+        // Jika nama tidak ada di wishlist
+        elem.innerHTML = `<i class="fa-regular fa-bookmark text-lg"></i>`;
+      }
+    });
+
+  } catch (error) {
+    console.error("Terjadi kesalahan saat mengambil wishlist:", error.message);
+  }
+}
+
+
+
+
+async function Wishlist(e, nama_pakaian, jenis_pakaian) {
+  e.preventDefault();      // Mencegah aksi default (jika ada)
+  e.stopPropagation();     // Mencegah event bubbling ke parent
+
+  console.log("Ditambahkan ke wishlist:", namanya, nama_pakaian, jenis_pakaian);
+
+  try {
+    const response = await fetch("/app/endpoint.go", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        tujuan: "Menambahkan_Wishlist",
+        namauser: namanya,
+        nama: nama_pakaian,
+        jenis_pakaian: jenis_pakaian
+      })
+    });
+
+    const result = await response.json(); // atau response.text() sesuai respon dari backend
+    console.log("Respon dari server:", result);
+  } catch (error) {
+    console.error("Gagal mengirim data wishlist:", error);
+  }
+
+  AmbilWishlist(namanya, id_user);
+}
+
+</script>
+<script>
         let inputan = "";
 
         function getStartEndRanges(totalData, batchSize = 20) {
@@ -508,70 +591,71 @@
 
                 <div class="w-full rounded-3xl border border-gray-200 bg-gradient-to-br from-white via-[#f9fdfc] to-[#eefcf9] p-6 text-center font-[Poppins] transition-all duration-500 shadow-sm hover:shadow-lg hover:scale-[1.005]">
 
-  <!-- ROW 1: Gambar + Info -->
-  <div class="flex flex-row gap-6 h-40">
-    
-    <!-- Kolom Gambar -->
-    <div class="relative">
-      <div class="canvas-${safeNama} w-full h-24 rounded-xl flex items-center justify-center overflow-hidden relative group cursor-pointer bg-gray-100 ring-1 ring-gray-200 shadow-inner">
-        <img src="${item.gambarUrl || ''}" class="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-110" />
+                <!-- ROW 1: Gambar + Info -->
+                <div class="flex flex-row gap-6 h-40">
+                  
+                  <!-- Kolom Gambar -->
+                  <div class="relative">
+                    <div class="canvas-${safeNama} w-full h-24 rounded-xl flex items-center justify-center overflow-hidden relative group cursor-pointer bg-gray-100 ring-1 ring-gray-200 shadow-inner">
+                      <img src="${item.gambarUrl || ''}" class="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-110" />
 
-        <!-- Overlay -->
-        <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-sm font-semibold transition-opacity duration-300">
-          Lihat Detail
-        </span>
+                      <!-- Overlay -->
+                      <span class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-sm font-semibold transition-opacity duration-300">
+                        Lihat Detail
+                      </span>
 
-        <!-- Placeholder jika tidak ada gambar -->
-        <span class="absolute z-10 text-white text-md font-medium ${item.gambarUrl ? 'hidden' : ''}">
-          Gambar ${item.nama}
-        </span>
-      </div>
-    </div>
+                      <!-- Placeholder jika tidak ada gambar -->
+                      <span class="absolute z-10 text-white text-md font-medium ${item.gambarUrl ? 'hidden' : ''}">
+                        Gambar ${item.nama}
+                      </span>
+                    </div>
+                  </div>
 
-    <!-- Kolom Info -->
-    <div class="w-[60%] text-left flex flex-col justify-between">
-      <div class="space-y-2">
-        <p class="text-[1.15rem] font-semibold text-gray-800/90 tracking-wide truncate">${item.nama}</p>
-        <p class="text-sm text-gray-600 truncate"><span class="font-medium text-gray-800/70">Kategori:</span> ${item.jenis_pakaian}</p>
-        <p class="text-sm text-gray-600 line-clamp-2"><span class="font-medium text-gray-800/70">Deskripsi:</span> ${item.deskripsi}</p>
-      </div>
-    </div>
-  </div>
+                  <!-- Kolom Info -->
+                  <div class="w-[60%] text-left flex flex-col justify-between">
+                    <div class="space-y-2">
+                      <p class="text-[1.15rem] font-semibold text-gray-800/90 tracking-wide truncate">${item.nama}</p>
+                      <p class="text-sm text-gray-600 truncate"><span class="font-medium text-gray-800/70">Kategori:</span> ${item.jenis_pakaian}</p>
+                      <p class="text-sm text-gray-600 line-clamp-2"><span class="font-medium text-gray-800/70">Deskripsi:</span> ${item.deskripsi}</p>
+                    </div>
+                  </div>
+                </div>
 
-  <!-- Harga & Stok -->
-  <div class="flex justify-between items-center mt-6 px-3 py-2 rounded-xl backdrop-blur-sm bg-white/40 shadow-inner">
-    <p class="text-sm text-gray-600"><strong>Stok:</strong> ${item.stok}</p>
-    <p class="text-lg text-emerald-600 font-bold tracking-wide bg-emerald-50 px-4 py-1 rounded-full shadow-sm border border-emerald-100">
-      Rp ${item.harga.toLocaleString('id-ID')}
-    </p>
-  </div>
+                <!-- Harga & Stok -->
+                <div class="flex justify-between items-center mt-6 px-3 py-2 rounded-xl backdrop-blur-sm bg-white/40 shadow-inner">
+                  <p class="text-sm text-gray-600"><strong>Stok:</strong> ${item.stok}</p>
+                  <p class="text-lg text-emerald-600 font-bold tracking-wide bg-emerald-50 px-4 py-1 rounded-full shadow-sm border border-emerald-100">
+                    Rp ${item.harga.toLocaleString('id-ID')}
+                  </p>
+                </div>
 
-  <hr class="my-6 border-gray-200">
+                <hr class="my-6 border-gray-200">
 
-  <!-- Tombol Aksi -->
-  <div class="flex flex-wrap gap-3 justify-start">
-    <button class="text-white bg-gradient-to-br from-gray-900 to-gray-700 hover:from-gray-800 hover:to-black px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-300/50 z-20 shadow-md hover:shadow-lg"
-      onclick="Wishlist('${item.nama}', '${item.kode_barang}')">
-      <i class="fa-regular fa-heart text-lg" data-kode="${item.kode_barang}" data-judul="${item.nama}" id="wishlist_element"></i>
-    </button>
+                <!-- Tombol Aksi -->
+                <div class="flex flex-wrap gap-3 justify-start">
+                  <button id="wishlist_element_${item.nama}" class="text-white bg-gradient-to-br from-gray-900 to-gray-700 hover:from-gray-800 hover:to-black px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-300/50 z-20 shadow-md hover:shadow-lg"
+                    onclick="Wishlist(event, '${item.nama}', '${item.jenis_pakaian}')">
+                    <i class="fa-regular fa-bookmark text-lg" data-kode="${item.kode_barang}" data-judul="${item.nama}"></i>
+                  </button>
 
-    <button class="text-white bg-gradient-to-br from-teal-500 via-emerald-500 to-teal-600 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
-      onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
-      <i class="fa-solid fa-share-nodes text-lg"></i>
-    </button>
 
-    <button class="text-white bg-gradient-to-br from-cyan-500 to-sky-600 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
-      onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
-      <i class="fa-solid fa-clipboard-list"></i>
-    </button>
+                  <button class="text-white bg-gradient-to-br from-teal-500 via-emerald-500 to-teal-600 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
+                    onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
+                    <i class="fa-solid fa-share-nodes text-lg"></i>
+                  </button>
 
-    <button class="text-white bg-gradient-to-br from-pink-500 to-rose-500 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
-      onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
-      <i class="fa-solid fa-comment-dots me-1"></i>
-    </button>
-  </div>
+                  <button class="text-white bg-gradient-to-br from-cyan-500 to-sky-600 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
+                    onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                  </button>
 
-</div>
+                  <button class="text-white bg-gradient-to-br from-pink-500 to-rose-500 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
+                    onclick="Bagikan('${item.nama}', '${item.kode_barang}')">
+                    <i class="fa-solid fa-comment-dots me-1"></i>
+                  </button>
+                </div>
+
+              </div>
 
 
 
@@ -643,6 +727,8 @@
         } catch (error) {
             console.error(`Gagal mengambil data untuk ${item.nama}:`, error);
         }
+
+        AmbilWishlist(namanya, id_user);
 
           
       });

@@ -230,6 +230,22 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
 					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
 				}
+			case "Menambahkan_Wishlist":
+				var Hasil map[string]string
+				Hasil = backend.Wishlist(server.database, req.NamaUser, req.Nama, req.JenisPakaian)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
+			case "Mengambil_Wishlist":
+				var Hasil []map[string]interface{}
+				Hasil = backend.WishlistUser(server.database, req.NamaUser, req.IdUser)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
 			default:
 				http.Error(w, "Tujuan tidak ditemukan", http.StatusNotFound)
 			}
