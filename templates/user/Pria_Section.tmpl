@@ -196,14 +196,6 @@
     <button class="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 shadow-sm transition duration-300">
       <i class="fa-solid fa-arrow-left text-lg"></i>
     </button>
-
-    <select class="px-4 w-[70%] py-2 bg-white border border-gray-300 rounded-xl text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all">
-      <option value="" disabled selected>Pilih Pakaian</option>
-      <option value="baju">Baju</option>
-      <option value="celana">Celana</option>
-      <option value="sepatu">Sepatu</option>
-      <option value="lainnya">Lainnya</option>
-    </select>
   </div>
 
   <!-- Input Pencarian -->
@@ -287,10 +279,10 @@
     
 
            <div class="flex items-center w-full mt-3">
-  <div class="flex-2 text-lg font-bold text-gray-600 bg-gray-100 px-4 py-2 rounded-md text-center shadow-sm">
-    <h2 class="text-sm text-gray-600">Produk</h2>
+  <div class="flex-2 text-lg font-bold text-gray-600 px-4 py-2 rounded-md text-center shadow-sm">
+    <h2 class="text-sm text-gray-600 font-[Poppins]">Produk</h2>
   </div>
-  <hr class="flex-1 h-[1.5px] bg-gray-400 border-none ml-2">
+  <hr class="flex-1 h-[0.7px] bg-gray-400 border-none ml-2">
 </div>
 
 
@@ -589,10 +581,10 @@ async function Wishlist(e, nama_pakaian, jenis_pakaian) {
 
                 card.innerHTML = `
 
-                <div class="w-full rounded-3xl border border-gray-200 bg-gradient-to-br from-white via-[#f9fdfc] to-[#eefcf9] p-6 text-center font-[Poppins] transition-all duration-500 shadow-sm hover:shadow-lg hover:scale-[1.005]">
+                <div class="w-full rounded-3xl border border-gray-200 bg-gradient-to-br from-white via-[#f9fdfc] to-[#eefcf9] p-4 text-center font-[Poppins] transition-all duration-500 shadow-sm hover:shadow-lg hover:scale-[1.005]">
 
                 <!-- ROW 1: Gambar + Info -->
-                <div class="flex flex-row gap-6 h-40">
+                <div class="flex flex-row gap-6 h-30">
                   
                   <!-- Kolom Gambar -->
                   <div class="relative">
@@ -617,12 +609,21 @@ async function Wishlist(e, nama_pakaian, jenis_pakaian) {
                       <p class="text-[1.15rem] font-semibold text-gray-800/90 tracking-wide truncate">${item.nama}</p>
                       <p class="text-sm text-gray-600 truncate"><span class="font-medium text-gray-800/70">Kategori:</span> ${item.jenis_pakaian}</p>
                       <p class="text-sm text-gray-600 line-clamp-2"><span class="font-medium text-gray-800/70">Deskripsi:</span> ${item.deskripsi}</p>
+                      
                     </div>
                   </div>
                 </div>
 
-                <!-- Harga & Stok -->
-                <div class="flex justify-between items-center mt-6 px-3 py-2 rounded-xl backdrop-blur-sm bg-white/40 shadow-inner">
+                
+
+                <div class="min-h-30">
+                  <div class="" text-left flex flex-col justify-between">
+                    
+                  </div>
+                </div>
+
+              
+                <div class="flex justify-between items-center px-3 py-2 rounded-xl">
                   <p class="text-sm text-gray-600"><strong>Stok:</strong> ${item.stok}</p>
                   <p class="text-lg text-emerald-600 font-bold tracking-wide bg-emerald-50 px-4 py-1 rounded-full shadow-sm border border-emerald-100">
                     Rp ${item.harga.toLocaleString('id-ID')}
@@ -637,7 +638,6 @@ async function Wishlist(e, nama_pakaian, jenis_pakaian) {
                     onclick="Wishlist(event, '${item.nama}', '${item.jenis_pakaian}')">
                     <i class="fa-regular fa-bookmark text-lg" data-kode="${item.kode_barang}" data-judul="${item.nama}"></i>
                   </button>
-
 
                   <button class="text-white bg-gradient-to-br from-teal-500 via-emerald-500 to-teal-600 hover:brightness-110 px-3 py-1.5 rounded-full transition-all duration-300 active:scale-95 z-20 shadow-md hover:shadow-lg"
                     onclick="Bagikan('${item.nama}', '${item.kode_barang}')">

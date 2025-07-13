@@ -649,23 +649,243 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
 
     <div class=" p-2 flex flex-col items-center bg-white max-h-[756px]">
 
-        <div
-        id="display_barang_keranjang"
-        class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-4 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-gray-200"
-        >
-            <!-- Isi barang keranjang di sini -->
+    <div class="swiper swaip-keranjang w-full max-w-2xl h-[100%]"> 
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <div
+            id="display_barang_keranjang"
+            class="w-full max-w-2xl h-[90%] overflow-y-auto bg-white rounded-xl shadow-inner p-4 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-gray-200"
+            >
+                <!-- Isi barang keranjang di sini -->
+            </div>
         </div>
-                
-        <div class="fixed bottom-3 right-3 z-50 flex items-center gap-4 px-5 py-3 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-teal-200 transition-all">
-        
-        <!-- Total Harga -->
-        <span id="span_total_harganyoo" class="text-xl font-semibold text-teal-800">
-            Rp 0
-        </span>
+       <div class="swiper-slide w-full max-w-2xl h-full" >
+        <div class="w-full h-full overflow-y-auto mb-10" style="--browser-kit-scrollbar: none;"id="hal2">
 
+        <style>
+                /* Sembunyikan scrollbar secara universal */
+        #hal2::-webkit-scrollbar {
+        display: none;
+        }
+
+        </style>
+            
+            
+           
+            <div class="rounded-xl p-4 overflow-y-auto max-h-[500px]" id="select_alamat_payment">
+            </div>
+
+            <script>
+            async function ambilAlamatUser(id) {
+            try {
+                const response = await fetch("/app/endpoint.go", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tujuan: "Ambil_Data_alamat_settings",
+                    iduser: id,
+                }),
+                });
+
+                if (!response.ok) throw new Error("Gagal menghubungi server");
+
+                const InfoUser = await response.json();
+                console.log("Data user:", InfoUser);
+
+                const container_alamat_disini = document.getElementById("select_alamat_payment");
+                container_alamat_disini.innerHTML = ""; // Kosongkan kontainer
+
+                InfoUser.forEach((item) => {
+                if (item.Status !== "Berhasil") return;
+
+                const namaAlamat = item.JenisAlamat || "Alamat";
+                const alamatLengkap = item.AlamatLengkap || "";
+                const wilayah = `${item.KabupatenKota}, Provinsi ${item.Provinsi}`;
+                const koordinat = item.Koordinat;
+
+                let iframeSrc = "";
+                if (koordinat) {
+                    const [latStr, lonStr] = koordinat.split(",").map(s => s.trim());
+                    const lat = parseFloat(latStr);
+                    const lon = parseFloat(lonStr);
+                    const lat2 = lat + 0.0002;
+                    const lon2 = lon + 0.0002;
+
+                    iframeSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lon},${lat},${lon2},${lat2}&layer=mapnik&marker=${lat},${lon}`;
+                }
+
+                const html = `
+                    <div class="w-full px-4 py-3 mb-4 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center font-[Inter, sans-serif]">
+                    <!-- Informasi Alamat -->
+                    <div class="flex flex-col gap-1 max-w-[60%] overflow-hidden">
+                        <div class="text-sm font-medium text-teal-600 flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>${namaAlamat}</span>
+                        </div>
+                        <div class="text-xs text-slate-600 truncate">
+                        ${alamatLengkap}
+                        </div>
+                        <div class="text-xs text-slate-500 font-medium truncate">
+                        ${wilayah}
+                        </div>
+                    </div>
+
+                    <!-- Map OpenStreetMap -->
+                    <div class="w-40 h-24 rounded overflow-hidden border border-slate-300 shadow-sm">
+                        <iframe
+                        class="w-full h-full"
+                        src="${iframeSrc}"
+                        style="border:0;"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    </div>
+                `;
+
+                container_alamat_disini.insertAdjacentHTML("beforeend", html);
+                });
+            } catch (error) {
+                console.error("Terjadi kesalahan:", error);
+                alert("Gagal mengambil data alamat. Coba lagi nanti.");
+            }
+            }
+
+            const idnyahnihbos = String(localStorage.getItem('id') ?? '');
+
+            ambilAlamatUser(idnyahnihbos);
+            </script>
+
+           <div class="rounded-xl p-4 overflow-y-auto space-y-4">
+
+           <h1 class="font-semibold">Pilihan Pembayaran</h1>
+           <br>
+           <div id="Pilihan_Metode_Pembayaran"></div>
+           
+           </div>
+
+            <script>
+            // Dummy data metode pembayaran
+            const metodePembayaran = [
+            { logo: "🏦", nama: "Bank Mandiri" },
+            { logo: "🏛️", nama: "Bank BCA" },
+            { logo: "💳", nama: "Bank BRI" },
+            { logo: "🏤", nama: "Bank BNI" }
+            ];
+
+            // Referensi elemen kontainer
+            const container = document.getElementById("Pilihan_Metode_Pembayaran");
+
+            // Generate elemen checkbox
+            metodePembayaran.forEach((bank, index) => {
+            const wrapper = document.createElement("label");
+            wrapper.className = "flex items-center justify-between bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 border border-gray-200 shadow-md hover:shadow-lg transition cursor-pointer";
+
+            wrapper.innerHTML = `
+                <div class="flex items-center space-x-4">
+                <div class="text-3xl">${bank.logo}</div>
+                <div class="text-lg font-medium text-white">${bank.nama}</div>
+                </div>
+                <input type="checkbox" name="metode_pembayaran" value="${bank.nama}" class="w-5 h-5 accent-blue-500">
+            `;
+
+            container.appendChild(wrapper);
+            });
+            </script>
+
+            <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: #0f172a; /* Dark slate background */
+                color: white;
+            }
+            </style>
+
+
+            
+            <div class="bg-white rounded-xl shadow-md p-6 max-w-full text-sm text-slate-800 font-sans mb-14">
+            <div class="font-semibold text-base mb-4">Cek ringkasan belanjaanmu, yuk</div>
+
+            <div class="flex justify-between mb-2">
+                <span>Total Harga (<span id="jumlah-barang">0</span> Barang)</span>
+                <span id="total-harga">Rp0</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span>Total Ongkos Kirim</span>
+                <span id="total-ongkir">Rp0</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span>Total Asuransi Pengiriman</span>
+                <span id="asuransi">Rp0</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span>Biaya Jasa Aplikasi</span>
+                <span id="jasa-aplikasi">Rp0</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span>Biaya Layanan</span>
+                <span id="layanan">Rp0</span>
+            </div>
+
+            <div class="flex justify-between items-center mt-4 mb-2 text-rose-500 font-semibold">
+                <span class="flex items-center gap-1">
+                <i class="fa-solid fa-tags text-xs"></i> Diskon
+                </span>
+                <span class="text-sm">▼</span>
+            </div>
+
+            <div class="pl-4 border-l border-slate-300 text-slate-500 text-sm space-y-1 mb-4">
+                <div class="flex justify-between">
+                <span>Diskon Barang</span>
+                <span id="diskon-barang" class="text-rose-500">-</span>
+                </div>
+                <div class="flex justify-between">
+                <span>Diskon Ongkir</span>
+                <span id="diskon-ongkir" class="text-rose-500">-</span>
+                </div>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="flex justify-between font-bold text-base mt-3">
+                <span>Total Tagihan</span>
+                <span id="total-tagihan" class="text-rose-600">Rp0</span>
+            </div>
+            <div id="kamu-hemat" class="text-sm text-rose-400 mt-1 font-medium">Kamu Hemat Rp0</div>
+            </div>
+            
+        </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script>
+
+    // Inisialisasi Swiper
+        const swiperKeranjang = new Swiper('.swaip-keranjang', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: false
+        });
+
+        // Fungsi untuk berpindah ke halaman ke-2
+        function pindahKeHalaman2() {
+        swiperKeranjang.slideTo(1); // index 1 = halaman ke-2
+        }
+
+
+    </script>
+
+
+        
+                
+        <div class="fixed bottom-3 right-3 z-50">
         <!-- Tombol Order -->
         <button 
-            onclick="" 
+            onclick="tampilkanBarangTerpilih('Submit', 0, 0 )" 
             class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-xl shadow-md transition-all duration-300"
         >
             <i class="fa-solid fa-basket-shopping text-base"></i>
@@ -707,6 +927,47 @@ function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
             totalHarga += harga_final;
         });
 
+        let totalHargaBarang = 0;
+        let totalJumlah = 0;
+
+        barangDipilih.forEach(item => {
+        totalHargaBarang += item.harga_final || (item.harga * item.jumlahnya);
+        totalJumlah += item.jumlahnya;
+        });
+
+        // Biaya berdasarkan total harga
+        const ongkir = Math.round(totalHargaBarang * 0.05);
+        const asuransi = Math.round(totalHargaBarang * 0.07);
+        const jasaAplikasi = 10000;
+        const layanan = 6300;
+
+        // Semua diskon 0
+        const diskonBarang = 0;
+        const diskonOngkir = 0;
+
+        const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;
+
+        // Helper rupiah
+        function formatRupiah(angka) {
+        return "Rp" + angka.toLocaleString("id-ID");
+        }
+
+        // Inject ke HTML
+        document.getElementById("jumlah-barang").textContent = totalJumlah;
+        document.getElementById("total-harga").textContent = formatRupiah(totalHargaBarang);
+        document.getElementById("total-ongkir").textContent = formatRupiah(ongkir);
+        document.getElementById("asuransi").textContent = formatRupiah(asuransi);
+        document.getElementById("jasa-aplikasi").textContent = formatRupiah(jasaAplikasi);
+        document.getElementById("layanan").textContent = formatRupiah(layanan);
+
+        document.getElementById("diskon-barang").textContent = "-";
+        document.getElementById("diskon-ongkir").textContent = "-";
+
+        document.getElementById("total-tagihan").textContent = formatRupiah(totalTagihan);
+        document.getElementById("kamu-hemat").textContent = "Kamu Hemat Rp0";
+
+        
+
     } else if (submit === "Submit") {
         console.log("OkeSubmitDilakukan");
         // Debug log
@@ -737,10 +998,48 @@ function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
 
             totalHarga += barang.harga * barang.jumlahnya;
         });
+
+        let totalHargaBarang = 0;
+        let totalJumlah = 0;
+
+        barangDipilih.forEach(item => {
+        totalHargaBarang += item.harga_final || (item.harga * item.jumlahnya);
+        totalJumlah += item.jumlahnya;
+        });
+
+        // Biaya berdasarkan total harga
+        const ongkir = Math.round(totalHargaBarang * 0.05);
+        const asuransi = Math.round(totalHargaBarang * 0.07);
+        const jasaAplikasi = 10000;
+        const layanan = 6300;
+
+        // Semua diskon 0
+        const diskonBarang = 0;
+        const diskonOngkir = 0;
+
+        const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;
+
+        // Helper rupiah
+        function formatRupiah(angka) {
+        return "Rp" + angka.toLocaleString("id-ID");
+        }
+
+        // Inject ke HTML
+        document.getElementById("jumlah-barang").textContent = totalJumlah;
+        document.getElementById("total-harga").textContent = formatRupiah(totalHargaBarang);
+        document.getElementById("total-ongkir").textContent = formatRupiah(ongkir);
+        document.getElementById("asuransi").textContent = formatRupiah(asuransi);
+        document.getElementById("jasa-aplikasi").textContent = formatRupiah(jasaAplikasi);
+        document.getElementById("layanan").textContent = formatRupiah(layanan);
+
+        document.getElementById("diskon-barang").textContent = "-";
+        document.getElementById("diskon-ongkir").textContent = "-";
+
+        document.getElementById("total-tagihan").textContent = formatRupiah(totalTagihan);
+        document.getElementById("kamu-hemat").textContent = "Kamu Hemat Rp0";
     }
 
     // Update tampilan total
-    document.getElementById("span_total_harganyoo").innerHTML = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 }
 
 
