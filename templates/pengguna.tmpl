@@ -717,32 +717,45 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
                 }
 
                 const html = `
-                    <div class="w-full px-4 py-3 mb-4 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center font-[Inter, sans-serif]">
-                    <!-- Informasi Alamat -->
-                    <div class="flex flex-col gap-1 max-w-[60%] overflow-hidden">
-                        <div class="text-sm font-medium text-teal-600 flex items-center gap-2">
-                        <i class="fa-solid fa-map-location-dot"></i>
-                        <span>${namaAlamat}</span>
-                        </div>
-                        <div class="text-xs text-slate-600 truncate">
-                        ${alamatLengkap}
-                        </div>
-                        <div class="text-xs text-slate-500 font-medium truncate">
-                        ${wilayah}
-                        </div>
-                    </div>
+                 <div 
+        class="w-full px-4 py-3 mb-4 bg-white text-slate-800 border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center font-[Inter, sans-serif]"
+       
+    >
+        <!-- Informasi Alamat -->
+        <div id="alamat_${namaAlamat}" class="flex flex-col gap-1 max-w-[60%] overflow-hidden">
+            <div class="text-sm font-medium text-teal-600 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>${namaAlamat}</span>
+            </div>
+            <div class="text-xs text-slate-600 truncate">
+                ${alamatLengkap}
+            </div>
+            <div class="text-xs text-slate-500 font-medium truncate">
+                ${wilayah}
+            </div>
+        </div>
 
-                    <!-- Map OpenStreetMap -->
-                    <div class="w-40 h-24 rounded overflow-hidden border border-slate-300 shadow-sm">
-                        <iframe
-                        class="w-full h-full"
-                        src="${iframeSrc}"
-                        style="border:0;"
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                    </div>
-                    </div>
+        <!-- Map dan Checkbox -->
+        <div class="flex flex-col items-end gap-2">
+            <div class="w-40 h-24 rounded overflow-hidden border border-slate-300 shadow-sm">
+                <iframe
+                    class="w-full h-full"
+                    src="${iframeSrc}"
+                    style="border:0;"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            <label class="flex items-center gap-2 text-sm">
+                <input 
+                 data-nama-alamat="${namaAlamat}"
+                data-alamat-lengkap="${alamatLengkap}"
+                data-koordinat="${koordinat}"
+                type="checkbox" class="form-checkbox text-teal-600 check-alamat" name="pilihanAlamat" value="${namaAlamat}">
+                Pilih
+            </label>
+        </div>
+    </div>
                 `;
 
                 container_alamat_disini.insertAdjacentHTML("beforeend", html);
@@ -756,6 +769,7 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
             const idnyahnihbos = String(localStorage.getItem('id') ?? '');
 
             ambilAlamatUser(idnyahnihbos);
+
             </script>
 
            <div class="rounded-xl p-4 overflow-y-auto space-y-4">
@@ -772,7 +786,8 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
             { logo: "🏦", nama: "Bank Mandiri" },
             { logo: "🏛️", nama: "Bank BCA" },
             { logo: "💳", nama: "Bank BRI" },
-            { logo: "🏤", nama: "Bank BNI" }
+            { logo: "🏤", nama: "Bank BNI" },
+            { logo: "🏛️", nama: "COD"}
             ];
 
             // Referensi elemen kontainer
@@ -786,9 +801,9 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
             wrapper.innerHTML = `
                 <div class="flex items-center space-x-4">
                 <div class="text-3xl">${bank.logo}</div>
-                <div class="text-lg font-medium text-white">${bank.nama}</div>
+                <div class="text-lg font-medium text-black">${bank.nama}</div>
                 </div>
-                <input type="checkbox" name="metode_pembayaran" value="${bank.nama}" class="w-5 h-5 accent-blue-500">
+                <input type="checkbox" value="${bank.nama}" class="method_pembayaran_check w-5 h-5 accent-blue-500">
             `;
 
             container.appendChild(wrapper);
@@ -897,20 +912,58 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
 
 <script>
 
+document.addEventListener('DOMContentLoaded', () => {
+    const checkboxes = document.querySelectorAll('.check-alamat');
+
+    if (checkboxes) {
+        console.log(checkboxes, "nih dia");
+    }
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('click', () => {
+            if (checkbox.checked) {
+                checkboxes.forEach((cb) => {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+            }
+            console.log(checkbox.checked); // Status centang dari checkbox yang diklik
+        });
+    });
+
+    const PembayaranMethod = document.querySelectorAll(".method_pembayaran_check");
+
+    console.log(PembayaranMethod);
+    PembayaranMethod.forEach((checkbox) => {
+        checkbox.addEventListener('click', () => {
+            if (checkbox.checked) {
+                PembayaranMethod.forEach((cb) => {
+                    if (cb !== checkbox) cb.checked = false;
+                });
+            }
+        });
+    });
+});
+
+
+
 let checkboxTerpilih = []; 
 const barangDipilih = [];
 const fullFormat = [];
 let totalHarga = 0;
 
 
-function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
+async function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
+    // Helper Rupiah
+    function formatRupiah(angka) {
+        return "Rp" + angka.toLocaleString("id-ID");
+    }
 
     if (submit === "MencentangBarang") {
         barangDipilih.length = 0;
         fullFormat.length = 0;
         totalHarga = 0;
 
-        checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
+        const checkboxTerpilih = document.querySelectorAll('.checkbox-barang:checked');
 
         checkboxTerpilih.forEach(cb => {
             const nama = cb.dataset.nama;
@@ -931,49 +984,72 @@ function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
         let totalJumlah = 0;
 
         barangDipilih.forEach(item => {
-        totalHargaBarang += item.harga_final || (item.harga * item.jumlahnya);
-        totalJumlah += item.jumlahnya;
+            totalHargaBarang += item.harga_final;
+            totalJumlah += item.jumlahnya;
         });
 
-        // Biaya berdasarkan total harga
         const ongkir = Math.round(totalHargaBarang * 0.05);
         const asuransi = Math.round(totalHargaBarang * 0.07);
         const jasaAplikasi = 10000;
         const layanan = 6300;
-
-        // Semua diskon 0
-        const diskonBarang = 0;
-        const diskonOngkir = 0;
-
         const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;
 
-        // Helper rupiah
-        function formatRupiah(angka) {
-        return "Rp" + angka.toLocaleString("id-ID");
-        }
-
-        // Inject ke HTML
         document.getElementById("jumlah-barang").textContent = totalJumlah;
         document.getElementById("total-harga").textContent = formatRupiah(totalHargaBarang);
         document.getElementById("total-ongkir").textContent = formatRupiah(ongkir);
         document.getElementById("asuransi").textContent = formatRupiah(asuransi);
         document.getElementById("jasa-aplikasi").textContent = formatRupiah(jasaAplikasi);
         document.getElementById("layanan").textContent = formatRupiah(layanan);
-
         document.getElementById("diskon-barang").textContent = "-";
         document.getElementById("diskon-ongkir").textContent = "-";
-
         document.getElementById("total-tagihan").textContent = formatRupiah(totalTagihan);
         document.getElementById("kamu-hemat").textContent = "Kamu Hemat Rp0";
 
-        
-
     } else if (submit === "Submit") {
         console.log("OkeSubmitDilakukan");
-        // Debug log
         console.log("Total Harga:", totalHarga.toLocaleString("id-ID", { style: "currency", currency: "IDR" }));
         console.log("Barang Dipilih:", barangDipilih);
         console.log("Full Format:", fullFormat);
+
+        const selected = document.querySelector('.check-alamat:checked');
+        if (!selected) {
+            console.log("Belum ada alamat yang dipilih.");
+            return;
+        }
+
+        const nama_alamat = selected.dataset.namaAlamat || "";
+        const lengkap_alamat = selected.dataset.alamatLengkap || "";
+        const koordinat = selected.dataset.koordinat || "";
+
+        console.log("Alamat Dipilih:", nama_alamat, lengkap_alamat, koordinat);
+
+        try {
+            for (const Barang of barangDipilih) {
+                const response = await fetch("/app/endpoint.go", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        tujuan: "Verifikasi_Transaksi",
+                        nama: Barang.nama,
+                        koordinat,
+                        alamat_lengkap: lengkap_alamat,
+                        ukuran: Barang.ukuran,
+                        jumlah: Barang.jumlahnya.toString(),
+                        harga: Barang.harga_final.toString(),
+                        iduser: id_user.toString()
+                    }),
+                });
+
+                const result = await response.json();
+                console.log("Respon Server:", result);
+            }
+
+            console.log("Semua data berhasil dikirim.");
+        } catch (error) {
+            console.error("Gagal mengirim data:", error);
+        }
 
     } else if (submit === "Ubah_Pesanan") {
         console.log(namanya, "nihcou");
@@ -982,13 +1058,9 @@ function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
 
         barangDipilih.forEach((barang, i) => {
             if (barang.nama === namanya) {
-                console.log(namanya, "Ada dalam list");
-
-                // Update jumlah & harga_final
                 barang.jumlahnya = Jumlahnya;
                 barang.harga_final = barang.harga * Jumlahnya;
 
-                // Sync ke fullFormat juga
                 fullFormat[i] = {
                     nama: barang.nama,
                     ukuran: barang.ukuran,
@@ -1003,44 +1075,29 @@ function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
         let totalJumlah = 0;
 
         barangDipilih.forEach(item => {
-        totalHargaBarang += item.harga_final || (item.harga * item.jumlahnya);
-        totalJumlah += item.jumlahnya;
+            totalHargaBarang += item.harga_final;
+            totalJumlah += item.jumlahnya;
         });
 
-        // Biaya berdasarkan total harga
         const ongkir = Math.round(totalHargaBarang * 0.05);
         const asuransi = Math.round(totalHargaBarang * 0.07);
         const jasaAplikasi = 10000;
         const layanan = 6300;
-
-        // Semua diskon 0
-        const diskonBarang = 0;
-        const diskonOngkir = 0;
-
         const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;
 
-        // Helper rupiah
-        function formatRupiah(angka) {
-        return "Rp" + angka.toLocaleString("id-ID");
-        }
-
-        // Inject ke HTML
         document.getElementById("jumlah-barang").textContent = totalJumlah;
         document.getElementById("total-harga").textContent = formatRupiah(totalHargaBarang);
         document.getElementById("total-ongkir").textContent = formatRupiah(ongkir);
         document.getElementById("asuransi").textContent = formatRupiah(asuransi);
         document.getElementById("jasa-aplikasi").textContent = formatRupiah(jasaAplikasi);
         document.getElementById("layanan").textContent = formatRupiah(layanan);
-
         document.getElementById("diskon-barang").textContent = "-";
         document.getElementById("diskon-ongkir").textContent = "-";
-
         document.getElementById("total-tagihan").textContent = formatRupiah(totalTagihan);
         document.getElementById("kamu-hemat").textContent = "Kamu Hemat Rp0";
     }
-
-    // Update tampilan total
 }
+
 
 
 

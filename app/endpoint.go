@@ -246,6 +246,14 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
 					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
 				}
+			case "Verifikasi_Transaksi":
+				var Hasil map[string]string
+				Hasil = backend.VerifikasiTransaksi(server.database, req.Nama, req.Koordinat, req.AlamatLengkap, req.Ukuran, req.Jumlah, req.Harga, req.IdUser)
+				fmt.Println(Hasil)
+				w.Header().Set("Content-Type", "application/json")
+				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
+					http.Error(w, "Gagal mengencode JSON", http.StatusInternalServerError)
+				}
 			default:
 				http.Error(w, "Tujuan tidak ditemukan", http.StatusNotFound)
 			}
