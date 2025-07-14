@@ -803,7 +803,7 @@ document.getElementById("tambah_keranjang_popup").addEventListener("click", func
                 <div class="text-3xl">${bank.logo}</div>
                 <div class="text-lg font-medium text-black">${bank.nama}</div>
                 </div>
-                <input type="checkbox" value="${bank.nama}" class="method_pembayaran_check w-5 h-5 accent-blue-500">
+                <input type="checkbox" data-nilai="${bank.nama}" value="${bank.nama}" class="method_pembayaran_check w-5 h-5 accent-blue-500">
             `;
 
             container.appendChild(wrapper);
@@ -988,8 +988,8 @@ async function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
             totalJumlah += item.jumlahnya;
         });
 
-        const ongkir = Math.round(totalHargaBarang * 0.05);
-        const asuransi = Math.round(totalHargaBarang * 0.07);
+        const ongkir = Math.round(totalHargaBarang * 0.002);
+        const asuransi = Math.round(totalHargaBarang * 0.003);
         const jasaAplikasi = 10000;
         const layanan = 6300;
         const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;
@@ -1020,36 +1020,42 @@ async function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
         const nama_alamat = selected.dataset.namaAlamat || "";
         const lengkap_alamat = selected.dataset.alamatLengkap || "";
         const koordinat = selected.dataset.koordinat || "";
+        const PembayaranMethod = document.querySelectorAll(".method_pembayaran_check:checked");
+
+        const Metode_final = PembayaranMethod[0].value;
+
+        console.log(PembayaranMethod, Metode_final);
 
         console.log("Alamat Dipilih:", nama_alamat, lengkap_alamat, koordinat);
 
         try {
-            for (const Barang of barangDipilih) {
-                const response = await fetch("/app/endpoint.go", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        tujuan: "Verifikasi_Transaksi",
+            const response = await fetch("/app/endpoint.go", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tujuan: "Verifikasi_Transaksi",
+                    metode_pembayaran: Metode_final,
+                    koordinat: koordinat,
+                    alamat_lengkap: lengkap_alamat,
+                    iduser: id_user.toString(),
+                    barang_transaksi: barangDipilih.map(Barang => ({
                         nama: Barang.nama,
-                        koordinat,
-                        alamat_lengkap: lengkap_alamat,
                         ukuran: Barang.ukuran,
                         jumlah: Barang.jumlahnya.toString(),
-                        harga: Barang.harga_final.toString(),
-                        iduser: id_user.toString()
-                    }),
-                });
+                        harga: Barang.harga_final.toString()
+                    }))
+                }),
+            });
 
-                const result = await response.json();
-                console.log("Respon Server:", result);
-            }
-
+            const result = await response.json();
+            console.log("Respon Server:", result);
             console.log("Semua data berhasil dikirim.");
         } catch (error) {
             console.error("Gagal mengirim data:", error);
         }
+
 
     } else if (submit === "Ubah_Pesanan") {
         console.log(namanya, "nihcou");
@@ -1079,8 +1085,8 @@ async function tampilkanBarangTerpilih(submit, Jumlahnya, namanya) {
             totalJumlah += item.jumlahnya;
         });
 
-        const ongkir = Math.round(totalHargaBarang * 0.05);
-        const asuransi = Math.round(totalHargaBarang * 0.07);
+        const ongkir = Math.round(totalHargaBarang * 0.002);
+        const asuransi = Math.round(totalHargaBarang * 0.001);
         const jasaAplikasi = 10000;
         const layanan = 6300;
         const totalTagihan = totalHargaBarang + ongkir + asuransi + jasaAplikasi + layanan;

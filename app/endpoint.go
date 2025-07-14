@@ -11,36 +11,38 @@ import (
 )
 
 type AjaxRequest struct {
-	Tujuan        string          `json:"tujuan"`
-	Data          json.RawMessage `json:"data"`
-	Nama          string          `json:"nama"`
-	Jenis         string          `json:"jenis"`
-	Ukuran        string          `json:"ukuran"`
-	Jumlah        string          `json:"jumlah"`
-	Harga         string          `json:"harga"`
-	Stok          string          `json:"stok"`
-	NamaUser      string          `json:"namauser"`
-	IdUser        string          `json:"iduser"`
-	Deskripsi     string          `json:"deskripsi"`
-	IdBarang      string          `json:"id_barang"`
-	JenisPakaian  string          `json:"jenis_pakaian"`
-	Gender        string          `json:"gender"`
-	KodeBarang    string          `json:"kode_barang"`
-	TanggalLahir  string          `json:"tanggal_lahir"`
-	NomorHp       string          `json:"nomor_hp"`
-	Username      string          `json:"username"`
-	Bio           string          `json:"bio"`
-	Email         string          `json:"email"`
-	AlamatLengkap any             `json:"alamat_lengkap"`
-	Provinsi      string          `json:"provinsi"`
-	KabupatenKota string          `json:"kabupaten_kota"`
-	Kecamatan     string          `json:"kecamatan"`
-	KelurahanDesa string          `json:"kelurahan_desa"`
-	KodePos       string          `json:"kode_pos"`
-	Koordinat     string          `json:"koordinat"`
-	NamaAlamat    string          `json:"namaalamat"`
-	JenisAlamat   string          `json:"jenisalamat"`
-	Kategori      string          `json:"kategori"`
+	Tujuan           string          `json:"tujuan"`
+	Data             json.RawMessage `json:"data"`
+	Nama             string          `json:"nama"`
+	Jenis            string          `json:"jenis"`
+	Ukuran           string          `json:"ukuran"`
+	Jumlah           string          `json:"jumlah"`
+	Harga            string          `json:"harga"`
+	Stok             string          `json:"stok"`
+	NamaUser         string          `json:"namauser"`
+	IdUser           string          `json:"iduser"`
+	Deskripsi        string          `json:"deskripsi"`
+	IdBarang         string          `json:"id_barang"`
+	JenisPakaian     string          `json:"jenis_pakaian"`
+	Gender           string          `json:"gender"`
+	KodeBarang       string          `json:"kode_barang"`
+	TanggalLahir     string          `json:"tanggal_lahir"`
+	NomorHp          string          `json:"nomor_hp"`
+	Username         string          `json:"username"`
+	Bio              string          `json:"bio"`
+	Email            string          `json:"email"`
+	AlamatLengkap    any             `json:"alamat_lengkap"`
+	Provinsi         string          `json:"provinsi"`
+	KabupatenKota    string          `json:"kabupaten_kota"`
+	Kecamatan        string          `json:"kecamatan"`
+	KelurahanDesa    string          `json:"kelurahan_desa"`
+	KodePos          string          `json:"kode_pos"`
+	Koordinat        string          `json:"koordinat"`
+	NamaAlamat       string          `json:"namaalamat"`
+	JenisAlamat      string          `json:"jenisalamat"`
+	Kategori         string          `json:"kategori"`
+	MetodePembayaran string          `json:"metode_pembayaran"`
+	BarangTransaksi  json.RawMessage `json:"barang_transaksi"`
 }
 
 type AjaxRequestFile struct {
@@ -248,7 +250,7 @@ func (server *Lingkup) AjaxEndpoint(w http.ResponseWriter, r *http.Request) {
 				}
 			case "Verifikasi_Transaksi":
 				var Hasil map[string]string
-				Hasil = backend.VerifikasiTransaksi(server.database, req.Nama, req.Koordinat, req.AlamatLengkap, req.Ukuran, req.Jumlah, req.Harga, req.IdUser)
+				Hasil = backend.VerifikasiTransaksi(server.database, req.BarangTransaksi, req.Koordinat, req.AlamatLengkap, req.IdUser, req.MetodePembayaran)
 				fmt.Println(Hasil)
 				w.Header().Set("Content-Type", "application/json")
 				if err := json.NewEncoder(w).Encode(Hasil); err != nil {
